@@ -24,13 +24,10 @@ Le prossime sezioni (es. `pizzerie/`) seguono lo stesso schema: una cartella per
 
 ## Sviluppo in locale
 
-Basta aprire `sagre/index.html` nel browser. Per servirlo via HTTP (consigliato, così i font si caricano come in produzione):
+Basta aprire `sagre/index.html` nel browser. Meglio servirlo via HTTP, così font e immagini si caricano come in produzione:
 
-```
-python -m http.server 8080
-```
-
-poi <http://localhost:8080/sagre/>.
+- da IntelliJ: tasto destro su `sagre/index.html` → *Open In* → *Browser* (usa il server integrato dell'IDE);
+- da terminale, con Node installato: `npx serve .` e poi <http://localhost:3000/sagre/>.
 
 ## Branch e deploy
 
