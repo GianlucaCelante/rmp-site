@@ -290,10 +290,8 @@
     if (!data.locale || data.locale.trim().length < 2) {
       errors.fieldLocale = 'Inserisci il nome della festa e il comune.';
     }
-    var telDigits = (data.telefono || '').match(/\d/g);
-    var telCount = telDigits ? telDigits.length : 0;
-    if (telCount < 8) {
-      errors.fieldTelefono = 'Controlla il numero: servono almeno 8 cifre.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((data.email || '').trim())) {
+      errors.fieldEmail = 'Inserisci un indirizzo email valido.';
     }
     if (!data.privacy) {
       errors.fieldPrivacy = 'Serve il consenso per poterti ricontattare.';
@@ -304,7 +302,7 @@
   if (form) {
     var chk = document.getElementById('inpPrivacy');
     if (chk) chk.addEventListener('change', function(){ if (chk.checked) setFieldError('fieldPrivacy', ''); });
-    ['inpNome','inpLocale','inpTelefono'].forEach(function(inputId){
+    ['inpNome','inpLocale','inpEmail'].forEach(function(inputId){
       var el = document.getElementById(inputId);
       if (!el) return;
       el.addEventListener('input', function(){
@@ -318,11 +316,11 @@
       var data = {
         nome: document.getElementById('inpNome').value,
         locale: document.getElementById('inpLocale').value,
-        telefono: document.getElementById('inpTelefono').value,
+        email: document.getElementById('inpEmail').value,
         privacy: document.getElementById('inpPrivacy') ? document.getElementById('inpPrivacy').checked : true
       };
       var errors = validateForm(data);
-      ['fieldNome','fieldLocale','fieldTelefono','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
+      ['fieldNome','fieldLocale','fieldEmail','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
       var errorKeys = Object.keys(errors);
       if (errorKeys.length) {
         errorKeys.forEach(function(fieldId){ setFieldError(fieldId, errors[fieldId]); });
