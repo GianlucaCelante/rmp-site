@@ -646,7 +646,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* reduced motion: pin spento e niente giro del tablet; il nastro resta
    sfogliabile (una schermata alla volta), senza scroll fluido */
 @media (prefers-reduced-motion:reduce){
-  .js-ready .step-trigger{ height:0; }
+  /* [data-index] per battere in specificita' le regole 230svh/205svh qui sopra */
+  .js-ready .step-trigger[data-index]{ height:0; }
   .js-ready .tablet-demo__sticky{ position:static; height:auto; }
 }
 
