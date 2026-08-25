@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infornato - Gestionale per pizzerie e ristoranti</title>
+<meta name="description" content="Comande, sala, magazzino e consegne in un unico sistema. Tre versioni, un preventivo scritto entro 24 ore.">
+<link rel="icon" href="../assets/favicon-pizzerie.svg" type="image/svg+xml">
+
+<!-- Webfont auto-hostati (assets/fonts): nessuna dipendenza da Google Fonts in produzione -->
+<link rel="preload" href="../assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="css/pizzerie.css">
+</head>
+<body>
+<nav class="nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">Infornato</a>
+    <div class="nav-links">
+      <a href="#cosa-fa" class="nav-link nav-hide-mobile">Cosa fa</a>
+      <a href="#tagli" class="nav-link nav-hide-mobile">Versioni</a>
+      <a href="#domande" class="nav-link nav-hide-mobile">Domande</a>
+      <a href="#contatti" class="nav-cta">Richiedi informazioni</a>
+    </div>
+  </div>
+</nav>
+<div id="top"></div>
+
+<main>
+<section id="hero" class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <p class="hero-kicker fade-up">Comande, sala e asporto in un unico sistema, pensato per la tua pizzeria.</p>
+    </div>
+  </div>
+  <div class="display-wrap hero-title">
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="hero-marquee__track">
+        <span>COMANDE &middot; SALA &middot; FORNO &middot; RIDER &middot; MAGAZZINO &middot; </span>
+        <span>COMANDE &middot; SALA &middot; FORNO &middot; RIDER &middot; MAGAZZINO &middot; </span>
+      </div>
+    </div>
+    <h1 class="display reveal-onload">
+      <span class="line-mask"><span class="line-inner" style="--i:0">OGNI COMANDA</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:1">AL SUO POSTO.</span></span>
+          </h1>
+  </div>
+  <div class="wrap">
+    <div class="hero-visual">
+      <div class="hero-circle">
+        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi informazioni">
+          <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs><path id="cta-ring-a" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
+            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI INFORMAZIONI &#183; RICHIEDI INFORMAZIONI &#183; </textPath></text>
+          </svg>
+          <span class="circle-cta__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a></span>
+      </div>
+      <!-- Fetta 3D "chubby" che levita (Adobe Stock 632740168, licenziata;
+           sfondo rimosso). Decorativa: aria-hidden, ferma con reduced-motion. -->
+      <div class="hero-pizza" aria-hidden="true">
+        <img src="img/pizza-fetta-3d.png" alt="" width="640" height="513" loading="lazy" onerror="this.closest('.hero-pizza').style.display='none'">
+      </div>
+      <!-- Palco hero: tablet con la mappa sala (la schermata piu' leggibile)
+           e schede grandi che raccontano cosa sta succedendo. Le schede sono
+           grafica dichiarata con dati demo, non finti screenshot. -->
+      <div class="hero-stage fade-up">
+        <div class="hero-tablet">
+          <div class="hero-tablet__screen parallax-frame">
+            <img class="parallax-img" src="img/gestionale-sala.png" alt="La mappa della sala nel gestionale: tavoli liberi, occupati e prenotati, con le prenotazioni in arrivo." width="1440" height="900" fetchpriority="high" loading="eager" onerror="this.closest('.hero-stage').classList.add('img-fallback');this.remove();">
+          </div>
+        </div>
+        <div class="hero-chip hero-chip--1" aria-hidden="true">
+          <span class="chip-dot"></span>
+          <span class="chip-txt"><strong>Comanda al forno</strong>2× Margherita D.O.P. · Tavolo 4</span>
+        </div>
+        <div class="hero-chip hero-chip--2" aria-hidden="true">
+          <span class="chip-check"></span>
+          <span class="chip-txt"><strong>Tavolo 8 · servito</strong></span>
+        </div>
+        <div class="hero-chip hero-chip--3" aria-hidden="true">
+          <span class="chip-dot chip-dot--amber"></span>
+          <span class="chip-txt"><strong>Ordine online ricevuto</strong>Ritiro alle 19:45</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Primo foglio dello stack: solo look (radius+ombra+overlap sull'hero).
+     Non verra' mai pinnato (altezza >> viewport) ne' mai marcato "under"
+     (l'effetto under tocca solo i fogli pinnati): il tablet sticky interno
+     resta quindi libero da transform sugli antenati. -->
+<section id="cosa-fa" class="section-pad sheet" style="--sheet-i:0">
+  <!-- ============ TABLET SCROLLYTELLING (innesto da landing-novu/index.html, sezione #dentro) ============
+       Il titolo di sezione vive DENTRO lo stage pinnato: titolo, tablet e
+       didascalia compaiono e restano insieme per tutta la durata dello scroll.
+       Struttura, classi e meccanica (grid-area: 1/1, gate .js-ready, IntersectionObserver
+       rootMargin -45%/-45%, trigger 100svh/150svh desktop, 70svh/125svh mobile) copiate
+       fedeli dal donatore. .tablet-demo qui e' un <div>, non <section>: evita di annidare
+       due <section> (questa e' gia' dentro #cosa-fa) senza toccare nessuno degli hook
+       CSS/JS che lavorano sulla classe .tablet-demo, non sul tag. -->
+  <div class="tablet-demo" id="dentro">
+    <div class="tablet-demo__grid">
+      <div class="tablet-demo__track" aria-hidden="true">
+        <!-- un solo trigger: da' la distanza di scroll per il giro del tablet.
+             Le schermate non si cambiano piu' scorrendo, si sfogliano di lato. -->
+        <div class="step-trigger" data-index="0"></div>
+      </div>
+      <div class="tablet-demo__sticky">
+        <h2 class="display display--sm tablet-demo__title">
+          <span class="line-mask"><span class="line-inner" style="--i:0">IL GESTIONALE.</span></span>
+        </h2>
+        <div class="tablet-demo__row">
+        <div class="tablet" role="img" aria-label="Schermata comande: presa ordini al banco e al telefono.">
+          <span class="tablet__cam"></span>
+          <span class="tablet__back" aria-hidden="true"></span>
+          <span class="tablet__ply" style="--z:-2.8px" aria-hidden="true"></span>
+          <span class="tablet__ply" style="--z:-5.6px" aria-hidden="true"></span>
+          <span class="tablet__ply" style="--z:-8.4px" aria-hidden="true"></span>
+          <span class="tablet__ply" style="--z:-11.2px" aria-hidden="true"></span>
+          <div class="tablet__screen">
+            <!-- Solo -touch, non il prevent totale: lo smooth scroll deve
+                 mollare il dito (altrimenti la sfogliata non parte) ma tenersi
+                 la rotella, se no lo scorrimento verticale sopra il tablet
+                 diventa quello ruvido del browser. -->
+            <div class="tablet__track" id="tabletTrack" data-lenis-prevent-touch tabindex="0" role="group" aria-label="Schermate del gestionale: scorri di lato per vedere le altre">
+              <img class="tablet__slide" data-index="0" loading="eager" width="1440" height="900" src="img/gestionale-comande.png" alt="">
+              <img class="tablet__slide" data-index="1" loading="lazy" width="1440" height="435" src="img/gestionale-cucina.png" alt="">
+              <img class="tablet__slide" data-index="2" loading="lazy" width="1440" height="900" src="img/gestionale-sala.png" alt="">
+              <!-- segnaposto: schermate non ancora disponibili -->
+              <img class="tablet__slide" data-index="3" loading="lazy" width="1440" height="900" src="img/gestionale-scorte.png" alt="">
+              <img class="tablet__slide" data-index="4" loading="lazy" width="1440" height="900" src="img/gestionale-report.png" alt="">
+              <img class="tablet__slide" data-index="5" loading="lazy" width="1440" height="900" src="img/gestionale-postazioni.png" alt="">
+            </div>
+          </div>
+          <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
+          <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
+        </div>
+        <div class="tablet-demo__text">
+          <div class="tablet-demo__caption">
+            <div class="tablet-demo__caption-item is-active" data-index="0">
+              <h3>Layout semplice e intuitivo.</h3>
+              <p>Il gestionale è pensato per la gestione delle comande, delle prenotazioni e della sala: sia al banco, sia al telefono.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="1">
+              <h3>Gestisci con semplicità prenotazioni e ordini.</h3>
+              <p>Ogni ordine si aggancia a una fascia oraria con il suo tetto di pizze: quando la fascia è piena, l'ordine dopo va nel primo orario libero. Se ti serve, puoi comunque forzare un ordine su una fascia già piena. Gli asporti si prenotano allo stesso modo, anche per i giorni successivi, con l'ora di ritiro già fissata.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="2">
+              <h3>Gestisci la sala velocemente.</h3>
+              <p>La piantina mostra i tavoli con il loro stato: verde liberi, giallo prenotati, rosso occupati, con i coperti sotto ognuno. I camerieri prendono la comanda dal telefono e l'ordine arriva in cucina senza tornare al banco.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="3">
+              <h3>Gestione rapida del magazzino.</h3>
+              <p>Il sistema scala da solo gli ingredienti usati durante il servizio, così sai sempre quanto ti resta in magazzino.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="4">
+              <h3>Tieni sotto controllo ricavi e spese.</h3>
+              <p>A ogni chiusura ricevi un report dettagliato su vendite, magazzino, costi e ricavi.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="5">
+              <h3>Monitor, dispositivi, stampanti.</h3>
+              <p>All'installazione e alla configurazione di stampanti e monitor pensiamo noi. Se ti manca qualcosa ti guidiamo nell'acquisto dei dispositivi più adatti, senza guadagnarci nulla.</p>
+            </div>
+          </div>
+          <div class="scrolly-cue" id="scrollyCue" aria-hidden="true">
+            <div class="scrolly-progress"><span id="scrollyBar"></span></div>
+            <p class="scrolly-hint">
+              <span class="scrolly-hint__n"><span id="scrollyNum">1</span> di <span id="scrollyTot">4</span></span>
+              <span class="scrolly-hint__txt scrolly-hint__txt--touch">Scorri col dito</span>
+              <span class="scrolly-hint__txt scrolly-hint__txt--mouse">Usa le frecce</span>
+              <span class="scrolly-hint__chev"></span>
+            </p>
+          </div>
+        </div>
+        </div><!-- /tablet-demo__row -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Il palmare del cameriere: stessa idea della cornice tablet, in verticale.
+       Il telefono e' costruito in CSS come il tablet, dentro la schermata. -->
+  <!-- Banda video, layout della reference: fondo scuro a tutta larghezza,
+       tipografia gigante bianca a sinistra, la mano col telefono che entra
+       dal bordo destro, cerchio arancione col play sovrapposto al telefono. -->
+  <div class="vband">
+    <div class="wrap vband__in">
+      <h3 class="display display-on-dark vband__display">
+        <span class="line-mask"><span class="line-inner" style="--i:0">LA COMANDA</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:1">NASCE</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:2">AL TAVOLO,</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:3">NON AL BANCO.</span></span>
+      </h3>
+    </div>
+    <img class="vband__hand" src="img/palmare-cutout.png" alt="Una mano tiene il telefono con la comanda del tavolo 4 aperta." width="942" height="1301" loading="lazy">
+    <!-- stesso bollino rotante dell'header: anello che gira, icona al centro -->
+    <span class="pop vband__playwrap"><button type="button" class="circle-cta" id="videoBtn" aria-label="Vedi il video">
+      <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+        <defs><path id="cta-ring-v" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
+        <text><textPath href="#cta-ring-v" textLength="496" lengthAdjust="spacingAndGlyphs">VEDI IL VIDEO &#183; VEDI IL VIDEO &#183; VEDI IL VIDEO &#183; </textPath></text>
+      </svg>
+      <span class="circle-cta__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8.5 5.8 L18 12 L8.5 18.2 Z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+      </span>
+    </button></span>
+  </div>
+</section>
+
+<section class="statement-section section-pad sheet" style="--sheet-i:1">
+  <div class="wrap">
+    <div class="statement">
+      <p class="fade-up">Un sistema unico, che non si ferma: funziona anche senza internet. La schermata è pulita e ordinata, così qualunque dipendente impara a usarlo fin dal primo servizio.</p>
+    </div>
+  </div>
+</section>
+<section id="tagli" class="pricing section-pad section-dark sheet" style="--sheet-i:2">
+  <!-- Pomodoro 3D (Adobe Stock 572565461, licenziato; sfondo rimosso).
+       Decorativo, stesso stile clay della fetta nell'hero. -->
+  <div class="veg veg--tagli" aria-hidden="true">
+    <img src="img/pomodoro-3d.png" alt="" width="480" height="501" loading="lazy" onerror="this.closest('.veg').style.display='none'">
+  </div>
+  <div class="display-wrap pricing-head-row">
+    <h2 class="display display-on-dark">
+      <span class="line-mask"><span class="line-inner" style="--i:0">TRE PIANI.</span></span>
+    </h2>
+  </div>
+  <div class="wrap">
+    <p class="pricing-sub fade-up">Scegli il piano più adatto alla tua realtà. Prima di qualsiasi contratto ti facciamo provare una demo funzionante del piano Essenziale, costruita sul tuo locale.</p>
+
+    <div class="price-cards">
+      <article class="price-card fade-up" style="--i:0">
+        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
+        <h3 class="price-card-name">Essenziale</h3>
+        <p class="price-card-from">da 1.190 € <span>+ 69 € al mese, oppure 690 € all'anno</span></p>
+        <p class="price-card-desc">Per la pizzeria d'asporto: prendi gli ordini, li mandi in cucina e chiudi la serata con i conti in ordine.</p>
+        <ul class="price-card-list">
+          <li><strong>Cassa e comande.</strong> Segni l'ordine una volta: conto e comanda in cucina partono insieme.</li>
+          <li><strong>Stampa in cucina.</strong> Ogni ordine esce stampato al forno, chiaro e in sequenza.</li>
+          <li><strong>Clienti e storico.</strong> Numeri e ordini dei clienti salvati: li richiami in un tocco.</li>
+          <li><strong>Formazione.</strong> La partenza la facciamo insieme, da remoto, compresa nel prezzo.</li>
+        </ul>
+        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="lite">Richiedi Essenziale</a></span>
+      </article>
+      <article class="price-card price-card--featured fade-up" style="--i:1">
+        <span class="price-card-badge">Consigliata per chi ha anche la sala</span>
+        <h3 class="price-card-name">Completa</h3>
+        <p class="price-card-from">da 2.490 € <span>+ 99 € al mese, oppure 990 € all'anno</span></p>
+        <p class="price-card-desc">Per chi serve ai tavoli oltre all'asporto: sala, camerieri e magazzino nello stesso sistema.</p>
+        <p class="price-card-inherit">Tutto di Essenziale, più:</p>
+        <ul class="price-card-list">
+          <li><strong>Mappa tavoli.</strong> La sala sullo schermo: liberi, occupati, prenotati. Conti divisi senza calcolatrice.</li>
+          <li><strong>Palmare camerieri.</strong> L'ordine parte dal tavolo e arriva in cucina. Licenza inclusa, dispositivo nel preventivo.</li>
+          <li><strong>Coda infornate.</strong> Le pizze in forno in ordine di orario: la cucina tiene il ritmo.</li>
+          <li><strong>Magazzino e food cost.</strong> Ogni pizza venduta scarica i suoi ingredienti: costi e margini reali, non a occhio.</li>
+        </ul>
+        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="completa">Richiedi Completa</a></span>
+      </article>
+      <article class="price-card fade-up" style="--i:2">
+        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
+        <h3 class="price-card-name">Premium</h3>
+        <p class="price-card-from">da 4.990 € <span>+ 199 € al mese, oppure 1.990 € all'anno</span></p>
+        <p class="price-card-desc">Per chi consegna a domicilio e vuole vendere online sul proprio sito, senza commissioni sugli ordini.</p>
+        <p class="price-card-inherit">Tutto di Completa, più:</p>
+        <ul class="price-card-list">
+          <li><strong>Rider e percorsi.</strong> Le consegne assegnate ai rider, con il percorso già calcolato.</li>
+          <li><strong>Ordini online.</strong> Sito e carrello tuoi: ordini illimitati, nessuna percentuale sul venduto.</li>
+          <li><strong>WhatsApp.</strong> Risponde da solo a orari e domande frequenti, e rimanda all'ordine online.</li>
+        </ul>
+        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="premium">Richiedi Premium</a></span>
+      </article>
+    </div>
+    <div class="custom-box fade-up">
+      <div class="custom-box__txt">
+        <h3 class="custom-box__title">Nessuno dei tre ti torna?</h3>
+        <p class="custom-box__desc">Ogni piano si può modificare: aggiungi quello che ti serve, togli quello che non usi. Il prezzo cambia di conseguenza e te lo scriviamo nero su bianco.</p>
+      </div>
+      <span class="pop"><a href="#contatti" class="pill custom-box__cta" data-exp="custom">Richiedi preventivo</a></span>
+    </div>
+    <p class="pricing-note fade-up">Prezzi indicativi, IVA esclusa. La cifra grande si paga una volta sola all'avvio; poi resta solo il canone, mensile o annuale (pagando l'anno sono due mesi in meno). Hardware e dettagli nel preventivo scritto.</p>
+  </div>
+</section>
+
+
+<section id="domande" class="section-pad sheet" style="--sheet-i:3">
+  <div class="display-wrap">
+    <h2 class="display">
+      <span class="line-mask"><span class="line-inner" style="--i:0">DOMANDE.</span></span>
+    </h2>
+  </div>
+  <div class="wrap">
+    <div class="rows" style="margin-bottom:34px;">
+      <div class="row row--plain fade-up" style="--i:0">
+        <div class="row-head">
+          <span class="row-title">Si prova prima di firmare.</span>
+          <span class="row-desc">Mezz'ora nel locale per guardare come lavori, poi una serata di prova col tuo menu già caricato. Decidi dopo.</span>
+        </div>
+      </div>
+      <div class="row row--plain fade-up" style="--i:1">
+        <div class="row-head">
+          <span class="row-title">Il tuo registratore resta.</span>
+          <span class="row-desc">Infornato non tocca la cassa fiscale: lo scontrino si batte come oggi.</span>
+        </div>
+      </div>
+      <div class="row row--plain fade-up" style="--i:2">
+        <div class="row-head">
+          <span class="row-title">Contratto di dodici mesi.</span>
+          <span class="row-desc">Alla scadenza si prosegue mese per mese. La disdetta non ha penali.</span>
+        </div>
+      </div>
+      <div class="row row--plain fade-up" style="--i:3">
+        <div class="row-head">
+          <span class="row-title">Nessuna commissione.</span>
+          <span class="row-desc">Il canone non cambia con gli incassi.</span>
+        </div>
+      </div>
+      <div class="row row--plain fade-up" style="--i:4">
+        <div class="row-head">
+          <span class="row-title">I dati restano tuoi.</span>
+          <span class="row-desc">Menu, clienti e storico: esportabili in ogni momento.</span>
+        </div>
+      </div>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item fade-up" style="--i:0">
+        <summary>Serve esperienza con la tecnologia?</summary>
+        <p class="faq-answer">No. Il sistema nasce per chi lavora in servizio: tasti grandi, poche schermate. La formazione a distanza è sempre compresa; una sessione in sede, se la vuoi, è una voce a parte del preventivo.</p>
+      </details>
+      <details class="faq-item fade-up" style="--i:1">
+        <summary>Perché il preventivo è scritto e non al telefono?</summary>
+        <p class="faq-answer">Un numero detto al telefono vale poco. Scritto, resta: calcolato sul tuo locale, da rileggere con calma.</p>
+      </details>
+    </div>
+  </div>
+</section>
+<section id="contatti" class="section-pad sheet" style="--sheet-i:4">
+  <div class="display-wrap">
+    <div class="closing-grid">
+      <h2 class="display closing-title">
+        <span class="line-mask"><span class="line-inner" style="--i:0">RICEVI PIÙ</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:1">INFORMAZIONI.</span></span>
+      </h2>
+      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi informazioni">
+        <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <defs><path id="cta-ring-b" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
+          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI INFORMAZIONI &#183; RICHIEDI INFORMAZIONI &#183; </textPath></text>
+        </svg>
+        <span class="circle-cta__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <form class="closing-form fade-up" id="quoteForm" novalidate>
+      <div class="field" id="fieldNome">
+        <label for="inpNome">Nome</label>
+        <input type="text" id="inpNome" name="nome" autocomplete="name" aria-describedby="errNome">
+        <span class="field-error" id="errNome"></span>
+      </div>
+      <div class="field" id="fieldLocale">
+        <label for="inpLocale">Nome del locale e città</label>
+        <input type="text" id="inpLocale" name="locale" autocomplete="organization" aria-describedby="errLocale">
+        <span class="field-error" id="errLocale"></span>
+      </div>
+      <div class="field" id="fieldTelefono">
+        <label for="inpTelefono">Telefono</label>
+        <input type="tel" id="inpTelefono" name="telefono" inputmode="tel" autocomplete="tel" aria-describedby="errTelefono">
+        <span class="field-error" id="errTelefono"></span>
+      </div>
+      <div class="field" id="fieldEsperienza">
+        <label for="inpEsperienza">Versione</label>
+        <select id="inpEsperienza" name="esperienza">
+          <option value="non-so" selected>Ancora da scegliere</option>
+          <option value="lite">Essenziale</option>
+          <option value="completa">Completa</option>
+          <option value="premium">Premium</option>
+          <option value="custom">Su misura</option>
+        </select>
+      </div>
+      <div class="field field--check" id="fieldPrivacy">
+        <label class="check" for="inpPrivacy">
+          <input type="checkbox" id="inpPrivacy" name="privacy" aria-describedby="errPrivacy">
+          <span>Acconsento al trattamento dei miei dati per essere ricontattato.</span>
+        </label>
+        <span class="field-error" id="errPrivacy"></span>
+      </div>
+      <button type="submit" class="pill pill--block form-submit-inline">Richiedi informazioni</button>
+      <p class="form-note">Ti rispondiamo entro 24 ore. Niente spam, niente vincoli.</p>
+    </form>
+
+    <div class="form-success" id="formSuccess" hidden>
+      <h3>Richiesta ricevuta.</h3>
+      <p>Grazie<span id="successName"></span>, ti rispondiamo entro 24 ore.</p>
+      <p class="summary-recap">Versione indicata: <strong id="successExp"></strong>.</p>
+    </div>
+
+    <div class="footer">
+      <div class="footer-brand">
+        <strong>Infornato</strong>
+        <span>Gestionale per pizzerie e ristoranti. Treviso e dintorni.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#cosa-fa">Cosa fa</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#tagli">Piani</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#domande">Domande</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pannello del video: il filmato non c'e' ancora, il riquadro e' pronto
+     ad accoglierlo (basta sostituire il segnaposto con un <video> o un iframe). -->
+<div class="video-modal" id="videoModal" hidden>
+  <div class="video-modal__sfondo" data-chiudi></div>
+  <div class="video-modal__box" role="dialog" aria-modal="true" aria-labelledby="videoTitolo">
+    <button type="button" class="video-modal__x" aria-label="Chiudi" data-chiudi></button>
+    <div class="video-modal__frame">
+      <p id="videoTitolo">Il video sta arrivando.</p>
+      <span>Stiamo registrando una serata vera: il cameriere che prende la comanda al tavolo e la manda in cucina.</span>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="../assets/js/lenis.min.js"></script>
+<script src="js/pizzerie.js"></script>
+</body>
+</html>

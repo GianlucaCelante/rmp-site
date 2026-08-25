@@ -11,16 +11,22 @@ sagre/                landing "sagre e feste di paese"
   css/sagre.css       stile della landing
   js/sagre.js         motion layer, carosello tablet, form
   img/                screenshot demo (hero KDS, 6 slide cassa, totem)
+pizzerie/             landing "pizzerie e ristoranti"
+  index.html
+  css/pizzerie.css
+  js/pizzerie.js
+  img/                screenshot gestionale, palmare, fetta e pomodoro 3D
 assets/               risorse condivise tra le sezioni
   css/fonts.css       @font-face dei webfont auto-hostati
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
-  favicon.svg
+  favicon.svg         favicon sagre (accento ambra)
+  favicon-pizzerie.svg  favicon pizzerie (accento rosso)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages
 ```
 
-Le prossime sezioni (es. `pizzerie/`) seguono lo stesso schema: una cartella per verticale con `index.html`, `css/`, `js/`, `img/`; in `assets/` solo ciò che è condiviso.
+Ogni verticale è autonomo: una cartella con `index.html`, `css/`, `js/`, `img/`. Le due landing condividono la stessa impalcatura (nav, hero, tablet, formule, FAQ, form) ma con stile e testi propri, per questo CSS e JS sono per cartella e non condivisi; in `assets/` sta solo ciò che è davvero comune. Le prossime sezioni seguono lo stesso schema.
 
 ## Sviluppo in locale
 
