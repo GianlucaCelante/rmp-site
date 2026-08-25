@@ -158,7 +158,10 @@
   (function () {
     var root = document.querySelector('.tablet-demo');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!root || !('IntersectionObserver' in window) || reduce) return;
+    /* Con "riduci movimento" il nastro resta sfogliabile (swipe, frecce,
+       tastiera): sono navigazione, non animazione. A spegnersi sono il pin,
+       il giro del tablet e lo scroll fluido (vedi CSS e motion layer). */
+    if (!root || !('IntersectionObserver' in window)) return;
     root.classList.add('js-ready');
 
     var tablet = root.querySelector('.tablet');

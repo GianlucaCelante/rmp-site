@@ -700,12 +700,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .tablet-demo.js-ready .tablet__screen{ border-radius:12px; }
 }
 
-/* reduced motion: pin spento, 3 blocchi statici impilati (doppia rete col JS) */
+/* reduced motion: pin spento e niente giro del tablet; il nastro resta
+   sfogliabile (una schermata alla volta), senza scroll fluido */
 @media (prefers-reduced-motion:reduce){
   .js-ready .step-trigger{ height:0; }
   .js-ready .tablet-demo__sticky{ position:static; height:auto; }
-  .tablet-demo.js-ready .tablet__track{ display:block; overflow:visible; }
-  .js-ready .tablet__slide{ position:static; opacity:1; transform:none; transition:none; }
 }
 
 /* Layout interno: dimensioni di default, terza slide panoramica, caption, indicatori */
