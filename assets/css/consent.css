@@ -1,0 +1,60 @@
+/* Banner cookie (vedi assets/js/consent.js). Usa i token della landing
+   quando ci sono, con un fallback sui valori di sagre. */
+.consent{
+  position:fixed;
+  inset:auto 0 0 0;
+  z-index:200;
+  padding:12px;
+  padding-bottom:max(12px, env(safe-area-inset-bottom));
+  transform:translateY(110%);
+  transition:transform .5s cubic-bezier(.32,.72,0,1);
+  pointer-events:none;
+  font-family:'Archivo',sans-serif;
+}
+.consent.is-open{ transform:translateY(0); pointer-events:auto; }
+.consent__box{
+  max-width:1040px;
+  margin-inline:auto;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:16px 28px;
+  padding:18px 22px;
+  background:var(--dark, #141312);
+  color:var(--card, #FCFBFA);
+  border-radius:var(--radius-ui, 10px);
+  box-shadow:0 18px 50px rgba(17,17,16,.32);
+}
+.consent__txt{ flex:1 1 380px; min-width:0; }
+.consent__txt strong{ display:block; font-size:16px; font-weight:600; margin-bottom:4px; }
+.consent__txt p{ margin:0; font-size:14px; line-height:1.5; color:rgba(252,251,250,.82); }
+.consent__link{
+  display:inline-block;
+  margin-top:6px;
+  font-size:14px;
+  color:inherit;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.consent__btns{ display:flex; gap:10px; flex:0 0 auto; margin-left:auto; }
+.consent__btn{
+  border:2px solid var(--accent-strong, #FFAA00);
+  border-radius:var(--radius-pill, 999px);
+  padding:11px 22px;
+  font:600 15px/1 'Archivo',sans-serif;
+  cursor:pointer;
+  transition:transform .2s ease, background .2s ease;
+}
+.consent__btn:hover{ transform:translateY(-1px); }
+.consent__btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+/* stessa evidenza per Accetta e Rifiuta: cambia solo il riempimento */
+.consent__btn--yes{ background:var(--accent-strong, #FFAA00); color:var(--ink, #111110); }
+.consent__btn--no{ background:transparent; color:var(--card, #FCFBFA); }
+.consent__btn--no:hover{ background:rgba(252,251,250,.08); }
+@media (max-width:600px){
+  .consent__btns{ width:100%; margin-left:0; }
+  .consent__btn{ flex:1 1 0; text-align:center; }
+}
+@media (prefers-reduced-motion:reduce){
+  .consent{ transition:none; }
+}

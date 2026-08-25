@@ -12,6 +12,7 @@
 <link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/fonts.css">
 <link rel="stylesheet" href="css/sagre.css">
+<link rel="stylesheet" href="../assets/css/consent.css">
 </head>
 <body>
 <nav class="nav" id="siteNav">
@@ -413,7 +414,7 @@
       <div class="field field--check" id="fieldPrivacy">
         <label class="check" for="inpPrivacy">
           <input type="checkbox" id="inpPrivacy" name="privacy" aria-describedby="errPrivacy">
-          <span>Acconsento al trattamento dei miei dati per essere ricontattato.</span>
+          <span>Acconsento al trattamento dei miei dati per essere ricontattato (<a href="../privacy/" target="_blank" rel="noopener">informativa privacy</a>).</span>
         </label>
         <span class="field-error" id="errPrivacy"></span>
       </div>
@@ -438,6 +439,10 @@
         <a href="#tagli">Le formule</a>
         <span class="footer-sep">&middot;</span>
         <a href="#domande">Domande</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="../privacy/">Privacy e cookie</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#" data-consent-open>Preferenze cookie</a>
       </div>
     </div>
   </div>
@@ -446,5 +451,6 @@
 
 <script src="../assets/js/lenis.min.js"></script>
 <script src="js/sagre.js"></script>
+<script src="../assets/js/consent.js" data-ga-id="" data-policy-url="../privacy/#cookie"></script>
 </body>
 </html>

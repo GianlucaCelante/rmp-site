@@ -16,8 +16,13 @@ pizzerie/             landing "pizzerie e ristoranti"
   css/pizzerie.css
   js/pizzerie.js
   img/                screenshot gestionale, palmare, fetta e pomodoro 3D
+privacy/              informativa privacy e cookie (linkata da checkbox e footer)
+  index.html
+  css/privacy.css
 assets/               risorse condivise tra le sezioni
   css/fonts.css       @font-face dei webfont auto-hostati
+  css/consent.css     stile del banner cookie
+  js/consent.js       banner cookie + Google Analytics 4 (caricato solo dopo il consenso)
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   favicon.svg         favicon sagre (accento ambra)
@@ -42,7 +47,21 @@ Basta aprire `sagre/index.html` nel browser. Meglio servirlo via HTTP, così fon
 
 Prima del primo deploy, nelle impostazioni del repository GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+## Google Analytics e banner cookie
+
+Il tracciamento è gestito da `assets/js/consent.js`, incluso in fondo a ogni pagina:
+
+```html
+<script src="../assets/js/consent.js" data-ga-id="G-XXXXXXXXXX" data-policy-url="../privacy/#cookie"></script>
+```
+
+- `data-ga-id` è l'ID misurazione di GA4. Se è vuoto non parte niente: né banner né cookie.
+- Lo script di Google viene scaricato solo dopo che l'utente ha premuto "Accetta" (Consent Mode con default `denied`); "Rifiuta" ha la stessa evidenza. La scelta vive in `localStorage` (`rmp-consent`) per 6 mesi.
+- Il link "Preferenze cookie" nel footer (`data-consent-open`) riapre il banner.
+- L'informativa in `privacy/index.html` va aggiornata se cambiano i servizi usati (form, analytics, video incorporati).
+
 ## Note
 
 - Il form "Richiedi il preventivo scritto" non è ancora collegato a un endpoint: in `sagre/js/sagre.js` la submit simula l'invio riuscito (vedi il `TODO`).
+- `privacy/index.html` contiene ancora i segnaposto tra parentesi quadre (titolare, indirizzo, P.IVA, email, servizio di inoltro del modulo): vanno compilati prima di pubblicare.
 - Il nome "Infornato" è provvisorio, in attesa del nome ufficiale. Compare in `<title>`, nel logo della nav e nella firma sotto il form.

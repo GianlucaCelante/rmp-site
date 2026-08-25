@@ -1275,8 +1275,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .footer-brand{ display:flex; flex-direction:column; gap:4px; }
 .footer-brand strong{ font:700 16px/1 'Archivo',sans-serif; color:var(--ink); }
 .footer-brand span{ font:400 15px/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
-.footer-links{ display:flex; gap:6px; font:600 14px/1 'Archivo',sans-serif; }
-.footer-links a{ text-decoration:none; color:var(--ink); }
+.footer-links{ display:flex; flex-wrap:wrap; gap:10px 6px; font:600 14px/1 'Archivo',sans-serif; }
+.footer-links a{ text-decoration:none; color:var(--ink); white-space:nowrap; }
 .footer-links a:hover{ color:var(--accent); }
 .footer-sep{ color:var(--muted-tx); }
 
