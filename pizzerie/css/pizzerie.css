@@ -1250,6 +1250,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .field.has-error input{ border-color:var(--accent); }
 .form-submit-inline{ width:100%; margin-top:22px; }
 .form-note{ font:400 15px/1.5 'Archivo',sans-serif; color:var(--muted-tx); margin-top:20px; max-width:48ch; }
+.form-error{ font:400 15px/1.5 'Archivo',sans-serif; color:var(--accent-text); margin-top:14px; max-width:48ch; }
+.closing-form.is-sending .form-submit-inline{ opacity:.6; cursor:progress; }
+/* honeypot: fuori schermo, non display:none (alcuni bot lo saltano) */
+.closing-form .hp{ position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
 .form-success{
   border:1.5px solid var(--line);
   border-radius:var(--radius);

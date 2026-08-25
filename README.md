@@ -27,6 +27,7 @@ assets/               risorse condivise tra le sezioni
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   favicon.svg         favicon sagre (accento ambra)
   favicon-pizzerie.svg  favicon pizzerie (accento rosso)
+worker/               Cloudflare Worker che inoltra il form con Brevo (vedi worker/README.md)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages
 ```
@@ -62,6 +63,6 @@ Il tracciamento è gestito da `assets/js/consent.js`, incluso in fondo a ogni pa
 
 ## Note
 
-- Il form "Richiedi il preventivo scritto" non è ancora collegato a un endpoint: in `sagre/js/sagre.js` la submit simula l'invio riuscito (vedi il `TODO`).
+- Il form "Richiedi il preventivo scritto" invia a `data-endpoint` del `<form id="quoteForm">` (l'URL del Worker in `worker/`). Finché l'attributo è vuoto l'invio è simulato.
 - `privacy/index.html` contiene ancora i segnaposto tra parentesi quadre (titolare, indirizzo, P.IVA, email, servizio di inoltro del modulo): vanno compilati prima di pubblicare.
 - Il nome "Infornato" è provvisorio, in attesa del nome ufficiale. Compare in `<title>`, nel logo della nav e nella firma sotto il form.

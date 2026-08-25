@@ -1,0 +1,111 @@
+/* Test del Worker senza Cloudflare: Node 18+ ha Request/Response/fetch.
+   Le chiamate a Brevo sono intercettate da un finto fetch. Esegui con
+   `npm test` dentro worker/. */
+import worker from '../src/index.js';
+import assert from 'node:assert/strict';
+
+const calls = [];
+globalThis.fetch = async (url, init) => {
+  calls.push({ url, body: JSON.parse(init.body), headers: init.headers });
+  if (globalThis.__failBrevo) return new Response('boom', { status: 500 });
+  return new Response('{}', { status: 201, headers: { 'content-type': 'application/json' } });
+};
+
+const env = {
+  ALLOWED_ORIGINS: 'https://gianlucacelante.github.io',
+  NOTIFY_TO: 'owner@example.com',
+  SENDER_EMAIL: 'noreply@example.com',
+  SENDER_NAME: 'Infornato',
+  SITE_NAME: 'Infornato',
+  SEND_CONFIRMATION: 'true',
+  BREVO_LIST_ID: '7',
+  BREVO_API_KEY: 'xkeysib-fake',
+  DRY_RUN: 'false'
+};
+const ORIGIN = 'https://gianlucacelante.github.io';
+function req(method, body, origin = ORIGIN, ip = '1.2.3.4') {
+  const headers = { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip };
+  if (origin) headers.Origin = origin;
+  return new Request('https://form.example.workers.dev/', { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+}
+const lead = { nome: 'Mario', locale: 'Sagra del Pesce, Caorle', email: 'mario@example.it', esperienza: 'completa', verticale: 'sagre', pagina: 'https://x/sagre/' };
+let n = 0;
+async function t(name, fn) { await fn(); n++; console.log('ok -', name); }
+
+await t('preflight CORS', async () => {
+  const r = await worker.fetch(req('OPTIONS'), env);
+  assert.equal(r.status, 204);
+  assert.equal(r.headers.get('Access-Control-Allow-Origin'), ORIGIN);
+});
+await t('GET rifiutato', async () => {
+  assert.equal((await worker.fetch(req('GET'), env)).status, 405);
+});
+await t('origine non autorizzata', async () => {
+  const r = await worker.fetch(req('POST', lead, 'https://evil.example'), env);
+  assert.equal(r.status, 403);
+  assert.equal(r.headers.get('Access-Control-Allow-Origin'), null);
+});
+await t('JSON malformato', async () => {
+  const r = await fetchRaw('{nope');
+  assert.equal(r.status, 400);
+});
+await t('honeypot: finto successo, nessuna chiamata', async () => {
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', { ...lead, website: 'http://spam' }), env);
+  assert.equal(r.status, 200);
+  assert.equal(calls.length, 0);
+});
+await t('validazione: email e formula', async () => {
+  const r = await worker.fetch(req('POST', { ...lead, email: 'mario@', esperienza: 'boh' }), env);
+  assert.equal(r.status, 400);
+  assert.deepEqual((await r.json()).fields, ['email', 'esperienza']);
+});
+await t('DRY_RUN: ok senza Brevo', async () => {
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', lead), { ...env, DRY_RUN: 'true' });
+  const j = await r.json();
+  assert.equal(r.status, 200);
+  assert.equal(j.dryRun, true);
+  assert.equal(calls.length, 0);
+});
+await t('invio completo: avviso + contatto + conferma', async () => {
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', lead, ORIGIN, '9.9.9.9'), env);
+  assert.equal(r.status, 200);
+  assert.equal((await r.json()).ok, true);
+  const paths = calls.map((c) => c.url.replace('https://api.brevo.com/v3', '')).sort();
+  assert.deepEqual(paths, ['/contacts', '/smtp/email', '/smtp/email']);
+  const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
+  assert.equal(notify.body.replyTo.email, 'mario@example.it');
+  assert.match(notify.body.subject, /Sagre e feste di paese: Sagra del Pesce, Caorle/);
+  assert.match(notify.body.htmlContent, /Festa M/);
+  const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'mario@example.it');
+  assert.match(confirm.body.textContent, /due giorni lavorativi/);
+  const contact = calls.find((c) => c.url.endsWith('/contacts'));
+  assert.deepEqual(contact.body.listIds, [7]);
+  assert.equal(contact.body.attributes.FORMULA, 'Festa M');
+  assert.equal(contact.headers['api-key'], 'xkeysib-fake');
+});
+await t('HTML nei campi viene neutralizzato', async () => {
+  calls.length = 0;
+  await worker.fetch(req('POST', { ...lead, nome: '<img src=x onerror=1>' }, ORIGIN, '8.8.8.8'), env);
+  const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
+  assert.doesNotMatch(notify.body.htmlContent, /<img/);
+  assert.match(notify.body.htmlContent, /&lt;img/);
+});
+await t('avviso fallito -> 502', async () => {
+  globalThis.__failBrevo = true;
+  const r = await worker.fetch(req('POST', lead, ORIGIN, '7.7.7.7'), env);
+  globalThis.__failBrevo = false;
+  assert.equal(r.status, 502);
+});
+await t('limite di frequenza per IP', async () => {
+  let last;
+  for (let i = 0; i < 6; i++) last = await worker.fetch(req('POST', lead, ORIGIN, '5.5.5.5'), { ...env, DRY_RUN: 'true' });
+  assert.equal(last.status, 429);
+});
+
+async function fetchRaw(text) {
+  return worker.fetch(new Request('https://form.example.workers.dev/', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: ORIGIN, 'CF-Connecting-IP': '2.2.2.2' }, body: text }), env);
+}
+console.log(n + ' test passati');

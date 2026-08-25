@@ -1,0 +1,13 @@
+{
+  "name": "rmp-site-form-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node test/run.js",
+    "dev": "wrangler dev --var DRY_RUN:true --var ALLOWED_ORIGINS:",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

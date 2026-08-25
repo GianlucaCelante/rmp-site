@@ -355,7 +355,9 @@
     </div>
   </div>
   <div class="wrap">
-    <form class="closing-form fade-up" id="quoteForm" novalidate>
+    <form class="closing-form fade-up" id="quoteForm" novalidate data-endpoint="" data-verticale="pizzerie">
+      <!-- honeypot anti-spam: invisibile, i bot lo compilano -->
+      <div class="hp" aria-hidden="true"><label for="inpWebsite">Sito web</label><input type="text" id="inpWebsite" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="field" id="fieldNome">
         <label for="inpNome">Nome</label>
         <input type="text" id="inpNome" name="nome" autocomplete="name" aria-describedby="errNome">
@@ -389,6 +391,7 @@
         <span class="field-error" id="errPrivacy"></span>
       </div>
       <button type="submit" class="pill pill--block form-submit-inline">Richiedi informazioni</button>
+      <p class="form-error" id="formError" hidden></p>
       <p class="form-note">Ti rispondiamo entro 24 ore. Niente spam, niente vincoli.</p>
     </form>
 

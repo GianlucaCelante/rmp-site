@@ -385,7 +385,9 @@
     </div>
   </div>
   <div class="wrap">
-    <form class="closing-form fade-up" id="quoteForm" novalidate>
+    <form class="closing-form fade-up" id="quoteForm" novalidate data-endpoint="" data-verticale="sagre">
+      <!-- honeypot anti-spam: invisibile, i bot lo compilano -->
+      <div class="hp" aria-hidden="true"><label for="inpWebsite">Sito web</label><input type="text" id="inpWebsite" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="field" id="fieldNome">
         <label for="inpNome">Nome</label>
         <input type="text" id="inpNome" name="nome" autocomplete="name" aria-describedby="errNome">
@@ -419,6 +421,7 @@
         <span class="field-error" id="errPrivacy"></span>
       </div>
       <button type="submit" class="pill pill--block form-submit-inline">Richiedi il preventivo scritto</button>
+      <p class="form-error" id="formError" hidden></p>
       <p class="form-note">Vi rispondiamo via email entro due giorni lavorativi con il preventivo scritto.</p>
     </form>
 

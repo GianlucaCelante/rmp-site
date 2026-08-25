@@ -330,20 +330,61 @@
         return;
       }
 
-      /* TODO: collegare invio (Formspree o mail). Qui si simula un invio riuscito. */
       var expSelect = document.getElementById('inpEsperienza');
       var expValue = expSelect ? expSelect.value : 'non-so';
       var expLabel = ESPERIENZA_LABELS[expValue] || expValue;
 
-      if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
-      if (successExpEl) successExpEl.textContent = expLabel;
-
-      form.hidden = true;
-      if (successBox) {
-        successBox.hidden = false;
-        successBox.setAttribute('tabindex', '-1');
-        successBox.focus();
+      function showSuccess(){
+        if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
+        if (successExpEl) successExpEl.textContent = expLabel;
+        form.hidden = true;
+        if (successBox) {
+          successBox.hidden = false;
+          successBox.setAttribute('tabindex', '-1');
+          successBox.focus();
+        }
       }
+
+      var formError = document.getElementById('formError');
+      if (formError) { formError.hidden = true; formError.textContent = ''; }
+
+      /* L'endpoint (Cloudflare Worker -> Brevo, vedi worker/README.md) sta in
+         data-endpoint sul <form>. Se e' vuoto l'invio e' simulato: comodo per
+         anteprime e sviluppo. */
+      var endpoint = (form.getAttribute('data-endpoint') || '').trim();
+      if (!endpoint) { showSuccess(); return; }
+
+      var hp = form.querySelector('[name="website"]');
+      var payload = {
+        nome: data.nome.trim(),
+        locale: data.locale.trim(),
+        email: data.email.trim(),
+        esperienza: expValue,
+        verticale: form.getAttribute('data-verticale') || '',
+        website: hp ? hp.value : '',
+        pagina: location.href
+      };
+      var submitBtn = form.querySelector('.form-submit-inline');
+      form.classList.add('is-sending');
+      if (submitBtn) submitBtn.disabled = true;
+      fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function(r){
+          return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok && j.ok !== false, error: j.error }; });
+        })
+        .then(function(res){
+          if (!res.ok) throw new Error(res.error || 'send');
+          showSuccess();
+        })
+        .catch(function(){
+          if (formError) {
+            formError.textContent = 'Non siamo riusciti a inviare la richiesta. Riprova tra qualche minuto.';
+            formError.hidden = false;
+          }
+        })
+        .then(function(){
+          form.classList.remove('is-sending');
+          if (submitBtn) submitBtn.disabled = false;
+        });
     });
   }
 

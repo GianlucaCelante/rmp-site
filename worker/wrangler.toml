@@ -1,0 +1,22 @@
+name = "rmp-site-form"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# Variabili NON segrete. La chiave Brevo va messa come secret:
+#   npx wrangler secret put BREVO_API_KEY
+[vars]
+# Origini autorizzate a chiamare il Worker (separate da virgola). Aggiungere
+# il dominio definitivo quando c'e'. Vuoto = tutte (solo per prove).
+ALLOWED_ORIGINS = "https://gianlucacelante.github.io"
+# Chi riceve l'avviso (una o piu' email separate da virgola)
+NOTIFY_TO = "da-compilare@example.com"
+# Mittente: deve essere un indirizzo (o dominio) verificato in Brevo
+SENDER_EMAIL = "da-compilare@example.com"
+SENDER_NAME = "Infornato"
+SITE_NAME = "Infornato"
+# "true" per mandare anche la conferma al richiedente
+SEND_CONFIRMATION = "true"
+# ID numerico della lista Brevo in cui salvare i contatti (vuoto = solo attributi)
+BREVO_LIST_ID = ""
+# "true" = valida e risponde ok senza chiamare Brevo (per prove)
+DRY_RUN = "false"
