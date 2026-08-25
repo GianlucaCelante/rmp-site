@@ -1,0 +1,1420 @@
+/* ---------- Reset ---------- */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Archivo',sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  /* clip, NON hidden: "hidden" qui rende il body un contenitore di scroll
+     e spegne ogni position:sticky dei discendenti (card e fogli). */
+  overflow-x:clip;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+button{font-family:inherit;}
+ul{margin:0;padding:0;list-style:none;}
+h1,h2,h3,p{margin:0;}
+input,button{font-size:inherit;}
+
+/* ---------- Tokens ---------- */
+:root{
+  --bg:        #E9E9E9;
+  --bg-hero:   #E2DFDA;
+  --surface-fallback: #cfcdc8;
+  --ink:       #111110;
+  --muted:     #6F6D68;      /* token as specified in the brief */
+  --muted-tx:  #676560;      /* AA-safe reading color derived from --muted, see report */
+  --accent:    #FFAA00;      /* decorativo: bordi, punti, superfici senza testo */
+  --accent-strong: #FFAA00;  /* riempimenti bottone: testo/icone sopra sono SCURI (var(--ink)), non bianchi */
+  --accent-text:   #8A5300;  /* accent usato come testo su fondi chiari, ~5:1 */
+  --dark:      #141312;
+  --card:      #FCFBFA;
+  --line:      rgba(17,17,16,0.14);
+  --line-inv:  rgba(252,251,250,0.16);
+
+  --radius:      28px;
+  --radius-pill: 999px;
+  --radius-ui:   10px;
+
+  --ease:        cubic-bezier(.32,.72,0,1);
+  --ease-reveal: cubic-bezier(.16,1,.3,1);
+
+  /* Token aggiunti per l'innesto tablet (da landing-novu): dimensioni cornice
+     tablet e padding orizzontale di sezione fuori da .wrap, stesso valore di
+     .wrap cosi' il blocco tablet-demo (full-bleed) resta allineato al resto. */
+  --tablet-bezel: clamp(10px, 1.6vw, 20px);
+  --tablet-radius: clamp(16px, 2.4vw, 28px);
+  --wrap-pad: clamp(20px, 4vw, 56px);
+
+  --fs-display:    clamp(56px, 9.5vw, 148px);
+  --fs-display-sm: clamp(40px, 6vw, 80px);
+  --fs-statement:  clamp(24px, 3vw, 40px);
+
+  --section-pad: clamp(72px, 10vw, 136px);
+  --nav-h: 72px;
+}
+
+/* ---------- Layout ---------- */
+.wrap{
+  max-width:1440px;
+  margin-inline:auto;
+  padding-inline:clamp(20px, 4vw, 56px);
+}
+.display-wrap{
+  max-width:1472px;
+  margin-inline:auto;
+  padding-inline:16px;
+}
+section{ position:relative; }
+.section-pad{ padding-block:var(--section-pad); }
+.section-dark{ background:var(--dark); color:var(--card); }
+
+/* ---------- Display type ---------- */
+.display{
+  font-family:'Anton',sans-serif;
+  text-transform:uppercase;
+  line-height:.95;
+  letter-spacing:-0.02em;
+  font-size:var(--fs-display);
+  color:var(--ink);
+  font-weight:400;
+}
+.display--sm{ font-size:var(--fs-display-sm); }
+.display-on-dark{ color:var(--card); }
+
+.line-mask{
+  display:block;
+  overflow:hidden;
+  /* con line-height .95 la maschera tagliava gli accenti delle maiuscole
+     (la U di PIU'): un filo di spazio sopra, ripreso col margine negativo
+     per non alterare il ritmo delle righe. */
+  padding-top:.09em;
+  margin-top:-.09em;
+}
+.line-inner{
+  display:block;
+  will-change:transform;
+}
+html.js .line-inner{
+  transform:translateY(105%);
+  transition:transform .9s var(--ease-reveal);
+  transition-delay:calc(var(--i,0) * 90ms);
+}
+html.js .line-inner.is-visible{
+  transform:translateY(0);
+}
+@media (prefers-reduced-motion:reduce){
+  html.js .line-inner{ transform:none; transition:none; }
+}
+
+/* ---------- Pop dei bottoni ---------- */
+/* Entrano piccoli e "scattano" alla dimensione piena con overshoot
+   elastico. Il wrapper .pop e' separato dal bottone: l'hover scale del
+   bottone non entra in conflitto. */
+html.js .pop{ display:block; opacity:0; transform:scale(.55); }
+html.js .pop.is-visible{
+  opacity:1;
+  transform:scale(1);
+  transition:opacity .45s ease, transform .7s cubic-bezier(.34,1.56,.64,1);
+}
+@media (prefers-reduced-motion:reduce){
+  html.js .pop{ opacity:1; transform:none; transition:none; }
+}
+
+/* ---------- Fade-up reveal ---------- */
+html.js .fade-up{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s var(--ease-reveal), transform .7s var(--ease-reveal);
+  transition-delay:calc(var(--i,0) * 60ms);
+  will-change:transform,opacity;
+}
+html.js .fade-up.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+@media (prefers-reduced-motion:reduce){
+  html.js .fade-up{ opacity:1; transform:none; transition:none; }
+}
+
+/* ---------- Parallax ---------- */
+.parallax-frame{ overflow:hidden; border-radius:var(--radius); position:relative; background:var(--surface-fallback); }
+.parallax-img{
+  position:absolute;
+  left:0; right:0;
+  top:-5%;
+  width:100%;
+  height:110%;
+  object-fit:cover;
+  display:block;
+  will-change:transform;
+}
+.img-fallback{
+  background:var(--surface-fallback);
+  min-height:clamp(200px,26vw,320px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+}
+.img-fallback::after{
+  content:"Immagine non disponibile";
+  font:500 14px/1.4 'Archivo',sans-serif;
+  color:#6b6a65;
+}
+
+/* ---------- Buttons ---------- */
+/* Badge rotante: testo in cerchio lungo il bordo (SVG textPath, ripetuto
+   due volte per chiudere il giro) che ruota in loop, freccia al centro. */
+.circle-cta{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:clamp(150px, 16vw, 220px);
+  height:clamp(150px, 16vw, 220px);
+  border-radius:50%;
+  background:var(--accent-strong);
+  color:var(--ink);
+  border:none;
+  cursor:pointer;
+  padding:0;
+  transition:transform .5s var(--ease);
+  flex-shrink:0;
+}
+.circle-cta:hover{ transform:scale(1.04); }
+.circle-cta:focus-visible{ outline:3px solid var(--ink); outline-offset:4px; }
+.circle-cta__ring{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  transform-origin:50% 50%;
+}
+@media (prefers-reduced-motion: no-preference){
+  .circle-cta__ring{ animation:ctaSpin 16s linear infinite; }
+  .circle-cta:hover .circle-cta__ring{ animation-duration:7s; }
+}
+@keyframes ctaSpin{ to{ transform:rotate(360deg); } }
+.circle-cta__ring text{
+  font-family:'Archivo',sans-serif;
+  font-weight:700;
+  font-size:19px;
+  fill:#111110;
+}
+.circle-cta__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.circle-cta__icon svg{
+  width:clamp(30px, 3.2vw, 42px);
+  height:auto;
+  display:block;
+  transition:transform .5s var(--ease);
+}
+.circle-cta:hover .circle-cta__icon svg{ transform:translate(3px,-3px); }
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--accent-strong);
+  color:var(--ink);
+  font:600 18px/1.2 'Archivo',sans-serif;
+  padding:16px 28px;
+  border-radius:var(--radius-pill);
+  border:none;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .4s var(--ease), opacity .4s var(--ease);
+  white-space:nowrap;
+}
+.pill:hover{ opacity:.88; transform:translateY(-2px); }
+.pill:focus-visible{ outline:3px solid var(--ink); outline-offset:3px; }
+.pill--block{ width:100%; white-space:normal; }
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  font:600 14px/1 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  border:1px solid var(--line);
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+}
+
+/* ---------- Nav ---------- */
+.nav{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:80;
+  height:var(--nav-h);
+  display:flex;
+  align-items:center;
+  background:transparent;
+  transition:background-color .5s var(--ease), backdrop-filter .5s var(--ease), transform .4s var(--ease);
+}
+.nav.is-scrolled{
+  background:rgba(233,233,233,0.72);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+}
+/* Sopra la sezione scura la nav si inverte, niente banda grigia sul nero */
+.nav.nav-on-dark.is-scrolled{ background:rgba(20,19,18,0.72); }
+.nav.nav-on-dark .nav-brand,
+.nav.nav-on-dark .nav-links a:not(.nav-cta){ color:var(--card); }
+.nav-inner{
+  width:100%;
+  max-width:1440px;
+  margin-inline:auto;
+  padding-inline:clamp(20px, 4vw, 56px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.nav-brand{
+  font:700 18px/1 'Archivo',sans-serif;
+  color:var(--ink);
+  text-decoration:none;
+}
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:clamp(20px,2.6vw,36px);
+}
+.nav-link{
+  font:500 15px/1 'Archivo',sans-serif;
+  color:var(--ink);
+  text-decoration:none;
+  padding-block:4px;
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease), color .3s var(--ease);
+}
+.nav-link:hover{ border-color:var(--ink); }
+.nav-cta{
+  font:600 15px/1 'Archivo',sans-serif;
+  color:var(--accent-text);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  white-space:nowrap;
+}
+.nav-hide-mobile{ display:inline-flex; }
+@media (max-width:760px){
+  .nav-hide-mobile{ display:none; }
+  /* label CTA piu' lunga della versione pizzeria: sulla riga unica mobile
+     riduciamo leggermente il font invece di spezzare il testo */
+  .nav-cta{ font-size:14px; }
+}
+@media (max-width:400px){
+  .nav-cta{ font-size:12.5px; }
+}
+
+#top{ height:1px; }
+main{ overflow-x:clip; }
+
+/* ---------- Focus ---------- */
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible{
+  outline:2px solid var(--accent-text);
+  outline-offset:3px;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  padding-top:calc(var(--nav-h) + 40px);
+  /* piu' spazio in basso: il foglio #cosa-fa sale a coprire questo bordo */
+  padding-bottom:96px;
+  /* un soffio piu' scuro e caldo del resto: cosi' il primo foglio (#cosa-fa,
+     che resta #E9E9E9) si stacca davvero dall'header quando gli sale sopra */
+  background:var(--bg-hero);
+}
+.hero-top{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:clamp(24px,4vw,48px);
+}
+.hero-kicker{
+  max-width:30ch;
+  font:500 18px/1.5 'Archivo',sans-serif;
+  color:var(--ink);
+  text-align:left;
+}
+.hero-title{ margin-bottom:clamp(32px,6vw,64px); }
+.hero-visual{
+  position:relative;
+  min-height:120px;
+}
+.hero-stage{
+  position:relative;
+  /* z-index esplicito: il transform del fade-up crea uno stacking context
+     e senza questo la fetta (z4) coprirebbe le schede. Con z4 e DOM
+     successivo, il palco sta sopra la fetta (che finisce con la punta
+     dietro al tablet: profondita' voluta) e sotto il cerchio (z5). */
+  z-index:4;
+  width:min(78%, 1000px);
+  margin-left:auto;
+}
+.hero-tablet{
+  padding:var(--tablet-bezel);
+  border-radius:var(--tablet-radius);
+  background:linear-gradient(135deg,#2e2b28,#100e0c);
+  box-shadow:0 30px 80px rgba(17,17,16,.28);
+}
+.hero-tablet__screen{
+  /* stesso formato della schermata cucina della demo (16:9): niente tagli */
+  aspect-ratio:1600/900;
+  overflow:hidden;
+  border-radius:calc(var(--tablet-radius) - var(--tablet-bezel));
+  background:#0d0c0b;
+}
+.hero-tablet__screen img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Schede-racconto sopra il tablet: grandi, leggibili, con dati demo */
+.hero-chip{
+  position:absolute;
+  z-index:6;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  border-radius:14px;
+  padding:12px 16px;
+  box-shadow:0 16px 40px rgba(17,17,16,.20);
+  pointer-events:none;
+  user-select:none;
+}
+.chip-txt{ font:400 13.5px/1.35 'Archivo',sans-serif; color:var(--muted-tx); }
+.chip-txt strong{ display:block; font-weight:600; font-size:14.5px; color:var(--ink); }
+.chip-dot{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:#3E9B4F; }
+.chip-dot--amber{ background:#E0A100; }
+.chip-check{
+  flex:0 0 auto;
+  width:22px; height:22px;
+  border-radius:50%;
+  background:#3E9B4F;
+  position:relative;
+}
+.chip-check::after{
+  content:"";
+  position:absolute;
+  left:6px; top:7px;
+  width:9px; height:5px;
+  border-left:2.5px solid #fff;
+  border-bottom:2.5px solid #fff;
+  transform:rotate(-45deg);
+}
+.hero-chip--1{ left:-6%; top:16%; }
+.hero-chip--2{ right:14%; top:-22px; }
+.hero-chip--3{ left:26%; bottom:-20px; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-chip--1{ animation:chipFloat 5.5s ease-in-out infinite alternate; }
+  .hero-chip--2{ animation:chipFloat 6.5s ease-in-out .8s infinite alternate; }
+  .hero-chip--3{ animation:chipFloat 7.5s ease-in-out .4s infinite alternate-reverse; }
+}
+@keyframes chipFloat{
+  from{ transform:translateY(-5px); }
+  to{ transform:translateY(6px); }
+}
+/* Il cerchio si sovrappone tra il titolo e lo screenshot, come nella
+   reference: deve essere visibile nel primo schermo senza scrollare. */
+.hero-circle{
+  position:absolute;
+  z-index:5;
+  top:clamp(-90px, -6vw, -48px);
+  left:clamp(16px, 30vw, 430px);
+}
+
+@media (max-width:900px){
+  .hero-top{ justify-content:flex-start; }
+  .hero-kicker{ text-align:left; max-width:38ch; }
+  .hero-stage{ width:100%; margin-top:10px; }
+  .hero-chip{ padding:10px 13px; }
+  .chip-txt{ font-size:12.5px; }
+  .chip-txt strong{ font-size:13.5px; }
+  .hero-chip--1{ left:-8px; top:10%; }
+  .hero-chip--2{ right:-6px; top:-16px; }
+  .hero-chip--3{ left:16px; bottom:-16px; }
+  .hero-circle{ position:static; display:inline-flex; margin:0 0 24px; }
+}
+
+/* ---------- Numbered rows (Cosa fa / Parliamoci chiaro) ---------- */
+.rows{ border-top:1px solid var(--line); }
+.row{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px 28px;
+  padding-block:26px;
+  border-bottom:1px solid var(--line);
+}
+.row-head{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:8px 32px;
+  flex:1;
+  transition:transform .5s var(--ease);
+}
+.row:hover .row-head{ transform:translateX(6px); }
+.row-title{
+  font:700 20px/1.3 'Archivo',sans-serif;
+  color:var(--ink);
+  flex:0 0 auto;
+  min-width:240px;
+}
+.row-desc{
+  font:400 16px/1.5 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  flex:1 1 320px;
+  max-width:52ch;
+}
+.row--plain .row-head{ padding-left:0; }
+
+/* ---------- Cosa fa: tablet scrollytelling (innesto da landing-novu, #dentro) ----------
+   Ricolorato sui token v2: fondo resta #E9E9E9 (la sezione non ha bg proprio,
+   eredita quello di #cosa-fa), caption in Archivo con titolo 700 e testo
+   --muted-tx (lo stesso token AA-safe usato da .row-desc/.shot-caption/ecc.
+   nel resto del file: --muted "nudo" non e' mai usato per testo qui), pallino
+   attivo var(--accent) (ambra secondo la palette sagre).
+   Cornice tablet: gradiente scuro del donatore mantenuto fedele. */
+.tablet{
+  position:relative;
+  padding:var(--tablet-bezel);
+  border-radius:var(--tablet-radius);
+  background:var(--dark);
+  background:linear-gradient(135deg,#2e2b28,#100e0c);
+  box-shadow:0 30px 80px rgba(17,17,16,.28);
+}
+.tablet__cam{
+  position:absolute;
+  left:calc(var(--tablet-bezel) / 2 - 3px);
+  top:50%;
+  margin-top:-3px;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:#3a3835;
+  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+  z-index:3;
+}
+.tablet__screen{
+  position:relative;
+  overflow:hidden;
+  border-radius:calc(var(--tablet-radius) - var(--tablet-bezel));
+  background:#0d0c0b;
+}
+.tablet__screen::after{
+  content:"";
+  position:absolute; inset:0;
+  z-index:2;
+  background:linear-gradient(115deg,rgba(255,255,255,.07),transparent 40%);
+  pointer-events:none;
+}
+.tablet__screen img{ width:100%; height:auto; display:block; }
+
+/* Scrollytelling: grid a celle sovrapposte (grid-area: 1 / 1) + gate .js-ready
+   sulla sezione. Senza JS: le 3 schermate restano impilate visibili nella
+   stessa cornice (fallback no-JS, nessun markup duplicato). */
+.tablet-demo{ margin-top:0; }
+.tablet-demo__grid{ display:grid; }
+.tablet-demo__track,.tablet-demo__sticky{ grid-area: 1 / 1; }
+.tablet-demo__track{ display:flex; flex-direction:column; pointer-events:none; }
+.step-trigger{ height:0; } /* senza JS: nessuna distanza di scroll */
+
+/* Un solo trigger: ~95svh se li prende il giro del tablet, il resto e' la
+   sosta in cui il tablet resta fermo e si sfogliano le schermate col dito.
+   Serve sosta abbondante: se la sezione scappa via mentre uno sfoglia,
+   l'interazione non si scopre nemmeno. */
+.js-ready .step-trigger[data-index="0"]{ height:230vh; height:230svh; }
+/* Lo stage e' alto quanto il suo contenuto, NON quanto lo schermo: cosi'
+   la sezione non si porta dietro fasce vuote ne' in testa ne' in coda.
+   Il centering nel viewport lo fa il top misurato dal JS (--stage-top). */
+.js-ready .tablet-demo__sticky{
+  position:sticky;
+  top:var(--stage-top, 12px);
+  align-self:start;
+  height:auto;
+  contain:layout paint;
+}
+/* Durante il giro la prospettiva proietta il tablet fuori dal box dello
+   stage e il paint containment lo taglia (bordo sotto mozzato). Solo
+   layout finche' il giro non e' chiuso; a giro finito torna il paint. */
+.tablet-demo.js-flip:not(.flip-done) .tablet-demo__sticky{ contain:layout; }
+/* Le schermate si sfogliano di lato: un nastro orizzontale con l'aggancio
+   nativo del browser (scroll-snap), non un finto slider in JS. Cosi' il
+   gesto ha l'inerzia del sistema e il dito lo trova dove se lo aspetta. */
+.tablet-demo.js-ready .tablet__track{
+  position:absolute; inset:0;
+  display:flex;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  scroll-behavior:smooth;
+}
+.tablet-demo.js-ready .tablet__track::-webkit-scrollbar{ display:none; }
+.tablet-demo.js-ready .tablet__track:focus-visible{ outline:2px solid var(--accent-text); outline-offset:-4px; }
+.tablet-demo.js-ready .tablet__slide{
+  flex:0 0 100%;
+  width:100%; height:100%;
+  object-fit:cover;
+  scroll-snap-align:center;
+  scroll-snap-stop:always;
+  opacity:1;
+}
+@media (prefers-reduced-motion:reduce){
+  .tablet-demo.js-ready .tablet__track{ scroll-behavior:auto; }
+}
+
+/* Frecce: solo con mouse. Su touch si scorre col dito e sarebbero ingombro. */
+.tablet-nav{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .tablet-demo.js-ready .tablet-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    display:grid;
+    place-items:center;
+    width:44px; height:44px;
+    border:none;
+    border-radius:50%;
+    background:rgba(252,251,250,.92);
+    box-shadow:0 6px 20px rgba(17,17,16,.22);
+    cursor:pointer;
+    z-index:4;
+    transition:opacity .3s var(--ease), transform .3s var(--ease);
+  }
+  .tablet-demo.js-ready .tablet-nav::before{
+    content:"";
+    width:9px; height:9px;
+    border-right:2.5px solid var(--ink);
+    border-bottom:2.5px solid var(--ink);
+  }
+  .tablet-nav--prev{ left:-22px; }
+  .tablet-nav--prev::before{ transform:rotate(135deg); margin-left:3px; }
+  .tablet-nav--next{ right:-22px; }
+  .tablet-nav--next::before{ transform:rotate(-45deg); margin-right:3px; }
+  .tablet-demo.js-ready .tablet-nav:hover{ transform:translateY(-50%) scale(1.06); }
+  .tablet-demo.js-ready .tablet-nav[disabled]{ opacity:.32; cursor:default; box-shadow:none; }
+  .tablet-demo.js-ready .tablet-nav[disabled]:hover{ transform:translateY(-50%); }
+  /* Prima del giro completo le frecce ruoterebbero col tablet: nascoste
+     finche' l'animazione non e' finita, poi entrano in dissolvenza. */
+  .tablet-demo.js-flip:not(.flip-done) .tablet-nav{ opacity:0; pointer-events:none; }
+}
+
+/* MOBILE (<768px): tablet compatto pinnato in alto, niente 100svh morti */
+@media (max-width:600px){
+  .hero-marquee__track span{ font-size:clamp(80px, 30vw, 150px); }
+  .hero-chip--3{ display:none; }
+  .hero-chip--2{ right:12px; }
+}
+@media (max-width:47.99em){
+  .js-ready .step-trigger[data-index="0"]{ height:205vh; height:205svh; }
+  .js-ready .tablet-demo__sticky{
+    padding-block:0;
+    overflow-x:clip;
+  }
+  /* Respiro attorno alla didascalia: su mobile il tablet e' quasi a tutta
+     larghezza e il testo gli restava appiccicato sopra e sotto. */
+  .tablet-demo.js-ready .tablet-demo__row{ gap:30px; }
+  .tablet-demo.js-ready .tablet-demo__caption{ padding-inline:6px; }
+  .tablet-demo.js-ready .scrolly-cue{ margin-top:26px; }
+  /* Mobile: schermate GRANDI. Cornice ridotta all'osso e larghezza quasi
+     piena: il "tablet" diventa poco piu' di un bordo attorno allo schermo.
+     Specificita' composta: la regola base ".tablet-demo .tablet{width:min(70vw,...)}"
+     arriva dopo nel foglio e a pari specificita' vincerebbe lei. */
+  .tablet-demo.js-ready .tablet{
+    width:calc(100vw - 16px);
+    max-width:none;
+    /* il parent ha padding orizzontale: "margin auto" non ricentra un box
+       piu' largo del content-box (sborda solo a destra). I margini negativi
+       simmetrici lo riportano al centro del viewport. */
+    margin-inline:calc((100% - (100vw - 16px)) / 2);
+    padding:8px;
+    border-radius:18px;
+  }
+  .tablet-demo.js-ready .tablet::before{ display:none; } /* niente fotocamera: bezel sottile */
+  .tablet-demo.js-ready .tablet__screen{ border-radius:12px; }
+}
+
+/* reduced motion: pin spento, 3 blocchi statici impilati (doppia rete col JS) */
+@media (prefers-reduced-motion:reduce){
+  .js-ready .step-trigger{ height:0; }
+  .js-ready .tablet-demo__sticky{ position:static; height:auto; }
+  .tablet-demo.js-ready .tablet__track{ display:block; overflow:visible; }
+  .js-ready .tablet__slide{ position:static; opacity:1; transform:none; transition:none; }
+}
+
+/* Layout interno: dimensioni di default, terza slide panoramica, caption, indicatori */
+.tablet-demo__sticky{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(10px,1.8vw,16px); /* titolo attaccato al gruppo, gruppo compatto */
+  padding-inline:var(--wrap-pad);
+}
+/* niente riserva per la nav: scendendo si nasconde da sola (auto-hide),
+   il gruppo pinnato si prende tutto lo schermo */
+.js-ready .tablet-demo__sticky{ padding-top:0; }
+
+/* Titolo dentro lo stage: taglia contestuale (non da sezione piena),
+   attaccato al tablet. Compare e resta col tablet, non prima. */
+.tablet-demo .display.tablet-demo__title{
+  text-align:center;
+  margin:0;
+}
+.tablet-demo__row{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(18px,3vw,28px);
+  width:100%;
+}
+
+.tablet-demo .tablet{ width:min(70vw,720px); margin-inline:auto; }
+/* js-ready sta sulla sezione stessa: serve il selettore composto, non discendente */
+/* stesso formato delle schermate della demo: niente tagli */
+.tablet-demo.js-ready .tablet__screen{ aspect-ratio:1366/768; }
+
+/* ---------- Flip d'ingresso del tablet (classe js-flip messa solo dal JS,
+   solo con Lenis attivo e senza reduced-motion) ---------- */
+.tablet__back{ display:none; }
+.js-flip .tablet-demo__row{ perspective:1900px; }
+.js-flip .tablet{ transform-style:preserve-3d; will-change:transform; }
+.js-flip.flip-done .tablet{ will-change:auto; }
+.js-flip .tablet__screen,
+.js-flip .tablet__cam{ backface-visibility:hidden; }
+.js-flip .tablet__back{
+  display:block;
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:linear-gradient(150deg,#403c37,#171512 65%);
+  /* il retro sta 14px dietro al fronte: e' lo spessore della "scocca" */
+  transform:rotateY(180deg) translateZ(14px);
+  backface-visibility:hidden;
+}
+/* Fianchi laterali: due lamelle ruotate di 90 gradi che collegano fronte e
+   retro. Durante il giro si vede il bordo, come un tablet vero, non un
+   cartoncino. Inset verticale per non sbordare dagli angoli arrotondati. */
+/* Spessore a lastre: copie della piastra ARROTONDATA sfalsate in profondita'
+   fino al retro (-14px). Di taglio si leggono come una parete continua, e la
+   sagoma resta stondata da ogni angolazione: niente lamelle squadrate che
+   sporgono agli angoli. */
+.tablet__ply{ display:none; }
+.js-flip .tablet__ply{
+  display:block;
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:#1b1916;
+  transform:translateZ(var(--z, -7px));
+}
+.js-flip .tablet__back::after{
+  content:"";
+  position:absolute; top:14px; right:16px;
+  width:14px; height:14px;
+  border-radius:50%;
+  background:#0a0a0b;
+  box-shadow:0 0 0 3px rgba(255,255,255,.07);
+}
+
+.tablet-demo__text{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  max-width:440px;
+}
+.tablet-demo__caption{ position:relative; width:100%; text-align:center; }
+/* Invito a proseguire: dentro lo stage bloccato non e' ovvio che le
+   schermate cambiano solo scorrendo. Tre segnali insieme: a che punto sei
+   (1 di 3), cosa fare (microcopy), dove (freccia che pulsa). */
+/* senza JS (o con animazioni ridotte) le tre schermate sono gia' tutte in
+   colonna: invitare a scorrere per vederle sarebbe una bugia */
+.scrolly-cue{ display:none; }
+.js-ready .scrolly-cue{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.scrolly-hint{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font:600 13px/1 'Archivo',sans-serif;
+  color:var(--muted-tx);
+}
+.scrolly-hint__n{ color:var(--ink); }
+.scrolly-hint__txt, .scrolly-hint__chev{ transition:opacity .5s var(--ease); }
+/* la freccia punta a destra: il gesto ora e' laterale, non verticale */
+.scrolly-hint__chev{
+  width:8px; height:8px;
+  border-right:2px solid var(--accent-text);
+  border-bottom:2px solid var(--accent-text);
+  transform:rotate(-45deg);
+}
+@media (prefers-reduced-motion: no-preference){
+  .scrolly-hint__chev{ animation:hintBob 1.7s ease-in-out infinite; }
+}
+@keyframes hintBob{
+  0%,100%{ transform:translateX(-2px) rotate(-45deg); }
+  50%{ transform:translateX(3px) rotate(-45deg); }
+}
+/* il consiglio cambia col dispositivo: col dito si scorre, col mouse si
+   usano le frecce. Nessun JS: due span e una media query. */
+.scrolly-hint__txt--mouse{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .scrolly-hint__txt--touch{ display:none; }
+  .scrolly-hint__txt--mouse{ display:inline; }
+}
+/* sull'ultima schermata non c'e' piu' niente da anticipare: resta il conto */
+.scrolly-cue.is-last .scrolly-hint__txt,
+.scrolly-cue.is-last .scrolly-hint__chev{ opacity:0; }
+.scrolly-progress{
+  width:56px; height:2px;
+  margin:0;
+  background:var(--line);
+  overflow:hidden;
+}
+.scrolly-progress span{
+  display:block; height:100%;
+  background:var(--accent);
+  transform:scaleX(.333);
+  transform-origin:left center;
+  transition:transform .45s var(--ease);
+}
+.tablet-demo__caption-item{ padding:0; }
+.tablet-demo__caption-item h3{
+  font:700 22px/1.2 'Archivo',sans-serif;
+  color:var(--ink);
+}
+.tablet-demo__caption-item p{
+  font:400 16px/1.55 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  margin-top:10px;
+}
+/* Le didascalie stanno impilate nella stessa cella di griglia: il
+   contenitore e' alto quanto la piu' alta delle sei, senza min-height
+   a mano da rimisurare ogni volta che un testo cambia. */
+.js-ready .tablet-demo__caption{ display:grid; }
+.js-ready .tablet-demo__caption-item{
+  grid-area:1/1;
+  opacity:0; transform:translateY(12px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.22,.61,.36,1);
+}
+.js-ready .tablet-demo__caption-item.is-active{ opacity:1; transform:translateY(0); z-index:1; }
+
+@media (min-width:1024px){
+  /* il layout affiancato ora vive sulla riga interna: lo stage resta in
+     colonna (titolo sopra, riga sotto) e va sempre in scena tutto insieme */
+  .js-ready .tablet-demo__sticky{ justify-content:center; padding-inline:var(--wrap-pad); }
+  .js-ready .tablet-demo__row{
+    flex-direction:row-reverse;
+    justify-content:center;
+    align-items:center;
+    gap:clamp(40px,6vw,88px);
+  }
+  .js-ready .tablet-demo__sticky .tablet{ width:min(54vw,860px); flex:0 1 auto; }
+  .js-ready .tablet-demo__text{
+    max-width:360px;
+    flex:0 0 360px;
+    align-items:flex-start;
+    text-align:left;
+  }
+  .js-ready .tablet-demo__caption{ text-align:left; }
+  .js-ready .tablet-demo__caption-item h3{ font-size:27px; }
+  .js-ready .scrolly-cue{ align-items:flex-start; }
+}
+
+/* ---------- Banda video: ordina al totem ----------
+   Layout della reference: fondo scuro pieno, tipografia gigante bianca a
+   sinistra, il totem eliminacoda che entra dal bordo destro e il cerchio
+   ambra che sbuca da dietro il bordo sinistro della scocca (il totem sta
+   sopra, come il telefono copriva parte dell'anello nella reference). */
+.vband{
+  position:relative;
+  background:var(--dark);
+  margin-top:clamp(56px,8vw,104px);
+  transition:background-color .9s var(--ease);
+}
+/* Transizione chiaro -> scuro all'arrivo (come la reference): il JS parte
+   dallo stato chiaro e lo toglie quando la banda prende lo schermo. Scura
+   di default: senza JS o con animazioni ridotte il testo bianco ha sempre
+   il suo fondo. */
+.vband--light{ background:var(--bg); }
+.vband .display{ transition:color .9s var(--ease); }
+.vband--light .display{ color:var(--ink); }
+@media (prefers-reduced-motion:reduce){
+  .vband, .vband .display{ transition:none; }
+}
+/* Scena: titolo, totem e bollino. L'overflow che taglia il totem sta qui,
+   non su .vband: sotto la scena arriva il blocco cucina, che non deve
+   essere tagliato. */
+.vband__scene{
+  position:relative;
+  overflow:hidden;
+}
+.vband__in{
+  position:relative;
+  z-index:2;
+  padding-block:clamp(48px,6vw,88px);
+  pointer-events:none;
+}
+/* solo tipografia, come la reference: niente paragrafo, il testo riempie
+   la banda su quattro righe */
+.vband__display{ font-size:clamp(46px,7vw,108px); max-width:66%; }
+/* Totem eliminacoda: scocca disegnata in CSS (stessa lingua materica del
+   tablet, gradiente 150deg #403c37 -> #171512, feritoia in plastica scura
+   #1b1916), schermo con la foto vera della schermata "Conferma e stampa". */
+.vband__totem{
+  position:absolute;
+  z-index:2;
+  right:clamp(10px,4vw,70px);
+  bottom:clamp(-40px,-2vw,-24px);
+  width:clamp(200px,24vw,340px);
+  /* altezza intrinseca: la segue lo schermo (aspect-ratio della foto),
+     niente piu' calc(100%+extra): la foto non deve mai essere tagliata */
+  height:auto;
+  transform:rotate(-3.5deg);
+  background:linear-gradient(150deg,#403c37,#171512 65%);
+  border-radius:clamp(18px,2vw,26px);
+  padding:clamp(12px,1.4vw,16px);
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  pointer-events:none;
+  user-select:none;
+}
+.vband__totem-screen{
+  aspect-ratio:800/1280;
+  background:var(--card);
+  border-radius:14px;
+  overflow:hidden;
+}
+.vband__totem-screen img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:inherit;
+}
+.vband__totem-slot{
+  display:block;
+  width:56%;
+  height:10px;
+  margin:clamp(10px,1.2vw,14px) auto 0;
+  border-radius:999px;
+  background:#0a0a0b;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.06);
+}
+/* Bollino statico: identico al circle-cta dell'header (anello che gira,
+   icona al centro) ma decorativo, non cliccabile: niente video da mostrare,
+   resta solo come richiamo al totem. Z-index sotto .vband__totem: il totem
+   sta sopra e lo copre in parte, il disco sbuca da dietro il suo bordo
+   sinistro (su tutti i viewport, mobile compreso). */
+.vband__playwrap{
+  position:absolute;
+  z-index:1;
+  right:clamp(180px,19vw,280px);
+  bottom:clamp(24px,4vw,52px);
+}
+.vband__playwrap .circle-cta{
+  width:clamp(190px,20vw,270px);
+  height:clamp(190px,20vw,270px);
+}
+.circle-cta--badge{ pointer-events:none; cursor:default; }
+@media (max-width:760px){
+  /* in colonna: testo sopra, sotto una zona riservata al totem che entra
+     da destra, col cerchio a sinistra che sbuca da dietro il suo angolo */
+  .vband__scene{ padding-bottom:clamp(300px,86vw,400px); }
+  .vband__display{ font-size:clamp(46px,12.5vw,60px); max-width:none; }
+  .vband__totem{ width:min(58vw,250px); right:-2vw; bottom:-20px; }
+  .vband__playwrap{
+    right:auto;
+    left:var(--wrap-pad);
+    bottom:clamp(40px,11vw,64px);
+  }
+  .vband__playwrap .circle-cta{
+    width:clamp(170px,45vw,200px);
+    height:clamp(170px,45vw,200px);
+  }
+}
+
+/* ---------- Banda cucina: invito a vedere la demo KDS, sotto la scena ---------- */
+.vband__more{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(24px,4vw,48px);
+  padding-block:clamp(40px,6vw,72px);
+  border-top:1px solid rgba(252,251,250,.12);
+}
+.vband__more-txt{ max-width:56ch; }
+.vband__more-txt h3{
+  font:700 clamp(24px,2.6vw,34px)/1.25 'Archivo',sans-serif;
+  color:var(--card);
+  transition:color .9s var(--ease);
+}
+.vband__more-txt p{
+  margin-top:12px;
+  font:400 16px/1.55 'Archivo',sans-serif;
+  color:rgba(252,251,250,.72);
+  max-width:56ch;
+  transition:color .9s var(--ease);
+}
+.vband__more .pill{ flex-shrink:0; white-space:nowrap; }
+/* stesso schema chiaro/scuro del titolo della banda: quando la banda e'
+   ancora chiara (.vband--light) anche questo testo resta leggibile */
+.vband--light .vband__more-txt h3{ color:var(--ink); }
+.vband--light .vband__more-txt p{ color:var(--muted-tx); }
+@media (prefers-reduced-motion:reduce){
+  .vband__more-txt h3, .vband__more-txt p{ transition:none; }
+}
+@media (max-width:760px){
+  .vband__more{ flex-direction:column; align-items:flex-start; }
+  .vband__more .pill{ width:100%; text-align:center; }
+}
+
+/* ---------- Prezzi "a partire da" e dettagli card ---------- */
+.price-card-from{
+  font:600 26px/1.1 'Archivo',sans-serif;
+  color:var(--ink);
+  margin:6px 0 12px;
+}
+.price-card-from span{
+  display:block;
+  font:400 15px/1.4 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  margin-top:4px;
+}
+/* Cosa comprende: elenco sempre in chiaro, niente pannello da aprire.
+   La spunta davanti a ogni voce la fa leggere come "incluso" e non come
+   un paragrafo qualsiasi. */
+/* segnaposto invisibile del badge: tiene i nomi e i prezzi delle tre schede
+   sulla stessa riga quando sono affiancate. Su mobile sono in colonna e
+   sarebbe solo spazio sprecato. */
+/* selettore composto: la regola .price-card-badge arriva dopo nel foglio e
+   a pari specificita' vincerebbe lei, rimettendo in scena il segnaposto */
+.price-card .price-card-badge--ghost{ visibility:hidden; }
+@media (max-width:900px){ .price-card .price-card-badge--ghost{ display:none; } }
+.price-card-inherit{
+  font:600 14.5px/1.4 'Archivo',sans-serif;
+  color:var(--ink);
+  margin:0;
+}
+.price-card-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.price-card-list li{
+  position:relative;
+  padding-left:24px;
+  font:400 14.5px/1.5 'Archivo',sans-serif;
+  color:var(--muted-tx);
+}
+.price-card-list li::before{
+  content:"";
+  position:absolute;
+  left:2px; top:.34em;
+  width:6px; height:11px;
+  border-right:2px solid var(--accent-text);
+  border-bottom:2px solid var(--accent-text);
+  transform:rotate(45deg);
+}
+.price-card-list li strong{ color:var(--ink); font-weight:600; }
+/* la CTA scende sempre in fondo: con elenchi di lunghezza diversa i tre
+   pulsanti restano comunque allineati tra loro */
+.price-card > .pop{ margin-top:auto; padding-top:4px; }
+/* Riquadro "su misura": sta sul fondo scuro della sezione piani, quindi
+   contorno chiaro invece di card bianca (le card bianche sono i tre piani,
+   questo e' un'altra cosa e deve leggersi come tale). */
+.custom-box{
+  margin-top:clamp(28px,4vw,40px);
+  padding:clamp(22px,3vw,30px);
+  border:1px solid rgba(252,251,250,0.22);
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(20px,3vw,40px);
+  flex-wrap:wrap;
+}
+.custom-box__title{ font:700 20px/1.3 'Archivo',sans-serif; color:var(--card); }
+.custom-box__desc{
+  margin-top:8px;
+  font:400 16px/1.55 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.72);
+  max-width:60ch;
+}
+.custom-box__cta{ white-space:nowrap; }
+@media (max-width:600px){
+  .custom-box{ flex-direction:column; align-items:stretch; }
+  /* label CTA unificata piu' lunga: su una sola riga non ci starebbe in
+     larghezza piena mobile, meglio due righe leggibili che testo tagliato */
+  .custom-box__cta{ width:100%; white-space:normal; }
+}
+.pricing-note{
+  margin-top:22px;
+  font:400 14px/1.5 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.55);
+}
+@media (min-width:768px){
+  .price-card--featured{ transform:scale(1.03); }
+}
+
+/* ---------- Statement ---------- */
+.statement p{
+  font:500 var(--fs-statement)/1.25 'Archivo',sans-serif;
+  color:var(--ink);
+  max-width:900px;
+}
+
+/* ---------- Prezzi (dark) ---------- */
+.pricing{ background:var(--dark); color:var(--card); }
+.pricing-head-row{ margin-bottom:16px; }
+.pricing-sub{
+  font:500 20px/1.5 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.7);
+  max-width:62ch;
+  margin-top:20px;
+}
+
+.price-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+  margin-top:clamp(48px,7vw,80px);
+}
+.price-card{
+  background:var(--card);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 20px 50px rgba(0,0,0,.35);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  border:2px solid transparent; /* riservato per non far "saltare" le card quando .price-card--featured aggiunge il bordo accent */
+  transition:transform .5s var(--ease);
+}
+.price-card:hover{ transform:translateY(-4px); }
+.price-card--featured{ border-color:var(--accent); }
+.price-card-badge{
+  display:inline-flex;
+  align-self:flex-start;
+  font:600 13px/1 'Archivo',sans-serif;
+  color:var(--accent-text);
+  background:rgba(255,170,0,.18);
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+}
+.price-card-name{ font:700 24px/1.2 'Archivo',sans-serif; }
+.price-card-desc{
+  font:500 15px/1.5 'Archivo',sans-serif;
+  color:var(--muted-tx);
+}
+@media (max-width:900px){
+  .price-cards{ grid-template-columns:1fr; }
+}
+
+/* ---------- Come si parte ---------- */
+
+.clear-block{ margin-top:clamp(96px,12vw,168px); }
+
+/* ---------- Domande ---------- */
+.faq-list{ border-top:1px solid var(--line); margin-top:clamp(40px,6vw,64px); }
+.faq-item{ border-bottom:1px solid var(--line); }
+.faq-item summary{
+  list-style:none;
+  cursor:pointer;
+  position:relative;
+  padding:26px 48px 26px 0;
+  font:600 20px/1.4 'Archivo',sans-serif;
+  color:var(--ink);
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{
+  content:"";
+  position:absolute;
+  right:4px; top:50%;
+  width:16px; height:16px;
+  transform:translateY(-50%);
+  background-image:linear-gradient(var(--ink),var(--ink)), linear-gradient(var(--ink),var(--ink));
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:16px 2px, 2px 16px;
+  transition:transform .5s var(--ease);
+}
+.faq-item[open] summary::after{ transform:translateY(-50%) rotate(45deg); }
+.faq-answer{
+  max-width:66ch;
+  margin-top:2px;
+  padding-bottom:28px;
+  font:400 16px/1.5 'Archivo',sans-serif;
+  color:var(--muted-tx);
+}
+
+/* ---------- Contatti / form ---------- */
+.closing-grid{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.closing-title{ flex:1 1 480px; }
+.closing-sub{
+  margin-top:20px;
+  margin-bottom:clamp(56px,8vw,96px);
+  font:500 20px/1.5 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  max-width:60ch;
+}
+.closing-form{
+  /* aria tra il titolo e i campi, richiesta in revisione */
+  margin-top:clamp(40px,6vw,72px);
+  max-width:640px;
+}
+.field{ display:flex; flex-direction:column; gap:8px; margin-bottom:32px; }
+.field label{ font:600 14px/1.3 'Archivo',sans-serif; color:var(--ink); }
+/* consenso: casella e testo sulla stessa riga, area di tocco generosa */
+.field--check{ margin-bottom:24px; }
+.check{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  cursor:pointer;
+  font:400 15px/1.45 'Archivo',sans-serif !important;
+  color:var(--muted-tx) !important;
+  font-weight:400 !important;
+}
+.check input[type="checkbox"]{
+  flex:0 0 auto;
+  width:22px; height:22px;
+  margin:0;
+  accent-color:var(--accent-strong);
+  cursor:pointer;
+}
+.field--check.has-error .check input[type="checkbox"]{ outline:2px solid var(--accent-text); outline-offset:2px; }
+.field input, .field select{
+  font:400 17px/1.4 'Archivo',sans-serif;
+  color:var(--ink);
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-ui);
+  padding:14px 16px;
+  width:100%;
+}
+.field select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 8l5 5 5-5' stroke='%23111110' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+  background-size:14px;
+  padding-right:42px;
+  cursor:pointer;
+}
+.field input::placeholder{ color:var(--muted-tx); opacity:1; }
+.field input:focus-visible, .field select:focus-visible{ outline:2px solid var(--accent-text); outline-offset:2px; border-color:var(--accent); }
+.field-error{
+  font:500 14px/1.4 'Archivo',sans-serif;
+  color:var(--accent-text);
+  min-height:18px;
+}
+.field.has-error input{ border-color:var(--accent); }
+.form-submit-inline{ width:100%; margin-top:30px; }
+.form-note{ font:400 15px/1.5 'Archivo',sans-serif; color:var(--muted-tx); margin-top:20px; max-width:48ch; }
+.form-success{
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px clamp(20px,3vw,32px);
+  background:var(--card);
+}
+.form-success h3{ font:700 22px/1.3 'Archivo',sans-serif; color:var(--ink); margin-bottom:12px; }
+.form-success p{ font:400 16px/1.6 'Archivo',sans-serif; color:var(--ink); }
+.form-success .summary-recap{ margin-top:16px; font:400 15px/1.7 'Archivo',sans-serif; color:var(--muted-tx); }
+.form-success .summary-recap strong{ color:var(--ink); font-weight:600; }
+[hidden]{ display:none !important; }
+
+.footer{
+  margin-top:clamp(64px,9vw,120px);
+  padding-top:32px;
+  border-top:1px solid var(--line);
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px 32px;
+  align-items:center;
+  justify-content:space-between;
+}
+.footer-brand{ display:flex; flex-direction:column; gap:4px; }
+.footer-brand strong{ font:700 16px/1 'Archivo',sans-serif; color:var(--ink); }
+.footer-brand span{ font:400 15px/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
+.footer-links{ display:flex; gap:6px; font:600 14px/1 'Archivo',sans-serif; }
+.footer-links a{ text-decoration:none; color:var(--ink); }
+/* hover in accent-text: l'ambra piena su fondo chiaro non regge il contrasto */
+.footer-links a:hover{ color:var(--accent-text); }
+.footer-sep{ color:var(--muted-tx); }
+
+/* ---------- Global section rhythm ---------- */
+#hero{ background:var(--bg); }
+#cosa-fa{ background:var(--bg); }
+/* Chiusura piu' generosa dell'apertura: sopra c'e' solo l'attacco del foglio,
+   sotto invece l'invito a scorrere ha bisogno di staccarsi dal foglio che
+   sale (la nota che faceva da cuscinetto non c'e' piu'). */
+#cosa-fa.section-pad{ padding-block:clamp(28px,4vw,48px) clamp(64px,8vw,104px); }
+.statement-section{ background:var(--bg); padding-block:clamp(96px, 14vw, 180px); }
+#domande{ background:var(--bg); }
+#contatti{ background:var(--bg); }
+
+@media (max-width:900px){
+  .row-title{ min-width:0; flex-basis:100%; }
+}
+
+/* ============================================================
+   V5 MOTION LAYER (vedi BRIEF-v5-motion.md) - solo aggiunte.
+   Nessuna regola sopra viene rimossa o rinominata. L'unica modifica
+   a una dichiarazione esistente e' l'aggiunta di "transform" alla
+   transition-list di .nav (sopra, riga della regola .nav), per non
+   sovrascrivere le transizioni di background-color/backdrop-filter
+   gia' presenti. Tutto il resto qui sotto sono nuove classi e nuovi
+   keyframes. Ogni blocco ha la sua rete prefers-reduced-motion,
+   stesso schema gia' usato sopra da .line-inner e .fade-up.
+   ============================================================ */
+
+/* ---- 1. Marquee dietro il titolo hero ---- */
+.hero{ overflow:hidden; }
+.hero-title{ position:relative; }
+.hero-title .display{ position:relative; z-index:1; }
+.hero-marquee{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  display:flex;
+  align-items:center;
+  pointer-events:none;
+  user-select:none;
+}
+.hero-marquee__track{
+  display:flex;
+  flex-wrap:nowrap;
+  will-change:transform;
+  animation:heroMarquee 55s linear infinite;
+}
+.hero-marquee__track span{
+  display:inline-block;
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-family:'Anton',sans-serif;
+  text-transform:uppercase;
+  font-size:clamp(120px, 22vw, 320px);
+  line-height:1;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(17,17,16,.10);
+}
+@supports not (-webkit-text-stroke:1px black){
+  .hero-marquee__track span{ color:rgba(17,17,16,.05); }
+}
+@keyframes heroMarquee{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+@media (max-width:600px){
+  .hero-marquee__track span{ -webkit-text-stroke:1px rgba(17,17,16,.08); }
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-marquee__track{ animation:none; }
+}
+
+/* Galleggiamento del cerchio CTA: sta sul wrapper .hero-circle, mai
+   su .circle-cta che ha gia' lo scale al passaggio del mouse (due
+   nodi diversi, transform indipendenti, nessun conflitto). */
+.hero-circle{ animation:heroCircleFloat 6s ease-in-out infinite alternate; }
+@keyframes heroCircleFloat{
+  from{ transform:translateY(-6px); }
+  to{ transform:translateY(6px); }
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-circle{ animation:none; }
+}
+
+/* ---- 2. Sezioni a fogli impilati (statement, tagli,
+   domande, contatti - #cosa-fa resta fuori, ha gia' il suo sticky
+   interno per il tablet). Background pieno per sezione gia' presente
+   sopra ("Global section rhythm" + .pricing scura): qui solo forma,
+   sovrapposizione e stacking. ---- */
+.sheet{
+  position:relative;
+  z-index:calc(9 + var(--sheet-i, 0));
+  border-radius:28px 28px 0 0;
+  box-shadow:0 -18px 50px rgba(17,17,16,.10);
+  margin-top:-28px;
+  transition:transform .5s var(--ease), filter .5s var(--ease);
+}
+.sheet--pin{
+  position:sticky;
+  top:0;
+}
+.sheet--pin.sheet--under{
+  transform:scale(0.97) translateY(-10px);
+  filter:brightness(.94);
+}
+@media (prefers-reduced-motion:reduce){
+  .sheet{ transition:none; }
+  .sheet--pin{ position:relative; }
+  .sheet--pin.sheet--under{ transform:none; filter:none; }
+}
+
+/* ---- 3. Card prezzi su mobile: scorrimento normale, niente mazzo
+   sovrapposto. Compaiono con la stessa dissolvenza .fade-up del resto
+   della pagina, sfalsate da var(--i). ---- */
+
+/* ---- 4. Statement: rivelazione parola per parola. Stato "spento"
+   applicato solo sotto html.js: senza JS le parole non vengono mai
+   spezzate in span, il paragrafo resta testo pieno via .statement p
+   (regola gia' presente sopra). ---- */
+html.js .statement .w{
+  color:rgba(17,17,16,.24);
+  transition:color .6s var(--ease-reveal);
+  transition-delay:calc(var(--wi, 0) * 28ms);
+}
+html.js .statement p.is-lit .w{ color:var(--ink); }
+@media (prefers-reduced-motion:reduce){
+  html.js .statement .w{ color:var(--ink); transition:none; }
+}
+
+/* ---- 5. Nav che si nasconde scendendo. Solo transform: non tocca le
+   proprieta' di background-color/backdrop-filter usate da is-scrolled
+   e nav-on-dark, convive con entrambe. ---- */
+.nav.nav--hidden{ transform:translateY(-130%); }
+@media (prefers-reduced-motion:reduce){
+  .nav.nav--hidden{ transform:none; }
+}
+
+/* ---- 6. Stagger esteso: le voci dell'elenco dentro ogni card prezzi
+   entrano una dopo l'altra (stesso principio del .fade-up con --i usato
+   dalle righe di "Parliamoci chiaro" e dalle FAQ). ---- */
+html.js .price-card-list li{
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .5s var(--ease-reveal), transform .5s var(--ease-reveal);
+}
+html.js .price-card.is-visible .price-card-list li{ opacity:1; transform:translateY(0); }
+html.js .price-card-list li:nth-child(1){ transition-delay:0ms; }
+html.js .price-card-list li:nth-child(2){ transition-delay:45ms; }
+html.js .price-card-list li:nth-child(3){ transition-delay:90ms; }
+html.js .price-card-list li:nth-child(4){ transition-delay:135ms; }
+@media (prefers-reduced-motion:reduce){
+  html.js .price-card-list li{ opacity:1; transform:none; transition:none; }
+}
