@@ -338,12 +338,47 @@
       if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
       if (successExpEl) successExpEl.textContent = expLabel;
 
-      form.hidden = true;
-      if (successBox) {
-        successBox.hidden = false;
-        successBox.setAttribute('tabindex', '-1');
-        successBox.focus();
-      }
+      /* Il bollino rotante e' un submit del form: senza form non fa piu'
+         nulla, quindi esce di scena insieme a lui. */
+      var orphanCta = document.querySelector('#contatti .closing-grid .pop');
+      if (orphanCta) orphanCta.hidden = true;
+
+      /* Se il titolo non e' ancora entrato in scena, niente reveal a
+         sorpresa mentre la pagina si riassesta. */
+      document.querySelectorAll('#contatti .line-inner').forEach(function(l){ l.classList.add('is-visible'); });
+
+      if (!successBox) { form.hidden = true; return; }
+      successBox.hidden = false;
+      successBox.setAttribute('tabindex', '-1');
+      requestAnimationFrame(function(){ successBox.classList.add('is-in'); });
+
+      /* preventScroll: il focus da solo farebbe scorrere il browser, che
+         con lo smooth scroll attivo si vede come uno scatto. */
+      var settle = function(){
+        if (lenis) lenis.resize();   /* Lenis rimisura: niente scroll disallineato */
+        successBox.focus({ preventScroll: true });
+      };
+
+      if (reduceMotion) { form.hidden = true; settle(); return; }
+
+      /* Il form si ritira in altezza: senza questo la pagina si accorcia di
+         700px in un frame, lo scroll viene troncato e la vista scatta. */
+      var formH = form.offsetHeight;
+      form.style.height = formH + 'px';
+      form.classList.add('is-leaving');
+      requestAnimationFrame(function(){ form.style.height = '0px'; });
+
+      var leaveDone = false;
+      var finishLeave = function(){
+        if (leaveDone) return;
+        leaveDone = true;
+        form.hidden = true;
+        form.classList.remove('is-leaving');
+        form.style.height = '';
+        settle();
+      };
+      form.addEventListener('transitionend', function(e){ if (e.propertyName === 'height') finishLeave(); });
+      setTimeout(finishLeave, 700);   /* rete di sicurezza se la transizione non parte */
     });
   }
 
