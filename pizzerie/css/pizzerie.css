@@ -1264,6 +1264,32 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .form-success p{ font:400 16px/1.6 'Archivo',sans-serif; color:var(--ink); }
 .form-success .summary-recap{ margin-top:16px; font:400 15px/1.7 'Archivo',sans-serif; color:var(--muted-tx); }
 .form-success .summary-recap strong{ color:var(--ink); font-weight:600; }
+/* Il box prende il posto del form: stessa larghezza e stesso stacco dal
+   titolo, altrimenti nasce incollato sotto il display e largo tutta la pagina. */
+.form-success{ margin-top:clamp(40px,6vw,72px); max-width:640px; }
+/* Il box riceve il fuoco via JS per annunciare l'esito: l'anello di
+   sistema qui e' un rettangolo nero pesante. Resta solo per chi naviga
+   da tastiera, e con i colori del sito. */
+.form-success:focus{ outline:none; }
+.form-success:focus-visible{ outline:2px solid var(--accent-text); outline-offset:4px; }
+html.js .form-success{ opacity:0; transform:translateY(14px); }
+html.js .form-success.is-in{
+  opacity:1;
+  transform:none;
+  transition:opacity .5s var(--ease-reveal), transform .5s var(--ease-reveal);
+}
+/* Il form si ritira in altezza invece di sparire di colpo: senza questo la
+   pagina si accorcia di 700px in un frame, lo scroll viene troncato e la
+   vista scatta. */
+.closing-form.is-leaving{
+  overflow:hidden;
+  opacity:0;
+  transition:height .45s var(--ease), opacity .25s ease;
+}
+@media (prefers-reduced-motion:reduce){
+  html.js .form-success{ opacity:1; transform:none; transition:none; }
+  .closing-form.is-leaving{ transition:none; }
+}
 [hidden]{ display:none !important; }
 
 .footer{
