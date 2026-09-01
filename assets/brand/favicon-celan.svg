@@ -1,4 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="cèlan">
-<title>cèlan</title>
-<path fill="#ce472d" d="M9.9 24.5L33.38 24.5L44.98 42.37L31.59 42.37ZM39.68 3.62L56.27 20.21L51.84 41.06L42.38 31.59ZM75.5 9.9L75.5 33.38L57.63 44.98L57.63 31.59ZM96.38 39.68L79.79 56.27L58.94 51.84L68.41 42.38ZM90.1 75.5L66.62 75.5L55.02 57.63L68.41 57.63ZM60.32 96.38L43.73 79.79L48.16 58.94L57.62 68.41ZM24.5 90.1L24.5 66.62L42.37 55.02L42.37 68.41ZM3.62 60.32L20.21 43.73L41.06 48.16L31.59 57.62Z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Marchio cèlan, file del grafico ("Tavola disegno 2.svg", versione rossa).
+     Unica modifica: il viewBox stringe sull'artboard 154.16 fino al segno
+     (che ne occupava il 64%), se no nella linguetta del browser il marchio
+     nasce piccolo. Le proporzioni sono quelle del PNG accanto. -->
+<svg id="Livello_1" data-name="Livello 1" xmlns="http://www.w3.org/2000/svg" viewBox="23.78 23.78 106.61 106.61">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #cd3c20;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-1" points="34.32 49.89 59.36 49.89 71.73 68.95 57.46 68.95 34.32 49.89"/>
+  <polygon class="cls-1" points="66.07 27.62 83.78 45.32 79.05 67.55 68.96 57.45 66.07 27.62"/>
+  <polygon class="cls-1" points="104.28 34.32 104.28 59.36 85.22 71.73 85.22 57.46 104.28 34.32"/>
+  <polygon class="cls-1" points="126.55 66.08 108.85 83.78 86.62 79.05 96.72 68.96 126.55 66.08"/>
+  <polygon class="cls-1" points="119.85 104.28 94.81 104.28 82.44 85.22 96.71 85.22 119.85 104.28"/>
+  <polygon class="cls-1" points="88.1 126.55 70.39 108.85 75.12 86.63 85.21 96.72 88.1 126.55"/>
+  <polygon class="cls-1" points="49.89 119.85 49.89 94.82 68.95 82.44 68.95 96.72 49.89 119.85"/>
+  <polygon class="cls-1" points="27.62 88.1 45.32 70.4 67.55 75.12 57.45 85.21 27.62 88.1"/>
 </svg>
