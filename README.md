@@ -57,5 +57,5 @@ Se un giorno servono le statistiche: il banner con Google Consent Mode e GA4 c'e
 ## Note
 
 - Il form "Richiedi il preventivo" invia a `data-endpoint` del `<form id="quoteForm">` (l'URL del Worker in `worker/`). Finché l'attributo è vuoto l'invio è simulato.
-- `privacy/index.html` è compilata con i dati del titolare; resta il segnaposto `[P.IVA]`, da togliere o sostituire prima di pubblicare.
+- `privacy/index.html` è compilata: titolare, indirizzo, conservazione, fornitori. Nessun segnaposto aperto. La P.IVA non c'è perché il titolare non ne ha ancora una: quando arriva va aggiunta al punto 1.
 - Il marchio del prodotto è **cèlan** (dominio www.celan.it, contatti celan.rmp@gmail.com). La landing sagre porta ancora il vecchio nome "Infornato" in `<title>`, nella nav e nel footer, e non è linkata da nessuna parte: va rifatta con il marchio nuovo.
