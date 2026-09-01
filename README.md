@@ -5,7 +5,7 @@ Sito vetrina del gestionale per la ristorazione. Sito statico: HTML, CSS e JS pu
 ## Struttura
 
 ```
-index.html            redirect a sagre/ (finché non esiste una home)
+index.html            redirect a pizzerie/ (finché non esiste una home vera)
 sagre/                landing "sagre e feste di paese" (marchio Infornato)
   index.html
   css/sagre.css       stile della landing
@@ -22,8 +22,6 @@ privacy/              informativa privacy e cookie (linkata da checkbox e footer
 assets/               risorse condivise tra le sezioni
   brand/              marchio cèlan: petali, lettere, logo, favicon (png)
   css/fonts.css       @font-face dei webfont auto-hostati
-  css/consent.css     stile del banner cookie
-  js/consent.js       banner cookie + Google Analytics 4 (caricato solo dopo il consenso)
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   favicon.svg         favicon sagre (accento ambra)
@@ -50,22 +48,14 @@ Basta aprire `pizzerie/index.html` nel browser. Meglio servirlo via HTTP, così 
 
 Prima del primo deploy, nelle impostazioni del repository GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-## Google Analytics e banner cookie
+## Niente statistiche, niente cookie
 
-Il tracciamento è gestito da `assets/js/consent.js`, incluso in fondo alla pagina:
+Il sito non usa cookie, né strumenti di statistica o di tracciamento, e nemmeno i font di Google: i webfont sono in `assets/fonts/`, così la visita non manda l'indirizzo IP a server terzi. È quello che dichiara `privacy/index.html`, ed è il motivo per cui non c'è un banner da accettare.
 
-```html
-<script src="../assets/js/consent.js" data-ga-id="G-XXXXXXXXXX" data-policy-url="../privacy/#cookie"></script>
-```
-
-- `data-ga-id` è l'ID misurazione di GA4. Se è vuoto non parte niente: né banner né cookie.
-- Lo script di Google viene scaricato solo dopo che l'utente ha premuto "Accetta" (Consent Mode con default `denied`); "Rifiuta" ha la stessa evidenza. La scelta vive in `localStorage` (`rmp-consent`) per 6 mesi.
-- Il link "Preferenze cookie" nel footer (`data-consent-open`) riapre il banner.
-
-Oggi lo include solo `sagre/`, con l'ID vuoto. La landing pizzerie e l'informativa cèlan **non** lo includono: il mockup ha tolto anche i font di Google per non passare l'IP dei visitatori a terzi, e l'informativa dichiara che il sito non usa cookie. Accendere le statistiche lì vuol dire prima riscrivere la sezione "Cookie" dell'informativa.
+Se un giorno servono le statistiche: il banner con Google Consent Mode e GA4 c'era, è stato tolto il 1/9/2026 e si recupera dalla storia di git (`git show <commit>^:assets/js/consent.js`). Va rimessa anche la sezione "Cookie" dell'informativa, che oggi dichiara il contrario.
 
 ## Note
 
 - Il form "Richiedi il preventivo" invia a `data-endpoint` del `<form id="quoteForm">` (l'URL del Worker in `worker/`). Finché l'attributo è vuoto l'invio è simulato.
-- `privacy/index.html` contiene ancora i segnaposto tra parentesi quadre (data di pubblicazione, ragione sociale, indirizzo, P.IVA, hosting, fornitore email): vanno compilati prima di pubblicare.
-- Il marchio del prodotto è **cèlan** (dominio www.celan.it, contatti celan.rmp@gmail.com). La landing sagre porta ancora il vecchio nome "Infornato" in `<title>`, nella nav e nel footer: va rifatta con il marchio nuovo.
+- `privacy/index.html` è compilata con i dati del titolare; resta il segnaposto `[P.IVA]`, da togliere o sostituire prima di pubblicare.
+- Il marchio del prodotto è **cèlan** (dominio www.celan.it, contatti celan.rmp@gmail.com). La landing sagre porta ancora il vecchio nome "Infornato" in `<title>`, nella nav e nel footer, e non è linkata da nessuna parte: va rifatta con il marchio nuovo.
