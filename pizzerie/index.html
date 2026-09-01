@@ -3,26 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Infornato - Gestionale per pizzerie e ristoranti</title>
-<meta name="description" content="Comande, sala, magazzino e consegne in un unico sistema. Tre versioni, un preventivo scritto entro 24 ore.">
-<link rel="icon" href="../assets/favicon-pizzerie.svg" type="image/svg+xml">
+<title>Celan - Il gestionale per il tuo locale</title>
+<meta name="description" content="Il gestionale per ristoranti, pizzerie e locali: comande, sala, forno e magazzino in un sistema solo. 1.099 € all'avvio e 290 € l'anno, fissi. Treviso e dintorni.">
+<link rel="icon" type="image/png" href="../assets/brand/favicon-celan.png">
+<link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 
-<!-- Webfont auto-hostati (assets/fonts): nessuna dipendenza da Google Fonts in produzione -->
+<!-- Webfont auto-hostati (assets/fonts): nessuna richiesta a server terzi,
+     cosi' la visita non trasferisce l'IP a Google (vedi privacy/). -->
 <link rel="preload" href="../assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/fonts.css">
 <link rel="stylesheet" href="css/pizzerie.css">
-<link rel="stylesheet" href="../assets/css/consent.css">
 </head>
 <body>
 <nav class="nav" id="siteNav">
   <div class="nav-inner">
-    <a href="#top" class="nav-brand">Infornato</a>
+    <a href="#top" class="nav-brand" aria-label="cèlan, connessione continua">
+      <span class="nav-brand__mark" aria-hidden="true">
+        <img class="petal" style="--da:0deg;--d:100ms;--t:380ms" src="../assets/brand/petalo-1.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-45deg;--d:142ms;--t:415ms" src="../assets/brand/petalo-2.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-90deg;--d:208ms;--t:450ms" src="../assets/brand/petalo-3.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-135deg;--d:298ms;--t:485ms" src="../assets/brand/petalo-4.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-180deg;--d:412ms;--t:520ms" src="../assets/brand/petalo-5.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-225deg;--d:550ms;--t:555ms" src="../assets/brand/petalo-6.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-270deg;--d:712ms;--t:590ms" src="../assets/brand/petalo-7.png" alt="" width="176" height="176">
+        <img class="petal" style="--da:-315deg;--d:898ms;--t:625ms" src="../assets/brand/petalo-8.png" alt="" width="176" height="176">
+      </span>
+      <span class="nav-brand__word" aria-hidden="true">
+        <img class="lt" style="--d:260ms" src="../assets/brand/parola-1.png" alt="" width="631" height="322">
+        <img class="lt" style="--d:410ms" src="../assets/brand/parola-2.png" alt="" width="631" height="322">
+        <img class="lt" style="--d:560ms" src="../assets/brand/parola-3.png" alt="" width="631" height="322">
+        <img class="lt" style="--d:710ms" src="../assets/brand/parola-4.png" alt="" width="631" height="322">
+        <img class="lt" style="--d:860ms" src="../assets/brand/parola-5.png" alt="" width="631" height="322">
+        <img class="accent" style="--d:1500ms" src="../assets/brand/parola-accento.png" alt="" width="631" height="322">
+      </span>
+    </a>
     <div class="nav-links">
       <a href="#cosa-fa" class="nav-link nav-hide-mobile">Cosa fa</a>
-      <a href="#tagli" class="nav-link nav-hide-mobile">Versioni</a>
+      <a href="#tagli" class="nav-link nav-hide-mobile">Prezzo</a>
       <a href="#domande" class="nav-link nav-hide-mobile">Domande</a>
-      <a href="#contatti" class="nav-cta">Richiedi informazioni</a>
+      <a href="#contatti" class="nav-cta">Richiedi il preventivo</a>
     </div>
   </div>
 </nav>
@@ -30,62 +50,48 @@
 
 <main>
 <section id="hero" class="hero">
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="hero-marquee__track">
+        <span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span>
+        <span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span>
+      </div>
+      <div class="hero-marquee__track hero-marquee__track--rev">
+        <span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span>
+        <span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span>
+      </div>
+      <div class="hero-marquee__track">
+        <span>FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; </span>
+        <span>FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; </span>
+      </div>
+    </div>
   <div class="wrap">
     <div class="hero-top">
-      <p class="hero-kicker fade-up">Comande, sala e asporto in un unico sistema, pensato per la tua pizzeria.</p>
+      <p class="hero-kicker fade-up">Prende le comande al banco, al telefono e ai tavoli e le manda in cucina.</p>
     </div>
   </div>
   <div class="display-wrap hero-title">
-    <div class="hero-marquee" aria-hidden="true">
-      <div class="hero-marquee__track">
-        <span>COMANDE &middot; SALA &middot; FORNO &middot; RIDER &middot; MAGAZZINO &middot; </span>
-        <span>COMANDE &middot; SALA &middot; FORNO &middot; RIDER &middot; MAGAZZINO &middot; </span>
-      </div>
-    </div>
     <h1 class="display reveal-onload">
-      <span class="line-mask"><span class="line-inner" style="--i:0">OGNI COMANDA</span></span>
-      <span class="line-mask"><span class="line-inner" style="--i:1">AL SUO POSTO.</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:0">IL GESTIONALE</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:1">PER IL TUO LOCALE.</span></span>
           </h1>
   </div>
   <div class="wrap">
     <div class="hero-visual">
       <div class="hero-circle">
-        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi informazioni">
+        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi il preventivo">
           <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
             <defs><path id="cta-ring-a" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI INFORMAZIONI &#183; RICHIEDI INFORMAZIONI &#183; </textPath></text>
+            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
           </svg>
           <span class="circle-cta__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a></span>
       </div>
-      <!-- Fetta 3D "chubby" che levita (Adobe Stock 632740168, licenziata;
-           sfondo rimosso). Decorativa: aria-hidden, ferma con reduced-motion. -->
+      <!-- Fetta fotografica che levita (immagine fornita da Gianluca, scontornata,
+           stessa inclinazione della vecchia 3D). Decorativa: aria-hidden. -->
       <div class="hero-pizza" aria-hidden="true">
-        <img src="img/pizza-fetta-3d.png" alt="" width="640" height="513" loading="lazy" onerror="this.closest('.hero-pizza').style.display='none'">
-      </div>
-      <!-- Palco hero: tablet con la mappa sala (la schermata piu' leggibile)
-           e schede grandi che raccontano cosa sta succedendo. Le schede sono
-           grafica dichiarata con dati demo, non finti screenshot. -->
-      <div class="hero-stage fade-up">
-        <div class="hero-tablet">
-          <div class="hero-tablet__screen parallax-frame">
-            <img class="parallax-img" src="img/gestionale-sala.png" alt="La mappa della sala nel gestionale: tavoli liberi, occupati e prenotati, con le prenotazioni in arrivo." width="1440" height="900" fetchpriority="high" loading="eager" onerror="this.closest('.hero-stage').classList.add('img-fallback');this.remove();">
-          </div>
-        </div>
-        <div class="hero-chip hero-chip--1" aria-hidden="true">
-          <span class="chip-dot"></span>
-          <span class="chip-txt"><strong>Comanda al forno</strong>2× Margherita D.O.P. · Tavolo 4</span>
-        </div>
-        <div class="hero-chip hero-chip--2" aria-hidden="true">
-          <span class="chip-check"></span>
-          <span class="chip-txt"><strong>Tavolo 8 · servito</strong></span>
-        </div>
-        <div class="hero-chip hero-chip--3" aria-hidden="true">
-          <span class="chip-dot chip-dot--amber"></span>
-          <span class="chip-txt"><strong>Ordine online ricevuto</strong>Ritiro alle 19:45</span>
-        </div>
+        <img src="img/pizza-fetta.png" alt="" width="640" height="483" loading="lazy" onerror="this.closest('.hero-pizza').style.display='none'">
       </div>
     </div>
   </div>
@@ -128,49 +134,62 @@
                  la rotella, se no lo scorrimento verticale sopra il tablet
                  diventa quello ruvido del browser. -->
             <div class="tablet__track" id="tabletTrack" data-lenis-prevent-touch tabindex="0" role="group" aria-label="Schermate del gestionale: scorri di lato per vedere le altre">
-              <img class="tablet__slide" data-index="0" loading="eager" width="1440" height="900" src="img/gestionale-comande.png" alt="">
-              <img class="tablet__slide" data-index="1" loading="lazy" width="1440" height="435" src="img/gestionale-cucina.png" alt="">
-              <img class="tablet__slide" data-index="2" loading="lazy" width="1440" height="900" src="img/gestionale-sala.png" alt="">
-              <!-- segnaposto: schermate non ancora disponibili -->
-              <img class="tablet__slide" data-index="3" loading="lazy" width="1440" height="900" src="img/gestionale-scorte.png" alt="">
-              <img class="tablet__slide" data-index="4" loading="lazy" width="1440" height="900" src="img/gestionale-report.png" alt="">
-              <img class="tablet__slide" data-index="5" loading="lazy" width="1440" height="900" src="img/gestionale-postazioni.png" alt="">
+              <img class="tablet__slide" data-index="0" loading="eager" width="1440" height="900" src="img/schermata-comande.png" alt="">
+              <img class="tablet__slide" data-index="1" loading="lazy" width="1440" height="900" src="img/schermata-forno.png" alt="">
+              <img class="tablet__slide" data-index="2" loading="lazy" width="1440" height="900" src="img/schermata-sala.png" alt="">
+              <img class="tablet__slide" data-index="3" loading="lazy" width="1440" height="900" src="img/schermata-rubrica.png" alt="">
+              <img class="tablet__slide" data-index="4" loading="lazy" width="1440" height="900" src="img/schermata-prenotazioni.png" alt="">
+              <!-- schermate non ancora disponibili: schermo spento in attesa delle immagini vere -->
+              <img class="tablet__slide" data-index="5" loading="lazy" width="1440" height="900" src="img/schermata-in-arrivo.png" alt="">
+              <img class="tablet__slide" data-index="6" loading="lazy" width="1440" height="900" src="img/schermata-in-arrivo.png" alt="">
             </div>
           </div>
-          <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
-          <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
         </div>
         <div class="tablet-demo__text">
           <div class="tablet-demo__caption">
             <div class="tablet-demo__caption-item is-active" data-index="0">
-              <h3>Layout semplice e intuitivo.</h3>
-              <p>Il gestionale è pensato per la gestione delle comande, delle prenotazioni e della sala: sia al banco, sia al telefono.</p>
+              <span class="cap-tag">Piano base</span>
+              <h3>L'ordine come lo chiede il cliente</h3>
+              <p>Si tolgono ingredienti, si raddoppiano, si fa mezza e mezza, si sceglie l'impasto e la cottura, si scrive una nota per la cucina. Tutto dalla schermata dell'ordine, senza aprire altro.</p>
             </div>
             <div class="tablet-demo__caption-item" data-index="1">
-              <h3>Gestisci con semplicità prenotazioni e ordini.</h3>
-              <p>Ogni ordine si aggancia a una fascia oraria con il suo tetto di pizze: quando la fascia è piena, l'ordine dopo va nel primo orario libero. Se ti serve, puoi comunque forzare un ordine su una fascia già piena. Gli asporti si prenotano allo stesso modo, anche per i giorni successivi, con l'ora di ritiro già fissata.</p>
+              <span class="cap-tag">Piano base</span>
+              <h3>La coda del forno, a fasce orarie</h3>
+              <p>Ogni fascia ha un tetto di ordini che decidi tu: quando &egrave; piena, l'ordine va nella prima libera, e se serve la forzi. Gli asporti si prenotano allo stesso modo, anche per i giorni dopo.</p>
             </div>
             <div class="tablet-demo__caption-item" data-index="2">
-              <h3>Gestisci la sala velocemente.</h3>
-              <p>La piantina mostra i tavoli con il loro stato: verde liberi, giallo prenotati, rosso occupati, con i coperti sotto ognuno. I camerieri prendono la comanda dal telefono e l'ordine arriva in cucina senza tornare al banco.</p>
+              <span class="cap-tag">Canone completo</span>
+              <h3>La mappa della sala</h3>
+              <p>La piantina &egrave; quella del tuo locale e ogni tavolo ha il suo colore: verde libero, giallo prenotato, rosso occupato, con i coperti segnati sotto.</p>
             </div>
             <div class="tablet-demo__caption-item" data-index="3">
-              <h3>Gestione rapida del magazzino.</h3>
-              <p>Il sistema scala da solo gli ingredienti usati durante il servizio, così sai sempre quanto ti resta in magazzino.</p>
+              <span class="cap-tag">Piano base</span>
+              <h3>La rubrica dei clienti</h3>
+              <p>Avrai sempre a disposizione la rubrica clienti per ritrovarli facilmente e velocizzare la prenotazione.</p>
             </div>
             <div class="tablet-demo__caption-item" data-index="4">
-              <h3>Tieni sotto controllo ricavi e spese.</h3>
-              <p>A ogni chiusura ricevi un report dettagliato su vendite, magazzino, costi e ricavi.</p>
+              <span class="cap-tag">Piano base</span>
+              <h3>Le prenotazioni sul calendario</h3>
+              <p>Tavoli e asporti si prenotano anche per i giorni dopo. Ogni giorno trovi l'elenco delle prenotazioni con: orario, nome e numero dei coperti.</p>
+            </div>
+            <div class="tablet-demo__caption-item" data-index="6">
+              <span class="cap-tag">Piano base</span>
+              <h3>Il magazzino sempre sotto controllo.</h3>
+              <p>Gestisci il magazzino sapendo sempre quanti panetti d'impasto sono disponibili per la giornata.</p>
             </div>
             <div class="tablet-demo__caption-item" data-index="5">
-              <h3>Monitor, dispositivi, stampanti.</h3>
-              <p>All'installazione e alla configurazione di stampanti e monitor pensiamo noi. Se ti manca qualcosa ti guidiamo nell'acquisto dei dispositivi più adatti, senza guadagnarci nulla.</p>
+              <span class="cap-tag">Piano base</span>
+              <h3>Il conto della giornata</h3>
+              <p>Alla chiusura hai il totale delle vendite e degli incassi, diviso per contanti, carte e altro.</p>
             </div>
           </div>
-          <div class="scrolly-cue" id="scrollyCue" aria-hidden="true">
-            <div class="scrolly-progress"><span id="scrollyBar"></span></div>
-            <p class="scrolly-hint">
-              <span class="scrolly-hint__n"><span id="scrollyNum">1</span> di <span id="scrollyTot">4</span></span>
+          <div class="scrolly-cue" id="scrollyCue">
+            <div class="scrolly-row">
+              <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
+              <div class="scrolly-dots" id="scrollyDots" role="tablist" aria-label="Schermate del gestionale"></div>
+              <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
+            </div>
+            <p class="scrolly-hint" aria-hidden="true">
               <span class="scrolly-hint__txt scrolly-hint__txt--touch">Scorri col dito</span>
               <span class="scrolly-hint__txt scrolly-hint__txt--mouse">Usa le frecce</span>
               <span class="scrolly-hint__chev"></span>
@@ -191,101 +210,201 @@
     <div class="wrap vband__in">
       <h3 class="display display-on-dark vband__display">
         <span class="line-mask"><span class="line-inner" style="--i:0">LA COMANDA</span></span>
-        <span class="line-mask"><span class="line-inner" style="--i:1">NASCE</span></span>
-        <span class="line-mask"><span class="line-inner" style="--i:2">AL TAVOLO,</span></span>
-        <span class="line-mask"><span class="line-inner" style="--i:3">NON AL BANCO.</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:1">NASCE AL TAVOLO</span></span>
       </h3>
+      <p class="vband__note">Nel canone completo il programma sui telefoni dei camerieri &egrave; compreso: quanti te ne servono.</p>
     </div>
-    <img class="vband__hand" src="img/palmare-cutout.png" alt="Una mano tiene il telefono con la comanda del tavolo 4 aperta." width="942" height="1301" loading="lazy">
+    <img class="vband__hand" src="img/palmare-mano.png" alt="Una mano tiene il telefono del cameriere con la comanda del tavolo aperta sul men&ugrave;." width="946" height="1300" loading="lazy">
     <!-- stesso bollino rotante dell'header: anello che gira, icona al centro -->
-    <span class="pop vband__playwrap"><button type="button" class="circle-cta" id="videoBtn" aria-label="Vedi il video">
+    <span class="pop vband__playwrap"><span class="circle-cta circle-cta--static" aria-hidden="true">
       <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
         <defs><path id="cta-ring-v" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-        <text><textPath href="#cta-ring-v" textLength="496" lengthAdjust="spacingAndGlyphs">VEDI IL VIDEO &#183; VEDI IL VIDEO &#183; VEDI IL VIDEO &#183; </textPath></text>
+        <text><textPath href="#cta-ring-v" textLength="496" lengthAdjust="spacingAndGlyphs">VELOCIZZA IL SERVIZIO &#183; VELOCIZZA IL SERVIZIO &#183; </textPath></text>
       </svg>
       <span class="circle-cta__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M8.5 5.8 L18 12 L8.5 18.2 Z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M13 2.5 L5.5 13.5 H11 L9.6 21.5 L18.5 9.8 H12.4 Z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
       </span>
-    </button></span>
+    </span></span>
   </div>
 </section>
 
 <section class="statement-section section-pad sheet" style="--sheet-i:1">
   <div class="wrap">
     <div class="statement">
-      <p class="fade-up">Un sistema unico, che non si ferma: funziona anche senza internet. La schermata è pulita e ordinata, così qualunque dipendente impara a usarlo fin dal primo servizio.</p>
+      <p class="fade-up">Grazie all'interfaccia semplice ed intuitiva, ogni cameriere avr&agrave; il proprio profilo dedicato. Gestendo in autonomia i tavoli e le prenotazioni.</p>
     </div>
   </div>
 </section>
 <section id="tagli" class="pricing section-pad section-dark sheet" style="--sheet-i:2">
-  <!-- Pomodoro 3D (Adobe Stock 572565461, licenziato; sfondo rimosso).
-       Decorativo, stesso stile clay della fetta nell'hero. -->
+  <!-- Pomodoro fotografico (immagine fornita da Gianluca, scontornata e
+       inclinata come la fetta nell'hero). Decorativo. -->
   <div class="veg veg--tagli" aria-hidden="true">
-    <img src="img/pomodoro-3d.png" alt="" width="480" height="501" loading="lazy" onerror="this.closest('.veg').style.display='none'">
+    <img src="img/pomodoro.png" alt="" width="480" height="443" loading="lazy" onerror="this.closest('.veg').style.display='none'">
   </div>
   <div class="display-wrap pricing-head-row">
     <h2 class="display display-on-dark">
-      <span class="line-mask"><span class="line-inner" style="--i:0">TRE PIANI.</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:0">IL PREZZO.</span></span>
     </h2>
   </div>
   <div class="wrap">
-    <p class="pricing-sub fade-up">Scegli il piano più adatto alla tua realtà. Prima di qualsiasi contratto ti facciamo provare una demo funzionante del piano Essenziale, costruita sul tuo locale.</p>
+    <p class="pricing-sub fade-up">L'avvio si paga una volta. Poi scegli il canone in base al locale: solo asporto, oppure completo con sala, cucina e i telefoni dei camerieri.</p>
 
-    <div class="price-cards">
-      <article class="price-card fade-up" style="--i:0">
-        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
-        <h3 class="price-card-name">Essenziale</h3>
-        <p class="price-card-from">da 1.190 € <span>+ 69 € al mese, oppure 690 € all'anno</span></p>
-        <p class="price-card-desc">Per la pizzeria d'asporto: prendi gli ordini, li mandi in cucina e chiudi la serata con i conti in ordine.</p>
-        <ul class="price-card-list">
-          <li><strong>Cassa e comande.</strong> Segni l'ordine una volta: conto e comanda in cucina partono insieme.</li>
-          <li><strong>Stampa in cucina.</strong> Ogni ordine esce stampato al forno, chiaro e in sequenza.</li>
-          <li><strong>Clienti e storico.</strong> Numeri e ordini dei clienti salvati: li richiami in un tocco.</li>
-          <li><strong>Formazione.</strong> La partenza la facciamo insieme, da remoto, compresa nel prezzo.</li>
-        </ul>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="lite">Richiedi Essenziale</a></span>
-      </article>
-      <article class="price-card price-card--featured fade-up" style="--i:1">
-        <span class="price-card-badge">Consigliata per chi ha anche la sala</span>
-        <h3 class="price-card-name">Completa</h3>
-        <p class="price-card-from">da 2.490 € <span>+ 99 € al mese, oppure 990 € all'anno</span></p>
-        <p class="price-card-desc">Per chi serve ai tavoli oltre all'asporto: sala, camerieri e magazzino nello stesso sistema.</p>
-        <p class="price-card-inherit">Tutto di Essenziale, più:</p>
-        <ul class="price-card-list">
-          <li><strong>Mappa tavoli.</strong> La sala sullo schermo: liberi, occupati, prenotati. Conti divisi senza calcolatrice.</li>
-          <li><strong>Palmare camerieri.</strong> L'ordine parte dal tavolo e arriva in cucina. Licenza inclusa, dispositivo nel preventivo.</li>
-          <li><strong>Coda infornate.</strong> Le pizze in forno in ordine di orario: la cucina tiene il ritmo.</li>
-          <li><strong>Magazzino e food cost.</strong> Ogni pizza venduta scarica i suoi ingredienti: costi e margini reali, non a occhio.</li>
-        </ul>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="completa">Richiedi Completa</a></span>
-      </article>
-      <article class="price-card fade-up" style="--i:2">
-        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
-        <h3 class="price-card-name">Premium</h3>
-        <p class="price-card-from">da 4.990 € <span>+ 199 € al mese, oppure 1.990 € all'anno</span></p>
-        <p class="price-card-desc">Per chi consegna a domicilio e vuole vendere online sul proprio sito, senza commissioni sugli ordini.</p>
-        <p class="price-card-inherit">Tutto di Completa, più:</p>
-        <ul class="price-card-list">
-          <li><strong>Rider e percorsi.</strong> Le consegne assegnate ai rider, con il percorso già calcolato.</li>
-          <li><strong>Ordini online.</strong> Sito e carrello tuoi: ordini illimitati, nessuna percentuale sul venduto.</li>
-          <li><strong>WhatsApp.</strong> Risponde da solo a orari e domande frequenti, e rimanda all'ordine online.</li>
-        </ul>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="premium">Richiedi Premium</a></span>
-      </article>
-    </div>
-    <div class="custom-box fade-up">
-      <div class="custom-box__txt">
-        <h3 class="custom-box__title">Nessuno dei tre ti torna?</h3>
-        <p class="custom-box__desc">Ogni piano si può modificare: aggiungi quello che ti serve, togli quello che non usi. Il prezzo cambia di conseguenza e te lo scriviamo nero su bianco.</p>
+    <div class="offer fade-up">
+      <div class="offer__core">
+        <div class="offer__figures">
+          <div class="offer__fig">
+            <span class="offer__name">Avvio</span>
+            <span class="offer__amount">1.099 &euro;</span>
+            <span class="offer__iva">+ IVA</span>
+            <span class="offer__label">una volta sola, per partire</span>
+            <span class="offer__desc">Si paga all'avvio. Copre tutto quello che serve per arrivare al primo servizio con il sistema acceso.</span>
+            <details class="offer__more">
+              <summary>Cosa comprende l'avvio da 1.099 &euro;</summary>
+              <ul>
+                <li>Sopralluogo nel locale e verifica dell'attrezzatura che hai gi&agrave;</li>
+                <li>Men&ugrave; caricato da noi, con i tuoi prezzi, prima di arrivare</li>
+                <li>Rubrica clienti caricata da noi, con gli indirizzi per il domicilio se lo fai</li>
+                <li>Installazione e configurazione di casse, stampanti e rete</li>
+                <li>Formazione di chi lavora con te, davanti al tablet</li>
+              </ul>
+            </details>
+          </div>
+          <div class="offer__fig">
+            <span class="offer__name">Canone solo asporto</span>
+            <span class="offer__amount">290 &euro;</span>
+            <span class="offer__iva">+ IVA</span>
+            <span class="offer__label">ogni anno</span>
+            <span class="offer__desc">Per chi fa asporto e domicilio. Sono <strong>24 &euro; al mese</strong>, e resta uguale negli anni.</span>
+            <details class="offer__more">
+              <summary>Cosa comprende il canone da 290 &euro;</summary>
+              <p class="offer__more-lead">Il canone paga due cose: il programma per l'asporto che usi ogni sera, con aggiornamenti e backup dei dati, e l'assistenza telefonica o in collegamento da remoto.</p>
+              <ul>
+                <li>Gestionale per asporto e domicilio</li>
+                <li>L'ordine come lo vuole il cliente: ingredienti tolti, raddoppiati, mezza e mezza</li>
+                <li>Coda del forno a fasce orarie, con il numero massimo di ordini per fascia deciso da te</li>
+                <li>Rubrica clienti, con ricerca per nome o per numero di telefono</li>
+                <li>Gestione prenotazioni asporto</li>
+                <li>Scorte di magazzino, coi panetti disponibili per la giornata</li>
+                <li>Chiusura di cassa e totali della giornata, consultabili anche da fuori dal locale</li>
+                <li>Aggiornamenti e backup ogni notte</li>
+                <li>Prezzi e men&ugrave; li cambi tu dal gestionale, senza chiamare</li>
+              </ul>
+            </details>
+          </div>
+          <div class="offer__fig">
+            <span class="offer__name">Canone completo &middot; asporto + sala e cucina</span>
+            <span class="offer__amount">390 &euro;</span>
+            <span class="offer__iva">+ IVA</span>
+            <span class="offer__label">ogni anno</span>
+            <span class="offer__desc">Per chi ha anche i tavoli. Sono <strong>33 &euro; al mese</strong>, e resta uguale negli anni.</span>
+            <details class="offer__more">
+              <summary>Cosa comprende il canone da 390 &euro;</summary>
+              <p class="offer__more-lead">Tutto quello del canone asporto, pi&ugrave; la parte di sala e cucina.</p>
+              <ul>
+                <li>Il programma sui telefoni dei camerieri, quanti te ne servono</li>
+                <li>Comande in cucina, stampate o su uno schermo (lo schermo conta come postazione in pi&ugrave;)</li>
+                <li>Mappa dei tavoli: liberi, occupati, prenotati</li>
+                <li>Prenotazioni dei tavoli con calendario</li>
+                <li>Esaurito automatico: quando un piatto finisce sparisce da tutte le postazioni</li>
+              </ul>
+              <div class="offer__more-apart">
+                <span class="cap-tag cap-tag--extra">Aggiunte a pagamento</span>
+                <p>Magazzino al grammo e food cost, fatture e documenti, ordini online e postazioni in pi&ugrave; non sono nei canoni: ognuna ha il suo prezzo, scritto qui sotto.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+        <div class="offer__side">
+          <p class="offer__lead">Il men&ugrave; e la lista dei clienti li carichiamo noi prima di arrivare, con i tuoi prezzi. Il giorno dell'installazione montiamo tutto, lo configuriamo e te lo lasciamo acceso.</p>
+          <span class="pop"><a href="#contatti" class="pill">Richiedi il preventivo</a></span>
+        </div>
       </div>
-      <span class="pop"><a href="#contatti" class="pill custom-box__cta" data-exp="custom">Richiedi preventivo</a></span>
     </div>
-    <p class="pricing-note fade-up">Prezzi indicativi, IVA esclusa. La cifra grande si paga una volta sola all'avvio; poi resta solo il canone, mensile o annuale (pagando l'anno sono due mesi in meno). Hardware e dettagli nel preventivo scritto.</p>
+
+    <div class="extras fade-up">
+      <p class="extras__kicker">Oltre il canone</p>
+      <h3 class="extras__title">Aggiungi elementi per un gestionale pi&ugrave; completo</h3>
+      <p class="extras__sub">Il piano base &egrave; completo per partire fin da subito; le aggiunte ti aiutano a gestire e velocizzare la tua attivit&agrave;.</p>
+      <div class="extras__grid">
+        <article class="extra">
+          <div class="extra__head"><span class="extra__name">Magazzino al grammo e food cost</span><span class="extra__price">190 &euro; l'anno <small>+ IVA</small></span></div>
+          <p class="extra__desc">&Egrave; il passo oltre le scorte comprese nel piano base: ogni piatto venduto scarica gli ingredienti al grammo, e vedi quanto costa di materia prima ogni voce del men&ugrave; e quanto margine lascia.</p>
+        </article>
+        <article class="extra">
+          <div class="extra__head"><span class="extra__name">Fatture e documenti</span><span class="extra__price">70 &euro; l'anno <small>+ IVA</small></span></div>
+          <p class="extra__desc">Crea e gestisci le fatture elettroniche all'interno del gestionale, comunicando direttamente con l'Agenzia delle Entrate.</p>
+        </article>
+        <article class="extra">
+          <div class="extra__head"><span class="extra__name">Ordini online</span><span class="extra__price">390 &euro; l'anno <small>+ IVA</small></span></div>
+          <p class="extra__desc">Una pagina con il tuo men&ugrave;, il tuo logo e i tuoi colori: il cliente ordina comodamente da casa, la richiesta arriva direttamente al gestionale in cassa. Se un sito ce l'hai gi&agrave;, basta aggiungerci il link.</p>
+        </article>
+        <article class="extra">
+          <div class="extra__head"><span class="extra__name">Postazione in pi&ugrave;</span><span class="extra__price">90 &euro; l'anno <small>+ IVA</small></span></div>
+          <p class="extra__desc">I telefoni dei camerieri non si contano: sono compresi nel piano base. La postazione &egrave; un punto fisso in pi&ugrave;, come una seconda cassa o uno schermo in cucina.</p>
+        </article>
+        <article class="extra extra--wide">
+          <div class="extra__head"><span class="extra__name">Sito web personalizzato</span><span class="extra__price">A preventivo</span></div>
+          <p class="extra__desc">Il sito completo del tuo locale, fatto da noi. Il prezzo dipende da pagine, foto e funzioni che servono, quindi si fa su misura. Si collega agli ordini online qui sopra.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="fisc-intro fade-up">
+      <h3 class="extras__title fisc-intro__title">L'attrezzatura ti aiutiamo a comprarla,<br>la parte fiscale non la seguiamo</h3>
+    </div>
+    <div class="fisc fade-up">
+      <h3 class="fisc__title">L'attrezzatura, al prezzo del negozio</h3>
+      <p class="fisc__txt">Nel preventivo trovi la lista di casse, tablet e stampanti che servono al tuo locale, modello per modello. Ti aiutiamo a comprarli e li paghi quello che costano in negozio: noi non ci mettiamo ricarichi.</p>
+      <p class="fisc__txt">Se qualcosa ce l'hai gi&agrave;, al sopralluogo vediamo cosa si pu&ograve; tenere. Montaggio e configurazione sono compresi nell'avvio.</p>
+    </div>
+
+    <div class="fisc fade-up">
+      <h3 class="fisc__title">La parte fiscale non la tocchiamo</h3>
+      <p class="fisc__txt">Se il registratore telematico ce l'hai gi&agrave;, resta tutto com'&egrave;: l'invio dei corrispettivi continua a seguirlo il tuo fornitore, e il gestionale si collega alla tua stampante fiscale. Se non ce l'hai, ti indirizziamo al fornitore pi&ugrave; adatto alle tue esigenze.</p>
+      <p class="fisc__txt">Noi non vendiamo registratori e non facciamo manutenzione n&eacute; assistenza fiscale.</p>
+    </div>
+
   </div>
 </section>
 
 
-<section id="domande" class="section-pad sheet" style="--sheet-i:3">
+<!-- Chi siamo: la risposta a "chi c'e' dietro", subito dopo il prezzo,
+     dove il dubbio nasce. Testo onesto: niente clienti citati finche'
+     non ci sono, niente anni inventati. Nomi e foto quando Gianluca li da'. -->
+<section id="chi-siamo" class="section-pad sheet" style="--sheet-i:3">
+  <div class="display-wrap">
+    <h2 class="display">
+      <span class="line-mask"><span class="line-inner" style="--i:0">DIETRO AL PROGETTO.</span></span>
+    </h2>
+  </div>
+  <div class="wrap">
+    <div class="statement" style="margin-bottom:42px;">
+      <p class="fade-up">Dietro c&egrave;lan ci sono uno sviluppatore e un graphic designer della provincia di Treviso. Sopralluogo, installazione e assistenza li facciamo di persona: chi ti risponde al telefono &egrave; chi ha creato e installato il sistema nel tuo locale, non avrai centralini come intermediari.</p>
+    </div>
+    <div class="rows">
+      <div class="row row--plain fade-up" style="--i:0">
+        <div class="row-head">
+          <span class="row-title">Come lavoriamo</span>
+          <span class="row-desc">Prima dell'installazione raccogliamo il men&ugrave; e la lista dei clienti, cos&igrave; li trovi gi&agrave; caricati. Il giorno fissato arriviamo, montiamo, configuriamo e andiamo via con il sistema acceso.</span>
+        </div>
+      </div>
+      <div class="row row--plain fade-up" style="--i:1">
+        <div class="row-head">
+          <span class="row-title">Quando chiami</span>
+          <span class="row-desc">La tua configurazione la conosciamo perch&eacute; l'abbiamo fatta noi: capiamo subito dov'&egrave; il problema e si risolve prima.</span>
+        </div>
+      </div>
+    </div>
+    <a class="cliente-uno fade-up" href="https://www.aipioppi.com/it" target="_blank" rel="noopener">
+      <img src="img/logo-aipioppi.png" alt="Il logo dell'Osteria ai Pioppi" width="288" height="288">
+      <span class="cliente-uno__txt">
+        <strong>Gi&agrave; in servizio all'Osteria ai Pioppi</strong>
+        <small>Nervesa della Battaglia (TV) &middot; aipioppi.com</small>
+      </span>
+    </a>
+  </div>
+</section>
+<section id="domande" class="section-pad sheet" style="--sheet-i:4">
   <div class="display-wrap">
     <h2 class="display">
       <span class="line-mask"><span class="line-inner" style="--i:0">DOMANDE.</span></span>
@@ -295,58 +414,65 @@
     <div class="rows" style="margin-bottom:34px;">
       <div class="row row--plain fade-up" style="--i:0">
         <div class="row-head">
-          <span class="row-title">Si prova prima di firmare.</span>
-          <span class="row-desc">Mezz'ora nel locale per guardare come lavori, poi una serata di prova col tuo menu già caricato. Decidi dopo.</span>
+          <span class="row-title">Il canone &egrave; bloccato e si paga un anno alla volta</span>
+          <span class="row-desc">Il canone che scegli resta quello anche fra cinque anni. Se non vuoi rinnovare lo dici trenta giorni prima, senza penali e senza motivazione.</span>
         </div>
       </div>
       <div class="row row--plain fade-up" style="--i:1">
         <div class="row-head">
-          <span class="row-title">Il tuo registratore resta.</span>
-          <span class="row-desc">Infornato non tocca la cassa fiscale: lo scontrino si batte come oggi.</span>
+          <span class="row-title">Dal canone asporto al completo quando vuoi</span>
+          <span class="row-desc">Il giorno che metti i tavoli passi al canone completo: si paga la differenza da l&igrave; in poi, senza rifare l'installazione.</span>
         </div>
       </div>
       <div class="row row--plain fade-up" style="--i:2">
         <div class="row-head">
-          <span class="row-title">Contratto di dodici mesi.</span>
-          <span class="row-desc">Alla scadenza si prosegue mese per mese. La disdetta non ha penali.</span>
+          <span class="row-title">Il canone non cambia con gli incassi</span>
+          <span class="row-desc">Paghi la stessa cifra che tu faccia venti o duecento ordini in una sera. Sul venduto non c'&egrave; una percentuale.</span>
         </div>
       </div>
       <div class="row row--plain fade-up" style="--i:3">
         <div class="row-head">
-          <span class="row-title">Nessuna commissione.</span>
-          <span class="row-desc">Il canone non cambia con gli incassi.</span>
+          <span class="row-title">Se internet va gi&ugrave;, si lavora lo stesso</span>
+          <span class="row-desc">Internet serve per l'installazione e per consultare i dati da fuori dal locale. Le comande, anche dai telefoni dei camerieri, girano sulla rete interna: se la linea cade si continua a lavorare.</span>
         </div>
       </div>
       <div class="row row--plain fade-up" style="--i:4">
         <div class="row-head">
-          <span class="row-title">I dati restano tuoi.</span>
-          <span class="row-desc">Menu, clienti e storico: esportabili in ogni momento.</span>
+          <span class="row-title">Il registratore telematico</span>
+          <span class="row-desc">Resta il tuo, con il fornitore che hai gi&agrave;: il gestionale si collega alla stampante fiscale. Vendita, manutenzione e assistenza fiscale restano del tuo fornitore.</span>
         </div>
       </div>
+      <div class="row row--plain fade-up" style="--i:5">
+        <div class="row-head">
+          <span class="row-title">I dati restano tuoi</span>
+          <span class="row-desc">Men&ugrave;, clienti e storico degli ordini si esportano in un file quando vuoi, anche il giorno che decidi di cambiare sistema.</span>
+        </div>
+      </div>
+
     </div>
     <div class="faq-list">
       <details class="faq-item fade-up" style="--i:0">
         <summary>Serve esperienza con la tecnologia?</summary>
-        <p class="faq-answer">No. Il sistema nasce per chi lavora in servizio: tasti grandi, poche schermate. La formazione a distanza è sempre compresa; una sessione in sede, se la vuoi, è una voce a parte del preventivo.</p>
+        <p class="faq-answer">No. L'abbiamo costruito per chi lavora in servizio: tasti grandi e poche schermate. La formazione &egrave; compresa nell'avviamento e la facciamo nel locale, davanti al tablet, il giorno dell'installazione.</p>
       </details>
       <details class="faq-item fade-up" style="--i:1">
-        <summary>Perché il preventivo è scritto e non al telefono?</summary>
-        <p class="faq-answer">Un numero detto al telefono vale poco. Scritto, resta: calcolato sul tuo locale, da rileggere con calma.</p>
+        <summary>Le aggiunte si possono attivare in un secondo momento?</summary>
+        <p class="faq-answer">S&igrave;, anche a distanza di mesi: si accendono senza rifare l'installazione e si pagano da quando le attivi. Allo stesso modo si spengono, se non ti servono pi&ugrave;.</p>
       </details>
     </div>
   </div>
 </section>
-<section id="contatti" class="section-pad sheet" style="--sheet-i:4">
+<section id="contatti" class="section-pad sheet" style="--sheet-i:5">
   <div class="display-wrap">
     <div class="closing-grid">
       <h2 class="display closing-title">
-        <span class="line-mask"><span class="line-inner" style="--i:0">RICEVI PIÙ</span></span>
-        <span class="line-mask"><span class="line-inner" style="--i:1">INFORMAZIONI.</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:0">IL</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:1">PREVENTIVO.</span></span>
       </h2>
-      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi informazioni">
+      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi il preventivo">
         <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
           <defs><path id="cta-ring-b" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI INFORMAZIONI &#183; RICHIEDI INFORMAZIONI &#183; </textPath></text>
+          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
         </svg>
         <span class="circle-cta__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -355,34 +481,49 @@
     </div>
   </div>
   <div class="wrap">
-    <form class="closing-form fade-up" id="quoteForm" novalidate data-endpoint="" data-verticale="pizzerie">
-      <!-- honeypot anti-spam: invisibile, i bot lo compilano -->
-      <div class="hp" aria-hidden="true"><label for="inpWebsite">Sito web</label><input type="text" id="inpWebsite" name="website" tabindex="-1" autocomplete="off"></div>
+    <form class="closing-form fade-up" id="quoteForm" novalidate>
       <div class="field" id="fieldNome">
         <label for="inpNome">Nome</label>
         <input type="text" id="inpNome" name="nome" autocomplete="name" aria-describedby="errNome">
         <span class="field-error" id="errNome"></span>
       </div>
       <div class="field" id="fieldLocale">
-        <label for="inpLocale">Nome del locale e città</label>
+        <label for="inpLocale">Nome del locale</label>
         <input type="text" id="inpLocale" name="locale" autocomplete="organization" aria-describedby="errLocale">
         <span class="field-error" id="errLocale"></span>
       </div>
+      <div class="field" id="fieldCitta">
+        <label for="inpCitta">Citt&agrave;</label>
+        <input type="text" id="inpCitta" name="citta" autocomplete="address-level2" aria-describedby="errCitta">
+        <span class="field-error" id="errCitta"></span>
+      </div>
       <div class="field" id="fieldEmail">
         <label for="inpEmail">Email</label>
-        <input type="email" id="inpEmail" name="email" inputmode="email" autocomplete="email" spellcheck="false" aria-describedby="errEmail">
+        <input type="email" id="inpEmail" name="email" inputmode="email" autocomplete="email" aria-describedby="errEmail">
         <span class="field-error" id="errEmail"></span>
       </div>
+      <div class="field" id="fieldTelefono">
+        <label for="inpTelefono">Telefono</label>
+        <input type="tel" id="inpTelefono" name="telefono" inputmode="tel" autocomplete="tel" aria-describedby="errTelefono">
+        <span class="field-error" id="errTelefono"></span>
+      </div>
       <div class="field" id="fieldEsperienza">
-        <label for="inpEsperienza">Versione</label>
-        <select id="inpEsperienza" name="esperienza">
-          <option value="non-so" selected>Ancora da scegliere</option>
-          <option value="lite">Essenziale</option>
-          <option value="completa">Completa</option>
-          <option value="premium">Premium</option>
-          <option value="custom">Su misura</option>
+        <label for="inpEsperienza">Il canone che ti interessa</label>
+        <select id="inpEsperienza" name="canone">
+          <option value="" selected>Scegli, se hai gi&agrave; un'idea</option>
+          <option value="asporto">Solo asporto &middot; 290 &euro; l'anno</option>
+          <option value="completo">Completo con sala e cucina &middot; 390 &euro; l'anno</option>
+          <option value="apertura">Sto per aprire, ancora da decidere</option>
         </select>
       </div>
+      <fieldset class="field field--aggiunte" id="fieldAggiunte">
+        <legend>Aggiunte che ti interessano <span class="legend-nota">(facoltativo)</span></legend>
+        <label class="check check--agg"><input type="checkbox" name="agg" value="Magazzino al grammo e food cost"><span>Magazzino al grammo e food cost &middot; 190 &euro; l'anno</span></label>
+        <label class="check check--agg"><input type="checkbox" name="agg" value="Fatture e documenti"><span>Fatture e documenti &middot; 70 &euro; l'anno</span></label>
+        <label class="check check--agg"><input type="checkbox" name="agg" value="Ordini online"><span>Ordini online &middot; 390 &euro; l'anno</span></label>
+        <label class="check check--agg"><input type="checkbox" name="agg" value="Postazioni in piu'"><span>Postazioni in pi&ugrave; &middot; 90 &euro; l'anno l'una</span></label>
+        <label class="check check--agg"><input type="checkbox" name="agg" value="Sito web personalizzato"><span>Sito web personalizzato &middot; a preventivo</span></label>
+      </fieldset>
       <div class="field field--check" id="fieldPrivacy">
         <label class="check" for="inpPrivacy">
           <input type="checkbox" id="inpPrivacy" name="privacy" aria-describedby="errPrivacy">
@@ -390,32 +531,30 @@
         </label>
         <span class="field-error" id="errPrivacy"></span>
       </div>
-      <button type="submit" class="pill pill--block form-submit-inline">Richiedi informazioni</button>
-      <p class="form-error" id="formError" hidden></p>
-      <p class="form-note">Ti rispondiamo entro 24 ore. Niente spam, niente vincoli.</p>
+      <button type="submit" class="pill pill--block form-submit-inline">Richiedi il preventivo</button>
     </form>
 
     <div class="form-success" id="formSuccess" hidden>
       <h3>Richiesta ricevuta.</h3>
-      <p>Grazie<span id="successName"></span>, ti rispondiamo entro 24 ore.</p>
-      <p class="summary-recap">Versione indicata: <strong id="successExp"></strong>.</p>
+      <p>Grazie<span id="successName"></span>, rispondiamo entro un giorno lavorativo.</p>
+      <p class="summary-recap">Richiesta: <strong id="successExp"></strong>.</p>
     </div>
 
     <div class="footer">
       <div class="footer-brand">
-        <strong>Infornato</strong>
-        <span>Gestionale per pizzerie e ristoranti. Treviso e dintorni.</span>
+        <img class="footer-logo" src="../assets/brand/logo-celan.png" alt="c&egrave;lan" width="1906" height="644">
+        <span>Gestionale per ristoranti, pizzerie e locali.</span>
       </div>
       <div class="footer-links">
         <a href="#cosa-fa">Cosa fa</a>
         <span class="footer-sep">&middot;</span>
-        <a href="#tagli">Piani</a>
+        <a href="#tagli">Prezzo</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#chi-siamo">Chi siamo</a>
         <span class="footer-sep">&middot;</span>
         <a href="#domande">Domande</a>
         <span class="footer-sep">&middot;</span>
         <a href="../privacy/">Privacy e cookie</a>
-        <span class="footer-sep">&middot;</span>
-        <a href="#" data-consent-open>Preferenze cookie</a>
       </div>
     </div>
   </div>
@@ -437,6 +576,5 @@
 
 <script src="../assets/js/lenis.min.js"></script>
 <script src="js/pizzerie.js"></script>
-<script src="../assets/js/consent.js" data-ga-id="" data-policy-url="../privacy/#cookie"></script>
 </body>
 </html>

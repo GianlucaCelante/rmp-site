@@ -158,20 +158,18 @@
   (function () {
     var root = document.querySelector('.tablet-demo');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    /* Con "riduci movimento" il nastro resta sfogliabile (swipe, frecce,
-       tastiera): sono navigazione, non animazione. A spegnersi sono il pin,
-       il giro del tablet e lo scroll fluido (vedi CSS e motion layer). */
-    if (!root || !('IntersectionObserver' in window)) return;
+    if (!root || !('IntersectionObserver' in window) || reduce) return;
     root.classList.add('js-ready');
 
     var tablet = root.querySelector('.tablet');
     var labels = [
       'Schermata comande: presa ordini al banco e al telefono.',
-      'Schermata prenotazioni: fasce orarie con il tetto di pizze per ogni slot.',
-      'Schermata sala: mappa dei tavoli con stato libero, occupato, prenotato.',
-      'Schermata magazzino: ingredienti e scorte della serata.',
-      'Schermata report: incassi, venduto, costi e ricavi.',
-      'Schermata postazioni: casse, monitor e stampanti collegate.'
+      'Schermata forno: fasce orarie con il tetto di ordini per ogni slot.',
+      'Schermata sala: planimetria dei tavoli con stato libero, prenotato, occupato.',
+      'Schermata rubrica: clienti con telefono e indirizzo.',
+      'Schermata prenotazioni: calendario di tavoli e asporti.',
+      'Schermata conto della giornata: in arrivo.',
+      'Schermata magazzino: in arrivo.'
     ];
 
     var track = document.getElementById('tabletTrack');
@@ -181,6 +179,19 @@
     if (!track || !slides.length) return;
 
     var current = -1;
+    /* pallini: uno per schermata, cliccabili */
+    var dotsBox = document.getElementById('scrollyDots');
+    var dots = [];
+    if (dotsBox) {
+      slides.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Vai alla schermata ' + (i + 1));
+        b.addEventListener('click', function () { vaiA(i); });
+        dotsBox.appendChild(b);
+        dots.push(b);
+      });
+    }
     /* aggiorna solo la didascalia e gli indicatori: quale schermata si vede
        lo decide il nastro, non piu' una classe */
     function activate(i) {
@@ -200,6 +211,7 @@
       if (cue) cue.classList.toggle('is-last', i === slides.length - 1);
       if (prevBtn) prevBtn.disabled = (i === 0);
       if (nextBtn) nextBtn.disabled = (i === slides.length - 1);
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
     }
 
     /* la schermata "in scena" e' quella che occupa il nastro: root e' il
@@ -235,6 +247,26 @@
       vaiA(current + (e.deltaX > 0 ? 1 : -1));
       setTimeout(function () { wheelLock = false; }, 420);
     }, { passive: false });
+    /* la prima volta che il nastro entra bene in vista, un piccolo scivolo
+       laterale mostra che le schermate scorrono. Solo una volta, mai se
+       l'utente ha gia' toccato, mai con reduced motion. */
+    var nudged = false;
+    function nudge() {
+      if (nudged || reduce || current > 0 || track.scrollLeft > 4) { nudged = true; return; }
+      nudged = true;
+      track.scrollTo({ left: 44, behavior: 'smooth' });
+      setTimeout(function () {
+        if (track.scrollLeft < track.clientWidth * 0.4) track.scrollTo({ left: 0, behavior: 'smooth' });
+      }, 520);
+    }
+    var nudgeIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { setTimeout(nudge, 900); nudgeIO.disconnect(); }
+      });
+    }, { threshold: 0.7 });
+    nudgeIO.observe(track);
+    track.addEventListener('pointerdown', function () { nudged = true; }, { once: true });
+
     /* al ridimensionamento il passo cambia: si riallinea alla schermata
        corrente (timer locale: la debounce del file vive in un altro scope) */
     var tRes;
@@ -302,7 +334,7 @@
   var successNameEl = document.getElementById('successName');
   var successExpEl = document.getElementById('successExp');
 
-  var ESPERIENZA_LABELS = { 'non-so': 'Non lo so ancora', 'lite': 'Essenziale', 'completa': 'Completa', 'premium': 'Premium', 'custom': 'Su misura' };
+  var ESPERIENZA_LABELS = { 'asporto': 'Solo asporto (290 €/anno)', 'completo': 'Completo con sala e cucina (390 €/anno)', 'apertura': 'Sto per aprire, ancora da decidere' };
 
   function setFieldError(fieldId, message){
     var fieldEl = document.getElementById(fieldId);
@@ -318,10 +350,18 @@
       errors.fieldNome = 'Inserisci il tuo nome.';
     }
     if (!data.locale || data.locale.trim().length < 2) {
-      errors.fieldLocale = 'Inserisci il nome del locale e la città.';
+      errors.fieldLocale = 'Inserisci il nome del locale.';
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((data.email || '').trim())) {
-      errors.fieldEmail = 'Inserisci un indirizzo email valido.';
+    if (!data.citta || data.citta.trim().length < 2) {
+      errors.fieldCitta = 'Inserisci la città.';
+    }
+    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email.trim())) {
+      errors.fieldEmail = "Controlla l'indirizzo email: sembra incompleto.";
+    }
+    var telDigits = (data.telefono || '').match(/\d/g);
+    var telCount = telDigits ? telDigits.length : 0;
+    if (telCount < 8) {
+      errors.fieldTelefono = 'Controlla il numero: servono almeno 8 cifre.';
     }
     if (!data.privacy) {
       errors.fieldPrivacy = 'Serve il consenso per poterti ricontattare.';
@@ -332,7 +372,7 @@
   if (form) {
     var chk = document.getElementById('inpPrivacy');
     if (chk) chk.addEventListener('change', function(){ if (chk.checked) setFieldError('fieldPrivacy', ''); });
-    ['inpNome','inpLocale','inpEmail'].forEach(function(inputId){
+    ['inpNome','inpLocale','inpCitta','inpEmail','inpTelefono'].forEach(function(inputId){
       var el = document.getElementById(inputId);
       if (!el) return;
       el.addEventListener('input', function(){
@@ -346,11 +386,13 @@
       var data = {
         nome: document.getElementById('inpNome').value,
         locale: document.getElementById('inpLocale').value,
+        citta: document.getElementById('inpCitta').value,
         email: document.getElementById('inpEmail').value,
+        telefono: document.getElementById('inpTelefono').value,
         privacy: document.getElementById('inpPrivacy') ? document.getElementById('inpPrivacy').checked : true
       };
       var errors = validateForm(data);
-      ['fieldNome','fieldLocale','fieldEmail','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
+      ['fieldNome','fieldLocale','fieldCitta','fieldEmail','fieldTelefono','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
       var errorKeys = Object.keys(errors);
       if (errorKeys.length) {
         errorKeys.forEach(function(fieldId){ setFieldError(fieldId, errors[fieldId]); });
@@ -360,95 +402,21 @@
         return;
       }
 
+      /* TODO: collegare invio (Formspree o mail). Qui si simula un invio riuscito. */
       var expSelect = document.getElementById('inpEsperienza');
-      var expValue = expSelect ? expSelect.value : 'non-so';
-      var expLabel = ESPERIENZA_LABELS[expValue] || expValue;
+      var expValue = expSelect ? expSelect.value : '';
+      var expLabel = ESPERIENZA_LABELS[expValue] || 'Canone da definire insieme';
 
-      function showSuccess(){
-        if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
-        if (successExpEl) successExpEl.textContent = expLabel;
+      if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
+      var aggScelte = Array.prototype.slice.call(form.querySelectorAll('input[name="agg"]:checked')).map(function (c) { return c.value; });
+      if (successExpEl) successExpEl.textContent = expLabel + (aggScelte.length ? ('. Aggiunte: ' + aggScelte.join(', ')) : '');
 
-        /* Il bollino rotante e' un submit del form: senza form non fa piu'
-           nulla, quindi esce di scena insieme a lui. */
-        var orphanCta = document.querySelector('#contatti .closing-grid .pop');
-        if (orphanCta) orphanCta.hidden = true;
-
-        /* Se il titolo non e' ancora entrato in scena, niente reveal a
-           sorpresa mentre la pagina si riassesta. */
-        document.querySelectorAll('#contatti .line-inner').forEach(function(l){ l.classList.add('is-visible'); });
-
-        if (!successBox) { form.hidden = true; return; }
+      form.hidden = true;
+      if (successBox) {
         successBox.hidden = false;
         successBox.setAttribute('tabindex', '-1');
-        requestAnimationFrame(function(){ successBox.classList.add('is-in'); });
-
-        /* preventScroll: il focus da solo farebbe scorrere il browser, che
-           con lo smooth scroll attivo si vede come uno scatto. */
-        var settle = function(){
-          if (lenis) lenis.resize();   /* Lenis rimisura: niente scroll disallineato */
-          successBox.focus({ preventScroll: true });
-        };
-
-        if (reduceMotion) { form.hidden = true; settle(); return; }
-
-        var h = form.offsetHeight;
-        form.style.height = h + 'px';
-        form.classList.add('is-leaving');
-        requestAnimationFrame(function(){ form.style.height = '0px'; });
-
-        var done = false;
-        var finish = function(){
-          if (done) return;
-          done = true;
-          form.hidden = true;
-          form.classList.remove('is-leaving');
-          form.style.height = '';
-          settle();
-        };
-        form.addEventListener('transitionend', function(e){ if (e.propertyName === 'height') finish(); });
-        setTimeout(finish, 700);   /* rete di sicurezza se la transizione non parte */
+        successBox.focus();
       }
-
-      var formError = document.getElementById('formError');
-      if (formError) { formError.hidden = true; formError.textContent = ''; }
-
-      /* L'endpoint (Cloudflare Worker -> Brevo, vedi worker/README.md) sta in
-         data-endpoint sul <form>. Se e' vuoto l'invio e' simulato: comodo per
-         anteprime e sviluppo. */
-      var endpoint = (form.getAttribute('data-endpoint') || '').trim();
-      if (!endpoint) { showSuccess(); return; }
-
-      var hp = form.querySelector('[name="website"]');
-      var payload = {
-        nome: data.nome.trim(),
-        locale: data.locale.trim(),
-        email: data.email.trim(),
-        esperienza: expValue,
-        verticale: form.getAttribute('data-verticale') || '',
-        website: hp ? hp.value : '',
-        pagina: location.href
-      };
-      var submitBtn = form.querySelector('.form-submit-inline');
-      form.classList.add('is-sending');
-      if (submitBtn) submitBtn.disabled = true;
-      fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-        .then(function(r){
-          return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok && j.ok !== false, error: j.error }; });
-        })
-        .then(function(res){
-          if (!res.ok) throw new Error(res.error || 'send');
-          showSuccess();
-        })
-        .catch(function(){
-          if (formError) {
-            formError.textContent = 'Non siamo riusciti a inviare la richiesta. Riprova tra qualche minuto.';
-            formError.hidden = false;
-          }
-        })
-        .then(function(){
-          form.classList.remove('is-sending');
-          if (submitBtn) submitBtn.disabled = false;
-        });
     });
   }
 
@@ -563,61 +531,22 @@
       });
     }
 
-    /* ---- 7. Ingresso del tablet: entra di schiena e si gira con lo scroll.
-       Scrub guidato da lenis.on('scroll') (niente listener nativi): mentre
-       la sezione entra si vede il retro in piccolo; nei primi ~55svh di pin
-       il tablet ruota (rotateY 180 -> 0) e sale a dimensione piena; poi
-       partono i cambi di schermata. Senza Lenis o con reduced-motion la
-       classe js-flip non viene mai messa: tablet dritto da subito. ---- */
-    /* Centering misurato dello stage pinnato: top = (viewport - contenuto)/2.
-       Sostituisce lo stage a schermo pieno, che lasciava fasce vuote. */
-    var stageEl = document.querySelector('.tablet-demo__sticky');
-    var measureStage = function () {
-      if (!stageEl) return;
-      var t = Math.max(8, Math.round((window.innerHeight - stageEl.offsetHeight) / 2));
-      stageEl.style.setProperty('--stage-top', t + 'px');
-    };
-    if (stageEl) {
-      measureStage();
-      window.addEventListener('load', measureStage);
-      window.addEventListener('resize', debounce(measureStage, 150));
-      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measureStage); }
-    }
-
-    var flipRoot = document.querySelector('.tablet-demo');
-    var flipSection = document.getElementById('dentro');
-    var flipTablet = flipRoot ? flipRoot.querySelector('.tablet') : null;
-    if (lenis && flipRoot && flipSection && flipTablet) {
-      flipRoot.classList.add('js-flip');
-      var flipDone = false;
-      var easeOutCubic = function (t) { return 1 - Math.pow(1 - t, 3); };
-      var applyFlip = function () {
-        var rect = flipSection.getBoundingClientRect();
-        var vh = window.innerHeight;
-        var raw;
-        if (rect.top >= 0) {
-          raw = 0; /* la sezione sta ancora entrando: retro, gia' a larghezza piena */
-        } else {
-          raw = Math.min(1, -rect.top / (vh * 0.95)); /* giro lento: ~un viewport di corsa */
-        }
-        if (raw >= 1) {
-          if (!flipDone) {
-            flipDone = true;
-            flipTablet.style.transform = '';
-            flipRoot.classList.add('flip-done');
-          }
-          return;
-        }
-        if (flipDone) { flipDone = false; flipRoot.classList.remove('flip-done'); }
-        var p = easeOutCubic(raw);
-        var rot = 180 * (1 - p);
-        /* solo rotazione: niente scala ne' spostamenti, i bordi restano fissi
-           ai margini per tutta la durata del giro */
-        flipTablet.style.transform = 'rotateY(' + rot + 'deg)';
-      };
-      applyFlip();
-      lenis.on('scroll', applyFlip);
-      window.addEventListener('resize', debounce(applyFlip, 150));
+    /* ---- 7. Ingresso del tablet: slide dal basso quando la sezione entra
+       in vista. Il giro 3D legato allo scroll e' stato tolto il 30/8: nei
+       test le persone si bloccavano credendo la pagina rotta. ---- */
+    var revealRoot = document.querySelector('.tablet-demo');
+    if (revealRoot) {
+      var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (noMotion) {
+        revealRoot.classList.add('tablet-in');
+      } else {
+        var inIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { revealRoot.classList.add('tablet-in'); inIO.disconnect(); }
+          });
+        }, { threshold: 0.22 });
+        inIO.observe(revealRoot);
+      }
     }
   })();
 })();

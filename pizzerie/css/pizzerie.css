@@ -69,6 +69,8 @@ input,button{font-size:inherit;}
   padding-inline:16px;
 }
 section{ position:relative; }
+/* respiro sotto i titoli display delle sezioni a contenuto immediato */
+#domande .display-wrap, #chi-siamo .display-wrap, #contatti .display-wrap{ margin-bottom:clamp(18px,3vw,36px); }
 .section-pad{ padding-block:var(--section-pad); }
 .section-dark{ background:var(--dark); color:var(--card); }
 
@@ -267,6 +269,50 @@ html.js .fade-up.is-visible{
 .nav.nav-on-dark.is-scrolled{ background:rgba(20,19,18,0.72); }
 .nav.nav-on-dark .nav-brand,
 .nav.nav-on-dark .nav-links a:not(.nav-cta){ color:var(--card); }
+/* Logo animato all'ingresso. La girandola: il petalo di destra appare per
+   primo, gli altri escono da lui ruotando in senso orario, veloci all'inizio
+   e via via piu' lenti, fermandosi ognuno al suo posto. Intanto le lettere
+   compaiono da sinistra a destra; per ultimo arriva l'accento sulla E.
+   Con "riduci movimento" il logo e' subito completo. */
+.nav-brand{ display:flex; align-items:center; }
+.nav-brand__mark{ position:relative; width:44px; height:44px; flex:0 0 auto; }
+.nav-brand__mark .petal{
+  position:absolute; inset:0; width:100%; height:100%;
+  transform:rotate(var(--da));
+  transform-origin:47.4% 47.8%;
+  opacity:0;
+  animation:petalIn var(--t,.45s) cubic-bezier(.25,.6,.35,1) var(--d,0ms) forwards;
+}
+@keyframes petalIn{
+  0%{ transform:rotate(var(--da)); opacity:0; }
+  14%{ opacity:1; }
+  100%{ transform:rotate(0deg); opacity:1; }
+}
+.nav-brand__word{ position:relative; width:calc(44px * 1262 / 644); height:44px; flex:0 0 auto; }
+.nav-brand__word img{
+  position:absolute; inset:0; width:100%; height:100%;
+  opacity:0;
+  animation:brandFade .34s ease-out var(--d,0ms) forwards;
+}
+.nav-brand__word .accent{
+  transform:scale(.55);
+  transform-origin:31% 6%;
+  animation:accentPop .4s cubic-bezier(.34,1.4,.5,1) var(--d,0ms) forwards;
+}
+@keyframes brandFade{
+  from{ opacity:0; transform:translateY(4px); }
+  to{ opacity:1; transform:none; }
+}
+@keyframes accentPop{
+  from{ opacity:0; transform:scale(.55); }
+  to{ opacity:1; transform:scale(1); }
+}
+/* sul fondo scuro le lettere nere passano in bianco; girandola, accento e
+   payoff restano arancioni (sono immagini monocrome: il filtro e' esatto) */
+.nav.nav-on-dark .nav-brand__word .lt{ filter:brightness(0) invert(1); }
+@media (prefers-reduced-motion:reduce){
+  .nav-brand__mark .petal, .nav-brand__word img{ animation:none; transform:none; opacity:1; }
+}
 .nav-inner{
   width:100%;
   max-width:1440px;
@@ -277,11 +323,10 @@ html.js .fade-up.is-visible{
   justify-content:space-between;
   gap:24px;
 }
-.nav-brand{
-  font:700 18px/1 'Archivo',sans-serif;
-  color:var(--ink);
-  text-decoration:none;
-}
+.nav-brand{ display:flex; align-items:center; text-decoration:none; }
+/* il logo ufficiale (PDF del 30/8), usato cosi' com'e'. Il PNG e' ad alta
+   risoluzione: qui si scala e basta. */
+.nav-brand img{ height:44px; width:auto; display:block; }
 .nav-links{
   display:flex;
   align-items:center;
@@ -425,10 +470,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .hero-pizza{
   position:absolute;
   z-index:4;
-  right:clamp(-24px, -1.6vw, -12px);
-  top:clamp(-164px, -10.6vw, -92px);
+  right:clamp(24px, 7vw, 130px);
+  top:clamp(-150px, -9vw, -60px);
   /* decorazione, non protagonista: sta sotto titolo e bottone in gerarchia */
-  width:clamp(115px, 13vw, 180px);
+  width:clamp(140px, 17vw, 250px);
   transform:rotate(14deg);
   pointer-events:none;
   user-select:none;
@@ -468,7 +513,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .veg--tagli{
   top:clamp(24px, 4vw, 60px);
-  right:clamp(-26px, -1.5vw, -14px);
+  right:clamp(18px, 4vw, 72px);
   width:clamp(92px, 11vw, 150px);
   transform:rotate(-10deg);
 }
@@ -480,9 +525,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
      la fetta occupa lo spazio libero alla sua destra, sopra lo screenshot */
   .hero-pizza{
     right:-12px;
-    top:-56px;
+    top:-24px;
     bottom:auto;
-    width:min(35vw, 140px);
+    width:min(42vw, 168px);
   }
 }
 @media (max-width:900px){
@@ -585,16 +630,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
    sosta in cui il tablet resta fermo e si sfogliano le schermate col dito.
    Serve sosta abbondante: se la sezione scappa via mentre uno sfoglia,
    l'interazione non si scopre nemmeno. */
-.js-ready .step-trigger[data-index="0"]{ height:230vh; height:230svh; }
+.js-ready .step-trigger[data-index="0"]{ height:0; } /* niente pin: la sezione scorre normale */
 /* Lo stage e' alto quanto il suo contenuto, NON quanto lo schermo: cosi'
    la sezione non si porta dietro fasce vuote ne' in testa ne' in coda.
    Il centering nel viewport lo fa il top misurato dal JS (--stage-top). */
-.js-ready .tablet-demo__sticky{
-  position:sticky;
-  top:var(--stage-top, 12px);
-  align-self:start;
-  height:auto;
-  contain:layout paint;
+.js-ready .tablet-demo__sticky{ position:static; height:auto; }
+/* Ingresso del tablet: slide dal basso quando la sezione entra in vista.
+   Sostituisce il giro 3D legato allo scroll: nei test le persone si
+   bloccavano credendo la pagina rotta. */
+.js-ready .tablet-demo__row{
+  opacity:0;
+  transform:translateY(72px);
+  transition:opacity .9s var(--ease-reveal), transform .9s var(--ease-reveal);
+}
+.tablet-demo.tablet-in .tablet-demo__row{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){
+  .js-ready .tablet-demo__row{ opacity:1; transform:none; transition:none; }
 }
 /* Durante il giro la prospettiva proietta il tablet fuori dal box dello
    stage e il paint containment lo taglia (bordo sotto mozzato). Solo
@@ -631,48 +682,42 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 
 /* Frecce: solo con mouse. Su touch si scorre col dito e sarebbero ingombro. */
 .tablet-nav{ display:none; }
-@media (hover:hover) and (pointer:fine){
-  .tablet-demo.js-ready .tablet-nav{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    display:grid;
-    place-items:center;
-    width:44px; height:44px;
-    border:none;
-    border-radius:50%;
-    background:rgba(252,251,250,.92);
-    box-shadow:0 6px 20px rgba(17,17,16,.22);
-    cursor:pointer;
-    z-index:4;
-    transition:opacity .3s var(--ease), transform .3s var(--ease);
-  }
-  .tablet-demo.js-ready .tablet-nav::before{
-    content:"";
-    width:9px; height:9px;
-    border-right:2.5px solid var(--ink);
-    border-bottom:2.5px solid var(--ink);
-  }
-  .tablet-nav--prev{ left:-22px; }
-  .tablet-nav--prev::before{ transform:rotate(135deg); margin-left:3px; }
-  .tablet-nav--next{ right:-22px; }
-  .tablet-nav--next::before{ transform:rotate(-45deg); margin-right:3px; }
-  .tablet-demo.js-ready .tablet-nav:hover{ transform:translateY(-50%) scale(1.06); }
-  .tablet-demo.js-ready .tablet-nav[disabled]{ opacity:.32; cursor:default; box-shadow:none; }
-  .tablet-demo.js-ready .tablet-nav[disabled]:hover{ transform:translateY(-50%); }
-  /* Prima del giro completo le frecce ruoterebbero col tablet: nascoste
-     finche' l'animazione non e' finita, poi entrano in dissolvenza. */
-  .tablet-demo.js-flip:not(.flip-done) .tablet-nav{ opacity:0; pointer-events:none; }
+/* Frecce piccole nella riga dei pallini: un solo gruppo di controlli,
+   sotto il tablet, che si legge al volo come "questo e' uno slider". */
+.scrolly-row{ display:flex; align-items:center; gap:14px; }
+.tablet-demo.js-ready .tablet-nav{
+  display:grid;
+  place-items:center;
+  width:28px; height:28px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--card);
+  cursor:pointer;
+  padding:0;
+  transition:opacity .3s var(--ease), transform .3s var(--ease), border-color .3s var(--ease);
 }
-
+.tablet-demo.js-ready .tablet-nav::before{
+  content:"";
+  width:7px; height:7px;
+  border-right:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+}
+.tablet-nav--prev::before{ transform:rotate(135deg); margin-left:2px; }
+.tablet-nav--next::before{ transform:rotate(-45deg); margin-right:2px; }
+.tablet-demo.js-ready .tablet-nav:hover{ transform:scale(1.1); border-color:var(--ink); }
+.tablet-demo.js-ready .tablet-nav[disabled]{ opacity:.32; cursor:default; }
+.tablet-demo.js-ready .tablet-nav[disabled]:hover{ transform:none; border-color:var(--line); }
 /* MOBILE (<768px): tablet compatto pinnato in alto, niente 100svh morti */
 @media (max-width:600px){
-  .hero-marquee__track span{ font-size:clamp(80px, 30vw, 150px); }
+  .hero-marquee__track span{ font-size:clamp(96px, 30vw, 150px); }
   .hero-chip--3{ display:none; }
-  .hero-chip--2{ right:12px; }
+  /* la chip dell'esaurito e' su due righe: senza limite di larghezza
+     scivola sopra quella del forno */
+  .hero-chip--2{ right:12px; max-width:62%; }
+  .hero-chip--1{ top:34%; max-width:58%; }
 }
 @media (max-width:47.99em){
-  .js-ready .step-trigger[data-index="0"]{ height:205vh; height:205svh; }
+
   .js-ready .tablet-demo__sticky{
     padding-block:0;
     overflow-x:clip;
@@ -680,8 +725,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   /* Respiro attorno alla didascalia: su mobile il tablet e' quasi a tutta
      larghezza e il testo gli restava appiccicato sopra e sotto. */
   .tablet-demo.js-ready .tablet-demo__row{ gap:30px; }
-  .tablet-demo.js-ready .tablet-demo__caption{ padding-inline:6px; }
-  .tablet-demo.js-ready .scrolly-cue{ margin-top:26px; }
+  .tablet-demo.js-ready .tablet-demo__caption{ padding-inline:6px; margin-top:20px; }
+  /* Su mobile i pallini vanno SUBITO sotto il tablet, prima del testo:
+     cosi' si capisce al volo che e' uno slider. Il cue e la didascalia
+     sono fratelli dentro __text: si scambiano con order. */
+  .tablet-demo.js-ready .scrolly-cue{ order:-1; margin-top:2px; }
   /* Mobile: schermate GRANDI. Cornice ridotta all'osso e larghezza quasi
      piena: il "tablet" diventa poco piu' di un bordo attorno allo schermo.
      Specificita' composta: la regola base ".tablet-demo .tablet{width:min(70vw,...)}"
@@ -700,12 +748,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .tablet-demo.js-ready .tablet__screen{ border-radius:12px; }
 }
 
-/* reduced motion: pin spento e niente giro del tablet; il nastro resta
-   sfogliabile (una schermata alla volta), senza scroll fluido */
+/* reduced motion: pin spento, 3 blocchi statici impilati (doppia rete col JS) */
 @media (prefers-reduced-motion:reduce){
-  /* [data-index] per battere in specificita' le regole 230svh/205svh qui sopra */
-  .js-ready .step-trigger[data-index]{ height:0; }
+  .js-ready .step-trigger{ height:0; }
   .js-ready .tablet-demo__sticky{ position:static; height:auto; }
+  .tablet-demo.js-ready .tablet__track{ display:block; overflow:visible; }
+  .js-ready .tablet__slide{ position:static; opacity:1; transform:none; transition:none; }
 }
 
 /* Layout interno: dimensioni di default, terza slide panoramica, caption, indicatori */
@@ -740,7 +788,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 
 /* la terza schermata (gestionale-cucina, 1440x435, panoramica) resta ancorata in alto */
 /* il forno e' una panoramica 1440x435: ancorata in alto, non centrata */
-.tablet__slide[data-index="1"]{ object-position:top; }
 
 /* ---------- Flip d'ingresso del tablet (classe js-flip messa solo dal JS,
    solo con Lenis attivo e senza reduced-motion) ---------- */
@@ -804,6 +851,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   align-items:center;
   gap:10px;
 }
+/* Pallini del carosello: la convenzione che tutti conoscono dal telefono.
+   Quello attivo si allunga in una pillola arancione. Cliccabili. */
+.scrolly-dots{ display:flex; gap:9px; align-items:center; }
+.scrolly-dots button{
+  width:11px; height:11px; border-radius:999px;
+  border:none; padding:0; cursor:pointer;
+  background:rgba(17,17,16,.22);
+  transition:width .35s var(--ease), background .35s var(--ease);
+}
+.scrolly-dots button.on{ width:30px; background:var(--accent); }
+.scrolly-dots button:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
 .scrolly-hint{
   display:inline-flex;
   align-items:center;
@@ -851,6 +910,23 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   transition:transform .45s var(--ease);
 }
 .tablet-demo__caption-item{ padding:0; }
+/* Tag base/aggiunta sopra il titolo della didascalia: dice subito se la
+   schermata mostrata rientra nel canone o e' un modulo a parte. */
+.cap-tag{
+  display:inline-block;
+  font:600 11px/1 'Archivo',sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted-tx);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 11px;
+  margin-bottom:10px;
+}
+.cap-tag--extra{
+  color:var(--accent-text);
+  border-color:currentColor;
+}
 .tablet-demo__caption-item h3{
   font:700 22px/1.2 'Archivo',sans-serif;
   color:var(--ink);
@@ -858,7 +934,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .tablet-demo__caption-item p{
   font:400 16px/1.55 'Archivo',sans-serif;
   color:var(--muted-tx);
-  margin-top:10px;
+  margin-top:15px;
 }
 /* Le didascalie stanno impilate nella stessa cella di griglia: il
    contenitore e' alto quanto la piu' alta delle sei, senza min-height
@@ -911,6 +987,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .vband--light{ background:var(--bg); }
 .vband .display{ transition:color .9s var(--ease); }
 .vband--light .display{ color:var(--ink); }
+.vband__note{
+  margin-top:clamp(16px,2.4vw,26px);
+  font:500 15px/1.5 'Archivo',sans-serif;
+  color:rgba(252,251,250,.62);
+  max-width:40ch;
+  transition:color .9s var(--ease);
+}
+.vband--light .vband__note{ color:var(--muted-tx); }
 @media (prefers-reduced-motion:reduce){
   .vband, .vband .display{ transition:none; }
 }
@@ -922,7 +1006,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 /* solo tipografia, come la reference: niente paragrafo, il testo riempie
    la banda su quattro righe */
-.vband__display{ font-size:clamp(46px,7vw,108px); max-width:66%; }
+.vband__display{ font-size:clamp(46px,7vw,108px); max-width:66%; line-height:1.06; }
 .vband__hand{
   position:absolute;
   /* sopra il cerchio: nella reference il telefono copre il bordo del disco */
@@ -951,21 +1035,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   width:clamp(190px,20vw,270px);
   height:clamp(190px,20vw,270px);
 }
+.circle-cta--static{ cursor:default; pointer-events:none; }
 .vband__playwrap .circle-cta:hover .circle-cta__icon svg{ transform:scale(1.12); }
 @media (max-width:760px){
   /* in colonna: testo sopra, sotto una zona riservata alla mano che entra
      da destra, col cerchio a sinistra sovrapposto al telefono */
-  .vband{ padding-bottom:clamp(300px,86vw,400px); }
+  .vband{ padding-bottom:clamp(330px,92vw,430px); margin-top:28px; }
   .vband__display{ font-size:clamp(46px,12.5vw,60px); max-width:none; }
-  .vband__hand{ height:auto; width:min(66vw,310px); right:-8vw; bottom:-24px; }
+  .vband__hand{ height:auto; width:min(70vw,330px); right:-5vw; bottom:6px; }
   .vband__playwrap{
     right:auto;
     left:var(--wrap-pad);
-    bottom:clamp(40px,11vw,64px);
+    bottom:clamp(96px,24vw,150px);
   }
   .vband__playwrap .circle-cta{
-    width:clamp(170px,45vw,200px);
-    height:clamp(170px,45vw,200px);
+    width:clamp(150px,40vw,180px);
+    height:clamp(150px,40vw,180px);
   }
 }
 
@@ -1054,7 +1139,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
    pulsanti restano comunque allineati tra loro */
 .price-card > .pop{ margin-top:auto; padding-top:4px; }
 /* Riquadro "su misura": sta sul fondo scuro della sezione piani, quindi
-   contorno chiaro invece di card bianca (le card bianche sono i tre piani,
+   contorno chiaro invece di card bianca (la card bianca e' il blocco prezzo,
    questo e' un'altra cosa e deve leggersi come tale). */
 .custom-box{
   margin-top:clamp(28px,4vw,40px);
@@ -1097,7 +1182,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 
 /* ---------- Prezzi (dark) ---------- */
 .pricing{ background:var(--dark); color:var(--card); }
-.pricing-head-row{ margin-bottom:16px; }
+.pricing-head-row{ margin-bottom:28px; }
 .pricing-sub{
   font:500 20px/1.5 'Archivo',sans-serif;
   color:rgba(252,251,250,0.7);
@@ -1143,6 +1228,252 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .price-cards{ grid-template-columns:1fr; }
 }
 
+/* ============================================================
+   OFFERTA UNICA (v6, 27 ago 2026)
+   Sostituisce le tre .price-card. Le regole .price-card* e
+   .custom-box* restano nel foglio ma non sono piu' usate dal
+   markup: si tolgono quando il prezzo e' confermato.
+   Struttura: guscio esterno + nucleo interno (bordi concentrici),
+   cosi' il blocco prezzo si legge come un oggetto solido e non
+   come l'ennesima card bianca.
+   ============================================================ */
+.offer{
+  margin-top:clamp(44px,6vw,72px);
+  background:rgba(252,251,250,0.05);
+  border:1px solid var(--line-inv);
+  border-radius:calc(var(--radius) + 10px);
+  padding:10px;
+}
+.offer__core{
+  background:var(--card);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:clamp(28px,4vw,52px);
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,56px);
+  align-items:start;
+}
+.offer__figures{ display:flex; flex-direction:column; gap:clamp(44px,6vw,64px); }
+.offer__fig{ display:flex; flex-direction:column; gap:6px; }
+.offer__amount{
+  font-family:'Anton',sans-serif;
+  font-weight:400;
+  font-size:clamp(64px,8.6vw,124px);
+  line-height:.88;
+  letter-spacing:-0.02em;
+  color:var(--ink);
+}
+.offer__fig + .offer__fig .offer__amount{ color:var(--accent-text); }
+.offer__label{
+  font:700 15px/1.4 'Archivo',sans-serif;
+  color:var(--ink);
+}
+.offer__desc{
+  margin-top:4px;
+  font:500 14px/1.55 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  max-width:34ch;
+}
+.offer__desc strong{ color:var(--ink); font-weight:700; }
+.offer__side{ display:flex; flex-direction:column; gap:24px; align-items:flex-start; align-self:center; }
+.offer__lead{
+  font:500 18px/1.55 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  max-width:42ch;
+}
+
+/* "Cosa comprende" apribile sotto ogni cifra: stesso disegno delle FAQ
+   (freccia +), ma dentro la card chiara del prezzo. Chiuso di default:
+   il blocco resta corto, chi vuole i dettagli li apre. */
+.offer__core{ border-radius:var(--radius); padding-bottom:clamp(22px,3vw,36px); }
+.offer__name{
+  font:700 14px/1.2 'Archivo',sans-serif;
+  letter-spacing:.09em; text-transform:uppercase;
+  color:var(--accent-text);
+  margin-bottom:2px;
+}
+.offer__iva{ font:600 13px/1 'Archivo',sans-serif; letter-spacing:.06em; color:var(--muted-tx); }
+.extra__price small{ font-size:11px; font-weight:600; opacity:.75; }
+.offer__fig .offer__more{ margin-top:4px; }
+.offer__fig .offer__more-cols{ grid-template-columns:1fr; }
+.offer__more{ padding-top:16px; }
+/* summary a bottone pieno: il dettaglio dei prezzi deve invitare al tap,
+   non sembrare una riga di testo qualsiasi */
+.offer__more summary{
+  list-style:none; cursor:pointer; user-select:none;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  font:700 16px/1.25 'Archivo',sans-serif; color:var(--accent-text);
+  background:rgba(240,86,60,0.07);
+  border:1px solid var(--accent);
+  border-radius:12px;
+  padding:14px 16px;
+  transition:background .3s var(--ease);
+}
+.offer__more summary:hover{ background:rgba(240,86,60,0.13); }
+.offer__more[open] > p, .offer__more[open] > ul, .offer__more[open] > div, .offer__more[open] > span{ margin-inline:4px; }
+.offer__more summary::-webkit-details-marker{ display:none; }
+.offer__more summary::after{
+  content:""; width:8px; height:8px; flex:0 0 auto;
+  border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);
+  transition:transform .35s var(--ease);
+}
+.offer__more[open] summary::after{ transform:rotate(-135deg) translateY(-2px); }
+.offer__more ul{ margin-top:8px; display:flex; flex-direction:column; gap:8px; }
+.offer__more li{
+  font:500 14.5px/1.5 'Archivo',sans-serif; color:var(--ink);
+  padding-left:16px; position:relative;
+}
+.offer__more li::before{
+  content:""; position:absolute; left:0; top:.6em; width:7px; height:1px; background:var(--accent);
+}
+.offer__more-lead{ margin-top:8px; font:500 14.5px/1.55 'Archivo',sans-serif; color:var(--muted-tx); }
+.offer__more-cols{ margin-top:10px; display:grid; grid-template-columns:1fr; gap:14px; }
+.offer__more-apart{ margin-top:18px; padding-top:16px; border-top:1px solid var(--line); }
+.offer__more-apart p{ font:400 14px/1.5 'Archivo',sans-serif; color:var(--muted-tx); margin-top:2px; }
+.col-nota{ font:400 13px/1.5 'Archivo',sans-serif; color:var(--muted-tx); margin-top:10px; padding-top:8px; border-top:1px dashed var(--line); }
+.cliente-uno{
+  display:inline-flex; align-items:center; gap:16px;
+  margin-top:clamp(28px,4vw,44px);
+  padding:12px 26px 12px 12px;
+  border:1px solid var(--line); border-radius:999px;
+  background:var(--card);
+  text-decoration:none; color:var(--ink);
+  transition:border-color .3s var(--ease), transform .3s var(--ease);
+}
+.cliente-uno:hover{ border-color:var(--accent); transform:translateY(-2px); }
+.cliente-uno img{ width:56px; height:56px; border-radius:50%; display:block; }
+.cliente-uno strong{ display:block; font:700 16px/1.3 'Archivo',sans-serif; }
+.cliente-uno small{ display:block; font:400 13px/1.4 'Archivo',sans-serif; color:var(--muted-tx); margin-top:2px; }
+.offer__more-cols h4{
+  margin:0 0 6px; font:700 13px/1.3 'Archivo',sans-serif; color:var(--accent-text);
+}
+/* il secondo details puo' allargarsi su tutta la card */
+@media (min-width:901px){
+  .offer__more-cols{ grid-template-columns:1fr 1fr 1fr; gap:18px; }
+}
+
+/* Extra: card, non righe. Sono la parte "oltre la base" e devono
+   leggersi come un pezzo a se', con piu' presenza delle righe di prima. */
+.extras__kicker{
+  font:700 13px/1 'Archivo',sans-serif; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:12px;
+}
+.extras__grid{
+  margin-top:clamp(26px,3.4vw,40px);
+  display:grid; grid-template-columns:repeat(2,1fr); gap:16px;
+}
+.extra--wide{ grid-column:1 / -1; }
+.extra{
+  background:rgba(252,251,250,0.05);
+  border:1px solid var(--line-inv);
+  border-radius:calc(var(--radius) - 8px);
+  padding:clamp(20px,2.4vw,28px);
+  display:flex; flex-direction:column; gap:10px;
+  transition:border-color .4s var(--ease), background .4s var(--ease);
+}
+.extra:hover{ border-color:rgba(240,86,60,.55); background:rgba(240,86,60,.06); }
+.extra__head{ display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
+.extra__name{ font:700 19px/1.3 'Archivo',sans-serif; color:var(--card); }
+.extra__price{ font:700 17px/1.2 'Archivo',sans-serif; color:var(--accent); white-space:nowrap; }
+.extra__desc{ font:500 15px/1.55 'Archivo',sans-serif; color:rgba(252,251,250,0.7); }
+@media (max-width:900px){
+  .extras__grid{ grid-template-columns:1fr; }
+}
+
+/* Extra: righe con il prezzo a destra. Layout volutamente
+   diverso dai gruppi qui sopra, cosi' si legge come un
+   listino a parte e non come altre funzioni comprese. */
+.extras{ margin-top:clamp(56px,8vw,104px); }
+.extras__title{
+  font:700 clamp(22px,2.6vw,30px)/1.25 'Archivo',sans-serif;
+  color:var(--card);
+  max-width:26ch;
+}
+.extras__sub{
+  margin-top:19px;
+  font:500 17px/1.6 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.66);
+  max-width:60ch;
+}
+.extras__list{ margin-top:clamp(26px,3.4vw,40px); }
+.extras__list li{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:clamp(20px,3vw,48px);
+  align-items:baseline;
+  padding:22px 0;
+  border-bottom:1px solid var(--line-inv);
+}
+.extras__list li:first-child{ border-top:1px solid var(--line-inv); }
+.extras__name{
+  display:block;
+  font:700 19px/1.3 'Archivo',sans-serif;
+  color:var(--card);
+  margin-bottom:6px;
+}
+.extras__desc{
+  display:block;
+  font:500 15px/1.55 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.66);
+  max-width:58ch;
+}
+.extras__price{
+  font:700 18px/1.2 'Archivo',sans-serif;
+  color:var(--accent);
+  white-space:nowrap;
+}
+.extras__soon{
+  display:inline-block;
+  margin-left:8px;
+  font:600 12px/1 'Archivo',sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(252,251,250,0.5);
+  vertical-align:middle;
+}
+
+/* Blocco fiscale: sta dentro la sezione scura ma con una superficie
+   propria e il bordo accento, perche' e' la risposta alla prima paura
+   del lettore e non deve passare come una nota a pie' di pagina. */
+.fisc{
+  margin-top:clamp(44px,6vw,72px);
+  border:1px solid var(--accent);
+  border-radius:var(--radius);
+  background:rgba(240,86,60,0.07);
+  padding:clamp(26px,3.4vw,44px);
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.fisc + .fisc{ margin-top:14px; }
+.fisc-intro{ margin-top:clamp(44px,6vw,72px); }
+.fisc-intro__title{ max-width:none; }
+.fisc-intro + .fisc{ margin-top:18px; }
+.fisc__title{
+  font:700 clamp(21px,2.4vw,28px)/1.25 'Archivo',sans-serif;
+  color:var(--card);
+}
+.fisc__txt{
+  font:500 17px/1.6 'Archivo',sans-serif;
+  color:rgba(252,251,250,0.78);
+  max-width:74ch;
+}
+
+@media (max-width:900px){
+  .fisc{ padding:24px 20px; }
+  /* il prezzo e' il momento della decisione: su mobile la card sfonda il
+     padding del wrap e va quasi a filo schermo, senza scatola nella scatola */
+  .offer{ margin-inline:calc(var(--wrap-pad) * -1 + 8px); padding:6px; }
+  .offer__core{ grid-template-columns:1fr; align-items:start; gap:26px; padding:24px 18px 28px; }
+  .offer__side{ gap:20px; }
+  .offer__side .pill{ width:100%; }
+      .incl__grid{ grid-template-columns:1fr; gap:30px; }
+  .extras__list li{ grid-template-columns:1fr; gap:8px; }
+  .extras__price{ order:-1; }
+}
+
 /* ---------- Come si parte ---------- */
 
 .clear-block{ margin-top:clamp(96px,12vw,168px); }
@@ -1174,7 +1505,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .faq-item[open] summary::after{ transform:translateY(-50%) rotate(45deg); }
 .faq-answer{
   max-width:66ch;
-  margin-top:2px;
+  margin-top:10px;
   padding-bottom:28px;
   font:400 16px/1.5 'Archivo',sans-serif;
   color:var(--muted-tx);
@@ -1204,6 +1535,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .field label{ font:600 14px/1.3 'Archivo',sans-serif; color:var(--ink); }
 /* consenso: casella e testo sulla stessa riga, area di tocco generosa */
 .field--check{ margin-bottom:20px; }
+.field--aggiunte{ border:1px solid var(--line); border-radius:12px; padding:16px 16px 8px; }
+.field--aggiunte legend{ font:600 14px/1.3 'Archivo',sans-serif; color:var(--ink); padding:0 6px; }
+.field--aggiunte .legend-nota{ font-weight:400; color:var(--muted-tx); }
+.check--agg{ margin-bottom:10px; font:400 15px/1.4 'Archivo',sans-serif; }
 .check{
   display:flex;
   align-items:flex-start;
@@ -1250,10 +1585,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .field.has-error input{ border-color:var(--accent); }
 .form-submit-inline{ width:100%; margin-top:22px; }
 .form-note{ font:400 15px/1.5 'Archivo',sans-serif; color:var(--muted-tx); margin-top:20px; max-width:48ch; }
-.form-error{ font:400 15px/1.5 'Archivo',sans-serif; color:var(--accent-text); margin-top:14px; max-width:48ch; }
-.closing-form.is-sending .form-submit-inline{ opacity:.6; cursor:progress; }
-/* honeypot: fuori schermo, non display:none (alcuni bot lo saltano) */
-.closing-form .hp{ position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
 .form-success{
   border:1.5px solid var(--line);
   border-radius:var(--radius);
@@ -1264,32 +1595,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .form-success p{ font:400 16px/1.6 'Archivo',sans-serif; color:var(--ink); }
 .form-success .summary-recap{ margin-top:16px; font:400 15px/1.7 'Archivo',sans-serif; color:var(--muted-tx); }
 .form-success .summary-recap strong{ color:var(--ink); font-weight:600; }
-/* Il box prende il posto del form: stessa larghezza e stesso stacco dal
-   titolo, altrimenti nasce incollato sotto il display e largo tutta la pagina. */
-.form-success{ margin-top:clamp(40px,6vw,72px); max-width:640px; }
-/* Il box riceve il fuoco via JS per annunciare l'esito: l'anello di
-   sistema qui e' un rettangolo nero pesante. Resta solo per chi naviga
-   da tastiera, e con i colori del sito. */
-.form-success:focus{ outline:none; }
-.form-success:focus-visible{ outline:2px solid var(--accent-text); outline-offset:4px; }
-html.js .form-success{ opacity:0; transform:translateY(14px); }
-html.js .form-success.is-in{
-  opacity:1;
-  transform:none;
-  transition:opacity .5s var(--ease-reveal), transform .5s var(--ease-reveal);
-}
-/* Il form si ritira in altezza invece di sparire di colpo: senza questo la
-   pagina si accorcia di 700px in un frame, lo scroll viene troncato e la
-   vista scatta. */
-.closing-form.is-leaving{
-  overflow:hidden;
-  opacity:0;
-  transition:height .45s var(--ease), opacity .25s ease;
-}
-@media (prefers-reduced-motion:reduce){
-  html.js .form-success{ opacity:1; transform:none; transition:none; }
-  .closing-form.is-leaving{ transition:none; }
-}
 [hidden]{ display:none !important; }
 
 .footer{
@@ -1302,11 +1607,14 @@ html.js .form-success.is-in{
   align-items:center;
   justify-content:space-between;
 }
+.footer-wordmark{ font:400 20px/1 'Anton',sans-serif; letter-spacing:.02em; }
+.footer-logo{ height:30px; width:auto; display:block; align-self:flex-start; }
+.footer-wordmark i{ font-style:normal; color:var(--accent); }
 .footer-brand{ display:flex; flex-direction:column; gap:4px; }
 .footer-brand strong{ font:700 16px/1 'Archivo',sans-serif; color:var(--ink); }
 .footer-brand span{ font:400 15px/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
-.footer-links{ display:flex; flex-wrap:wrap; gap:10px 6px; font:600 14px/1 'Archivo',sans-serif; }
-.footer-links a{ text-decoration:none; color:var(--ink); white-space:nowrap; }
+.footer-links{ display:flex; gap:6px; font:600 14px/1 'Archivo',sans-serif; }
+.footer-links a{ text-decoration:none; color:var(--ink); }
 .footer-links a:hover{ color:var(--accent); }
 .footer-sep{ color:var(--muted-tx); }
 
@@ -1316,8 +1624,9 @@ html.js .form-success.is-in{
 /* Chiusura piu' generosa dell'apertura: sopra c'e' solo l'attacco del foglio,
    sotto invece l'invito a scorrere ha bisogno di staccarsi dal foglio che
    sale (la nota che faceva da cuscinetto non c'e' piu'). */
-#cosa-fa.section-pad{ padding-block:clamp(28px,4vw,48px) clamp(64px,8vw,104px); }
-.statement-section{ background:var(--bg); padding-block:clamp(96px, 14vw, 180px); }
+#cosa-fa.section-pad{ padding-block:clamp(28px,4vw,48px) 0; }
+.statement-section{ background:var(--bg); padding-block:clamp(72px, 10vw, 130px); }
+#chi-siamo{ background:var(--bg); }
 #domande{ background:var(--bg); }
 #contatti{ background:var(--bg); }
 
@@ -1345,15 +1654,19 @@ html.js .form-success.is-in{
   inset:0;
   z-index:0;
   display:flex;
-  align-items:center;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding-bottom:clamp(8px,1.5vw,24px);
+  gap:clamp(6px,1vw,14px);
   pointer-events:none;
   user-select:none;
 }
+.hero-marquee__track.hero-marquee__track--rev{ animation-direction:reverse; }
 .hero-marquee__track{
   display:flex;
   flex-wrap:nowrap;
   will-change:transform;
-  animation:heroMarquee 55s linear infinite;
+  animation:heroMarquee 24s linear infinite;
 }
 .hero-marquee__track span{
   display:inline-block;
@@ -1361,7 +1674,7 @@ html.js .form-success.is-in{
   white-space:nowrap;
   font-family:'Anton',sans-serif;
   text-transform:uppercase;
-  font-size:clamp(120px, 22vw, 320px);
+  font-size:clamp(90px, 11vw, 175px);
   line-height:1;
   color:transparent;
   -webkit-text-stroke:1px rgba(17,17,16,.10);
