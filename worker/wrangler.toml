@@ -7,13 +7,16 @@ compatibility_date = "2026-08-01"
 [vars]
 # Origini autorizzate a chiamare il Worker (separate da virgola). Aggiungere
 # il dominio definitivo quando c'e'. Vuoto = tutte (solo per prove).
-ALLOWED_ORIGINS = "https://gianlucacelante.github.io"
+ALLOWED_ORIGINS = "https://gianlucacelante.github.io,https://www.celan.it,https://celan.it"
 # Chi riceve l'avviso (una o piu' email separate da virgola)
-NOTIFY_TO = "da-compilare@example.com"
-# Mittente: deve essere un indirizzo (o dominio) verificato in Brevo
-SENDER_EMAIL = "da-compilare@example.com"
-SENDER_NAME = "Infornato"
-SITE_NAME = "Infornato"
+NOTIFY_TO = "celan.rmp@gmail.com"
+# Mittente: deve essere un indirizzo (o dominio) verificato in Brevo.
+# Oggi e' la casella Gmail; quando il dominio celan.it avra' SPF e DKIM su
+# Brevo conviene passare a un indirizzo del dominio (le caselle Gmail hanno
+# un DMARC che fa finire in spam la posta spedita da terzi).
+SENDER_EMAIL = "celan.rmp@gmail.com"
+SENDER_NAME = "cèlan"
+SITE_NAME = "cèlan"
 # "true" per mandare anche la conferma al richiedente
 SEND_CONFIRMATION = "true"
 # ID numerico della lista Brevo in cui salvare i contatti (vuoto = solo attributi)

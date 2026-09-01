@@ -402,21 +402,99 @@
         return;
       }
 
-      /* TODO: collegare invio (Formspree o mail). Qui si simula un invio riuscito. */
       var expSelect = document.getElementById('inpEsperienza');
       var expValue = expSelect ? expSelect.value : '';
       var expLabel = ESPERIENZA_LABELS[expValue] || 'Canone da definire insieme';
-
-      if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
       var aggScelte = Array.prototype.slice.call(form.querySelectorAll('input[name="agg"]:checked')).map(function (c) { return c.value; });
-      if (successExpEl) successExpEl.textContent = expLabel + (aggScelte.length ? ('. Aggiunte: ' + aggScelte.join(', ')) : '');
 
-      form.hidden = true;
-      if (successBox) {
+      function showSuccess(){
+        if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
+        if (successExpEl) successExpEl.textContent = expLabel + (aggScelte.length ? ('. Aggiunte: ' + aggScelte.join(', ')) : '');
+
+        /* Il bollino rotante e' un submit del form: senza form non fa piu'
+           nulla, quindi esce di scena insieme a lui. */
+        var orphanCta = document.querySelector('#contatti .closing-grid .pop');
+        if (orphanCta) orphanCta.hidden = true;
+
+        /* Se il titolo non e' ancora entrato in scena, niente reveal a
+           sorpresa mentre la pagina si riassesta. */
+        document.querySelectorAll('#contatti .line-inner').forEach(function(l){ l.classList.add('is-visible'); });
+
+        if (!successBox) { form.hidden = true; return; }
         successBox.hidden = false;
         successBox.setAttribute('tabindex', '-1');
-        successBox.focus();
+        requestAnimationFrame(function(){ successBox.classList.add('is-in'); });
+
+        /* preventScroll: il focus da solo farebbe scorrere il browser, che
+           con lo smooth scroll attivo si vede come uno scatto. */
+        var settle = function(){
+          if (lenis) lenis.resize();   /* Lenis rimisura: niente scroll disallineato */
+          successBox.focus({ preventScroll: true });
+        };
+
+        if (reduceMotion) { form.hidden = true; settle(); return; }
+
+        var h = form.offsetHeight;
+        form.style.height = h + 'px';
+        form.classList.add('is-leaving');
+        requestAnimationFrame(function(){ form.style.height = '0px'; });
+
+        var done = false;
+        var finish = function(){
+          if (done) return;
+          done = true;
+          form.hidden = true;
+          form.classList.remove('is-leaving');
+          form.style.height = '';
+          settle();
+        };
+        form.addEventListener('transitionend', function(e){ if (e.propertyName === 'height') finish(); });
+        setTimeout(finish, 700);   /* rete di sicurezza se la transizione non parte */
       }
+
+      var formError = document.getElementById('formError');
+      if (formError) { formError.hidden = true; formError.textContent = ''; }
+
+      /* L'endpoint (Cloudflare Worker -> Brevo, vedi worker/README.md) sta in
+         data-endpoint sul <form>. Se e' vuoto l'invio e' simulato: comodo per
+         anteprime e sviluppo. */
+      var endpoint = (form.getAttribute('data-endpoint') || '').trim();
+      if (!endpoint) { showSuccess(); return; }
+
+      var hp = form.querySelector('[name="website"]');
+      var payload = {
+        nome: data.nome.trim(),
+        locale: data.locale.trim(),
+        citta: data.citta.trim(),
+        email: data.email.trim(),
+        telefono: data.telefono.trim(),
+        esperienza: expValue,
+        aggiunte: aggScelte,
+        verticale: form.getAttribute('data-verticale') || '',
+        website: hp ? hp.value : '',
+        pagina: location.href
+      };
+      var submitBtn = form.querySelector('.form-submit-inline');
+      form.classList.add('is-sending');
+      if (submitBtn) submitBtn.disabled = true;
+      fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function(r){
+          return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok && j.ok !== false, error: j.error }; });
+        })
+        .then(function(res){
+          if (!res.ok) throw new Error(res.error || 'send');
+          showSuccess();
+        })
+        .catch(function(){
+          if (formError) {
+            formError.textContent = 'Non siamo riusciti a inviare la richiesta. Riprova tra qualche minuto.';
+            formError.hidden = false;
+          }
+        })
+        .then(function(){
+          form.classList.remove('is-sending');
+          if (submitBtn) submitBtn.disabled = false;
+        });
     });
   }
 

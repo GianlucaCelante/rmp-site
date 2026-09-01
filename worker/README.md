@@ -7,7 +7,7 @@ Cloudflare Worker che riceve il modulo "Richiedi il preventivo" delle landing e 
 - Account Cloudflare (piano gratuito: 100.000 richieste/giorno).
 - Account Brevo con un **mittente verificato** (Impostazioni → Mittenti e IP). Finché non c'è il dominio del prodotto va bene un indirizzo singolo; con il dominio, aggiungere i record SPF/DKIM/DMARC che Brevo indica.
 - Chiave API Brevo (Impostazioni → Chiavi API → Genera).
-- In Brevo, creare gli attributi contatto usati dal Worker (Contatti → Impostazioni → Attributi): `NOME`, `LOCALE`, `FORMULA`, `VERTICALE`, `ORIGINE` (tutti testo). Facoltativo: una lista "Preventivi sito" e annotarne l'ID.
+- In Brevo, creare gli attributi contatto usati dal Worker (Contatti → Impostazioni → Attributi): `NOME`, `LOCALE`, `CITTA`, `TELEFONO`, `FORMULA`, `AGGIUNTE`, `VERTICALE`, `ORIGINE` (tutti testo). Facoltativo: una lista "Preventivi sito" e annotarne l'ID.
 - Node 18+ (per `npx wrangler` e per i test).
 
 ## Test senza Cloudflare

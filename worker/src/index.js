@@ -14,11 +14,19 @@
 
 const BREVO_API = 'https://api.brevo.com/v3';
 
+/* Le formule che ogni landing puo' mandare. La chiave vuota vale "non
+   l'ha indicata": il form pizzerie lascia il select libero di restare sul
+   segnaposto, quello sagre ha invece la voce esplicita "non-so". */
 const ESPERIENZE = {
   sagre: { 'non-so': 'Non lo so ancora', lite: 'La base', completa: 'Festa M', premium: 'Festa L', custom: 'Su misura' },
-  pizzerie: { 'non-so': 'Ancora da scegliere', lite: 'Essenziale', completa: 'Completa', premium: 'Premium', custom: 'Su misura' }
+  pizzerie: {
+    '': 'Da definire insieme',
+    asporto: 'Canone solo asporto (290 euro/anno)',
+    completo: 'Canone completo, sala e cucina (390 euro/anno)',
+    apertura: 'Sta per aprire, ancora da decidere'
+  }
 };
-const VERTICALI = { sagre: 'Sagre e feste di paese', pizzerie: 'Pizzerie e ristoranti' };
+const VERTICALI = { sagre: 'Sagre e feste di paese', pizzerie: 'Pizzerie, ristoranti e locali' };
 
 /* Limite di frequenza best-effort per isolate (5 invii / 10 minuti per IP).
    Per una protezione vera aggiungere una regola "Rate limiting" nel
@@ -56,13 +64,20 @@ function esc(s) {
 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/* Nome leggibile della formula scelta, e se una scelta c'e' stata davvero. */
+function formulaDi(lead) { return ESPERIENZE[lead.verticale][lead.esperienza]; }
+function haScelto(lead) { return lead.esperienza !== '' && lead.esperienza !== 'non-so'; }
+
 function validate(body) {
   const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
   const lead = {
     nome: clean(body.nome, 120),
     locale: clean(body.locale, 200),
+    citta: clean(body.citta, 120),
     email: clean(body.email, 200),
-    esperienza: clean(body.esperienza, 20) || 'non-so',
+    telefono: clean(body.telefono, 40),
+    esperienza: clean(body.esperienza, 20),
+    aggiunte: (Array.isArray(body.aggiunte) ? body.aggiunte : []).slice(0, 10).map((v) => clean(v, 120)).filter(Boolean),
     verticale: clean(body.verticale, 20) || 'sagre',
     pagina: clean(body.pagina, 300)
   };
@@ -70,8 +85,19 @@ function validate(body) {
   if (lead.nome.length < 2) errors.push('nome');
   if (lead.locale.length < 2) errors.push('locale');
   if (!EMAIL_RE.test(lead.email)) errors.push('email');
-  if (!VERTICALI[lead.verticale]) errors.push('verticale');
-  else if (!ESPERIENZE[lead.verticale][lead.esperienza]) errors.push('esperienza');
+  /* citta e telefono: obbligatori dove il form li chiede (pizzerie),
+     accettati e riportati se arrivano da altrove */
+  if (lead.verticale === 'pizzerie') {
+    if (lead.citta.length < 2) errors.push('citta');
+    if ((lead.telefono.match(/\d/g) || []).length < 8) errors.push('telefono');
+  }
+  const formule = ESPERIENZE[lead.verticale];
+  if (!formule) {
+    errors.push('verticale');
+  } else {
+    if (lead.esperienza === '' && formule['non-so']) lead.esperienza = 'non-so';
+    if (!(lead.esperienza in formule)) errors.push('esperienza');
+  }
   return { lead, errors };
 }
 
@@ -89,12 +115,16 @@ async function brevo(env, path, payload) {
 }
 
 function sendNotification(env, lead) {
-  const formula = ESPERIENZE[lead.verticale][lead.esperienza];
   const verticale = VERTICALI[lead.verticale];
   const rows = [
-    ['Nome', lead.nome], ['Festa / locale', lead.locale], ['Email', lead.email],
-    ['Formula', formula], ['Verticale', verticale], ['Pagina', lead.pagina || '-']
+    ['Nome', lead.nome], ['Festa / locale', lead.locale]
   ];
+  if (lead.citta) rows.push(['Citta', lead.citta]);
+  rows.push(['Email', lead.email]);
+  if (lead.telefono) rows.push(['Telefono', lead.telefono]);
+  rows.push(['Formula', formulaDi(lead)]);
+  if (lead.aggiunte.length) rows.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  rows.push(['Verticale', verticale], ['Pagina', lead.pagina || '-']);
   const html = '<h2 style="font-family:sans-serif">Nuova richiesta di preventivo (' + esc(verticale) + ')</h2>' +
     '<table style="font-family:sans-serif;border-collapse:collapse">' +
     rows.map(([k, v]) => '<tr><td style="padding:6px 12px 6px 0;color:#666">' + esc(k) + '</td><td style="padding:6px 0"><strong>' + esc(v) + '</strong></td></tr>').join('') +
@@ -112,17 +142,17 @@ function sendNotification(env, lead) {
 }
 
 function sendConfirmation(env, lead) {
-  const formula = ESPERIENZE[lead.verticale][lead.esperienza];
-  const tempi = lead.verticale === 'pizzerie' ? 'entro 24 ore' : 'entro due giorni lavorativi';
-  const site = env.SITE_NAME || 'Infornato';
+  const formula = formulaDi(lead);
+  const tempi = lead.verticale === 'pizzerie' ? 'entro un giorno lavorativo' : 'entro due giorni lavorativi';
+  const site = env.SITE_NAME || 'il sito';
   const html = '<div style="font-family:sans-serif;line-height:1.5">' +
     '<p>Ciao ' + esc(lead.nome) + ',</p>' +
     '<p>abbiamo ricevuto la tua richiesta per <strong>' + esc(lead.locale) + '</strong>' +
-    (lead.esperienza !== 'non-so' ? ' (formula indicata: ' + esc(formula) + ')' : '') + '.</p>' +
+    (haScelto(lead) ? ' (formula indicata: ' + esc(formula) + ')' : '') + '.</p>' +
     '<p>Ti rispondiamo ' + tempi + ' con il preventivo scritto. Se nel frattempo vuoi aggiungere qualcosa, rispondi pure a questa email.</p>' +
     '<p>' + esc(site) + '</p></div>';
   const text = 'Ciao ' + lead.nome + ',\n\nabbiamo ricevuto la tua richiesta per ' + lead.locale +
-    (lead.esperienza !== 'non-so' ? ' (formula indicata: ' + formula + ')' : '') + '.\nTi rispondiamo ' + tempi +
+    (haScelto(lead) ? ' (formula indicata: ' + formula + ')' : '') + '.\nTi rispondiamo ' + tempi +
     ' con il preventivo scritto. Se nel frattempo vuoi aggiungere qualcosa, rispondi pure a questa email.\n\n' + site;
   return brevo(env, '/smtp/email', {
     sender: { name: env.SENDER_NAME || site, email: env.SENDER_EMAIL },
@@ -142,7 +172,10 @@ function addContact(env, lead) {
     attributes: {
       NOME: lead.nome,
       LOCALE: lead.locale,
-      FORMULA: ESPERIENZE[lead.verticale][lead.esperienza],
+      CITTA: lead.citta,
+      TELEFONO: lead.telefono,
+      FORMULA: formulaDi(lead),
+      AGGIUNTE: lead.aggiunte.join(', '),
       VERTICALE: lead.verticale,
       ORIGINE: 'form-sito'
     }

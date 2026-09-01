@@ -29,6 +29,12 @@ function req(method, body, origin = ORIGIN, ip = '1.2.3.4') {
   return new Request('https://form.example.workers.dev/', { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
 }
 const lead = { nome: 'Mario', locale: 'Sagra del Pesce, Caorle', email: 'mario@example.it', esperienza: 'completa', verticale: 'sagre', pagina: 'https://x/sagre/' };
+const leadPizza = {
+  nome: 'Giulia', locale: 'Da Ottavio', citta: 'Nervesa della Battaglia',
+  email: 'giulia@example.it', telefono: '0422 885 200', esperienza: 'completo',
+  aggiunte: ['Ordini online', 'Fatture e documenti'],
+  verticale: 'pizzerie', pagina: 'https://x/pizzerie/'
+};
 let n = 0;
 async function t(name, fn) { await fn(); n++; console.log('ok -', name); }
 
@@ -98,6 +104,37 @@ await t('avviso fallito -> 502', async () => {
   const r = await worker.fetch(req('POST', lead, ORIGIN, '7.7.7.7'), env);
   globalThis.__failBrevo = false;
   assert.equal(r.status, 502);
+});
+await t('pizzerie: citta e telefono obbligatori', async () => {
+  const r = await worker.fetch(req('POST', { ...leadPizza, citta: '', telefono: '123' }, ORIGIN, '4.4.4.1'), env);
+  assert.equal(r.status, 400);
+  assert.deepEqual((await r.json()).fields, ['citta', 'telefono']);
+});
+await t('pizzerie: invio completo con aggiunte', async () => {
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', leadPizza, ORIGIN, '4.4.4.2'), env);
+  assert.equal(r.status, 200);
+  const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
+  assert.match(notify.body.textContent, /Citta: Nervesa della Battaglia/);
+  assert.match(notify.body.textContent, /Telefono: 0422 885 200/);
+  assert.match(notify.body.textContent, /Aggiunte: Ordini online, Fatture e documenti/);
+  assert.match(notify.body.subject, /Pizzerie, ristoranti e locali: Da Ottavio/);
+  const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'giulia@example.it');
+  assert.match(confirm.body.textContent, /un giorno lavorativo/);
+  assert.match(confirm.body.textContent, /Canone completo/);
+  const contact = calls.find((c) => c.url.endsWith('/contacts'));
+  assert.equal(contact.body.attributes.CITTA, 'Nervesa della Battaglia');
+  assert.equal(contact.body.attributes.AGGIUNTE, 'Ordini online, Fatture e documenti');
+});
+await t('pizzerie: formula non scelta', async () => {
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', { ...leadPizza, esperienza: '', aggiunte: [] }, ORIGIN, '4.4.4.3'), env);
+  assert.equal(r.status, 200);
+  const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
+  assert.match(notify.body.textContent, /Formula: Da definire insieme/);
+  assert.doesNotMatch(notify.body.textContent, /Aggiunte:/);
+  const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'giulia@example.it');
+  assert.doesNotMatch(confirm.body.textContent, /formula indicata/);
 });
 await t('limite di frequenza per IP', async () => {
   let last;
