@@ -20,7 +20,7 @@ privacy/              informativa privacy e cookie (linkata da checkbox e footer
   index.html
   css/privacy.css
 assets/               risorse condivise tra le sezioni
-  brand/              marchio cèlan: petali, lettere, logo, favicon (png)
+  brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg)
   css/fonts.css       @font-face dei webfont auto-hostati
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
