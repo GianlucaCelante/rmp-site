@@ -114,53 +114,186 @@ async function brevo(env, path, payload) {
   return r;
 }
 
+/* ---------------- Le due email ----------------
+   Regole del mezzo, non del web: tabelle invece di flex, stili in riga
+   invece di un foglio di stile, niente webfont ne' SVG (nessun client li
+   carica), niente JavaScript.
+
+   Il punto fermo: le immagini partono bloccate in mezzo mondo (Gmail con
+   "chiedi prima di mostrare", Outlook aziendale, quasi tutte le app in
+   anteprima). Quindi il marchio non puo' vivere solo dentro il PNG: l'alt
+   dell'immagine e' vestito con gli stili del marchio, cosi' a immagini
+   spente resta la parola "celan" grande e nel rosso giusto, e sopra c'e'
+   comunque la fascia d'accento. Nessuna informazione sta dentro un'immagine. */
+
+const SITO = 'https://celan.it';
+const LOGO = SITO + '/assets/brand/logo-celan-email.png';
+const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+const INK = '#111110', MUTO = '#6F6D68', RIGA = '#e4e2de', ACCENTO = '#cd3c20', CARTA = '#ffffff', FONDO = '#e9e9e9';
+
+function guscio(occhiello, corpo, piede) {
+  return '<!doctype html><html lang="it"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">' +
+    '</head><body style="margin:0;padding:0;background:' + FONDO + ';-webkit-text-size-adjust:100%">' +
+    /* riga d'anteprima: la legge solo l'elenco dei messaggi */
+    '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + esc(occhiello) + '</div>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:' + FONDO + '">' +
+    '<tr><td align="center" style="padding:28px 12px">' +
+    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;background:' + CARTA + ';border:1px solid ' + RIGA + ';border-radius:14px;overflow:hidden">' +
+    /* fascia d'accento: si vede sempre, anche a immagini spente */
+    '<tr><td style="height:5px;line-height:5px;font-size:0;background:' + ACCENTO + '">&nbsp;</td></tr>' +
+    '<tr><td style="padding:26px 30px 0">' +
+    '<a href="' + SITO + '" style="text-decoration:none;color:' + ACCENTO + '">' +
+    '<img src="' + LOGO + '" alt="cèlan" width="190" height="64" style="display:block;border:0;width:190px;max-width:55%;height:auto;font-family:' + FONT + ';font-size:26px;font-weight:700;letter-spacing:-.02em;color:' + ACCENTO + '"></a>' +
+    '</td></tr>' +
+    '<tr><td style="padding:20px 30px 32px;font-family:' + FONT + ';font-size:16px;line-height:1.6;color:' + INK + '">' + corpo + '</td></tr>' +
+    '</table>' +
+    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px">' +
+    '<tr><td style="padding:16px 12px 4px;font-family:' + FONT + ';font-size:12px;line-height:1.7;color:' + MUTO + ';text-align:center">' + piede + '</td></tr>' +
+    '</table>' +
+    '</td></tr></table></body></html>';
+}
+
+/* etichetta piccola in maiuscoletto sopra un titolo */
+function occhiello(t) {
+  return '<p style="margin:0 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:' + ACCENTO + ';font-weight:700">' + esc(t) + '</p>';
+}
+function titolo(t) {
+  return '<p style="margin:0;font-size:23px;line-height:1.25;font-weight:700;color:' + INK + '">' + esc(t) + '</p>';
+}
+
+function righe(coppie) {
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:20px 0 0">' +
+    coppie.map(function ([k, v], i) {
+      const bordo = i ? 'border-top:1px solid ' + RIGA + ';' : '';
+      return '<tr>' +
+        '<td style="' + bordo + 'padding:10px 14px 10px 0;color:' + MUTO + ';font-size:13px;vertical-align:top;white-space:nowrap">' + esc(k) + '</td>' +
+        '<td style="' + bordo + 'padding:10px 0;font-size:15px;font-weight:600;vertical-align:top;color:' + INK + '">' + v + '</td>' +
+        '</tr>';
+    }).join('') + '</table>';
+}
+
+/* passi numerati: la sequenza e' vera (prima il preventivo, poi il
+   sopralluogo, poi l'installazione), non un ornamento */
+function passi(voci) {
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:8px 0 0">' +
+    voci.map(function (t, i) {
+      return '<tr>' +
+        '<td width="30" style="padding:9px 12px 0 0;vertical-align:top;font-size:15px;font-weight:700;color:' + ACCENTO + '">' + (i + 1) + '.</td>' +
+        '<td style="padding:9px 0 0;vertical-align:top;font-size:15px;line-height:1.55;color:' + INK + '">' + t + '</td>' +
+        '</tr>';
+    }).join('') + '</table>';
+}
+
+/* bottone che regge anche in Outlook: e' una tabella, non un <a> stilizzato */
+function bottone(testo, href) {
+  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 0">' +
+    '<tr><td style="background:' + ACCENTO + ';border-radius:999px">' +
+    '<a href="' + href + '" style="display:inline-block;padding:13px 26px;font-family:' + FONT + ';font-size:15px;font-weight:700;color:#ffffff;text-decoration:none">' + esc(testo) + '</a>' +
+    '</td></tr></table>';
+}
+
 function sendNotification(env, lead) {
   const verticale = VERTICALI[lead.verticale];
-  const rows = [
-    ['Nome', lead.nome], ['Festa / locale', lead.locale]
-  ];
-  if (lead.citta) rows.push(['Citta', lead.citta]);
-  rows.push(['Email', lead.email]);
-  if (lead.telefono) rows.push(['Telefono', lead.telefono]);
-  rows.push(['Formula', formulaDi(lead)]);
-  if (lead.aggiunte.length) rows.push(['Aggiunte', lead.aggiunte.join(', ')]);
-  rows.push(['Verticale', verticale], ['Pagina', lead.pagina || '-']);
-  const html = '<h2 style="font-family:sans-serif">Nuova richiesta di preventivo (' + esc(verticale) + ')</h2>' +
-    '<table style="font-family:sans-serif;border-collapse:collapse">' +
-    rows.map(([k, v]) => '<tr><td style="padding:6px 12px 6px 0;color:#666">' + esc(k) + '</td><td style="padding:6px 0"><strong>' + esc(v) + '</strong></td></tr>').join('') +
-    '</table><p style="font-family:sans-serif;color:#666">Rispondi a questa email per scrivere direttamente al richiedente.</p>';
-  const text = rows.map(([k, v]) => k + ': ' + v).join('\n');
+  const dove = lead.citta ? lead.locale + ', ' + lead.citta : lead.locale;
+  const link = (href, testo) => '<a href="' + href + '" style="color:' + ACCENTO + ';text-decoration:none">' + esc(testo) + '</a>';
+
+  const coppie = [['Nome', esc(lead.nome)], ['Locale', esc(lead.locale)]];
+  if (lead.citta) coppie.push(['Città', esc(lead.citta)]);
+  coppie.push(['Email', link('mailto:' + lead.email, lead.email)]);
+  if (lead.telefono) coppie.push(['Telefono', link('tel:' + lead.telefono.replace(/[^0-9+]/g, ''), lead.telefono)]);
+  coppie.push(['Formula', esc(formulaDi(lead))]);
+  if (lead.aggiunte.length) coppie.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
+  coppie.push(['Sezione', esc(verticale)]);
+
+  const corpo = occhiello('Nuova richiesta') + titolo(dove) + righe(coppie) +
+    '<p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:' + MUTO + '">' +
+    'Rispondi a questa email per scrivere direttamente a ' + esc(lead.nome) + '.' +
+    (lead.pagina ? '<br>Arrivata da ' + link(esc(lead.pagina), lead.pagina) : '') + '</p>';
+
+  const piatto = [['Nome', lead.nome], ['Locale', lead.locale]];
+  if (lead.citta) piatto.push(['Città', lead.citta]);
+  piatto.push(['Email', lead.email]);
+  if (lead.telefono) piatto.push(['Telefono', lead.telefono]);
+  piatto.push(['Formula', formulaDi(lead)]);
+  if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  piatto.push(['Sezione', verticale]);
+
+  const testo = 'NUOVA RICHIESTA - ' + dove + '\n\n' +
+    piatto.map(([k, v]) => k + ': ' + v).join('\n') +
+    '\n\nRispondi a questa email per scrivere direttamente a ' + lead.nome + '.' +
+    (lead.pagina ? '\nArrivata da ' + lead.pagina : '');
+
   return brevo(env, '/smtp/email', {
     sender: { name: env.SENDER_NAME || env.SITE_NAME || 'Sito', email: env.SENDER_EMAIL },
     to: env.NOTIFY_TO.split(',').map((e) => ({ email: e.trim() })),
     replyTo: { email: lead.email, name: lead.nome },
-    subject: '[' + (env.SITE_NAME || 'Sito') + '] Preventivo ' + verticale + ': ' + lead.locale,
-    htmlContent: html,
-    textContent: text,
+    subject: '[' + (env.SITE_NAME || 'Sito') + '] ' + dove + ' - richiesta di preventivo',
+    htmlContent: guscio(piatto.map(([k, v]) => k + ': ' + v).join(' - '), corpo,
+      'Avviso automatico dal modulo di ' + SITO.replace('https://', '')),
+    textContent: testo,
     tags: ['preventivo', lead.verticale]
   });
 }
 
 function sendConfirmation(env, lead) {
-  const formula = formulaDi(lead);
-  const tempi = lead.verticale === 'pizzerie' ? 'entro un giorno lavorativo' : 'entro due giorni lavorativi';
+  const sagre = lead.verticale === 'sagre';
+  const tempi = sagre ? 'entro due giorni lavorativi' : 'entro un giorno lavorativo';
+  const luogo = sagre ? 'la festa' : 'il locale';
+  const tuo = sagre ? 'della tua festa' : 'del tuo locale';
   const site = env.SITE_NAME || 'il sito';
-  const html = '<div style="font-family:sans-serif;line-height:1.5">' +
-    '<p>Ciao ' + esc(lead.nome) + ',</p>' +
-    '<p>abbiamo ricevuto la tua richiesta per <strong>' + esc(lead.locale) + '</strong>' +
-    (haScelto(lead) ? ' (formula indicata: ' + esc(formula) + ')' : '') + '.</p>' +
-    '<p>Ti rispondiamo ' + tempi + ' con il preventivo scritto. Se nel frattempo vuoi aggiungere qualcosa, rispondi pure a questa email.</p>' +
-    '<p>' + esc(site) + '</p></div>';
-  const text = 'Ciao ' + lead.nome + ',\n\nabbiamo ricevuto la tua richiesta per ' + lead.locale +
-    (haScelto(lead) ? ' (formula indicata: ' + formula + ')' : '') + '.\nTi rispondiamo ' + tempi +
-    ' con il preventivo scritto. Se nel frattempo vuoi aggiungere qualcosa, rispondi pure a questa email.\n\n' + site;
+  const TEL = '345 293 3633';
+
+  const recap = [[sagre ? 'Festa' : 'Locale', esc(lead.locale) + (lead.citta ? ', ' + esc(lead.citta) : '')]];
+  if (haScelto(lead)) recap.push(['Formula', esc(formulaDi(lead))]);
+  if (lead.aggiunte.length) recap.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
+
+  const voci = [
+    'Ti mandiamo il preventivo scritto e ne parliamo con calma, anche al telefono se preferisci.',
+    'Se ti convince, veniamo a vedere ' + luogo + ' e guardiamo cosa dell\'attrezzatura che hai già si può tenere.',
+    'Il menù e la lista dei clienti li carichiamo noi prima di arrivare. Il giorno dell\'installazione montiamo, configuriamo e ti lasciamo il sistema acceso, con la formazione già fatta.'
+  ];
+
+  const corpo = occhiello('Richiesta ricevuta') +
+    titolo('Grazie ' + lead.nome + ', l\'abbiamo presa in carico.') +
+    '<p style="margin:18px 0 0">Ti scriviamo <strong>' + tempi + '</strong> con il preventivo per <strong>' + esc(lead.locale) + '</strong>. Non è un listino: dentro c\'è quello che serve davvero, con la lista dell\'attrezzatura modello per modello, ai prezzi del negozio. Su quella non mettiamo ricarichi.</p>' +
+    righe(recap) +
+    '<p style="margin:26px 0 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:' + MUTO + ';font-weight:700">Come si va avanti</p>' +
+    passi(voci) +
+    '<p style="margin:26px 0 0">A leggere la tua richiesta è una persona: dietro c&egrave;lan ci siamo in due, e chi ti risponde è chi poi viene a installare il sistema. Niente centralini, niente moduli da ricompilare.</p>' +
+    '<p style="margin:14px 0 0">Se hai fretta o ti viene in mente altro, rispondi pure a questa email &mdash; arriva a noi &mdash; oppure chiamaci.</p>' +
+    bottone('Chiamaci: ' + TEL, 'tel:+393452933633') +
+    '<p style="margin:26px 0 0">A presto,<br><strong>' + esc(site) + '</strong></p>';
+
+  const piatto = [[sagre ? 'Festa' : 'Locale', lead.locale + (lead.citta ? ', ' + lead.citta : '')]];
+  if (haScelto(lead)) piatto.push(['Formula', formulaDi(lead)]);
+  if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+
+  const testo = 'Grazie ' + lead.nome + ', l\'abbiamo presa in carico.\n\n' +
+    'Ti scriviamo ' + tempi + ' con il preventivo per ' + lead.locale + '. Non è un listino: dentro c\'è ' +
+    'quello che serve davvero, con la lista dell\'attrezzatura modello per modello, ai prezzi del negozio. ' +
+    'Su quella non mettiamo ricarichi.\n\n' +
+    piatto.map(([k, v]) => k + ': ' + v).join('\n') + '\n\n' +
+    'COME SI VA AVANTI\n' + voci.map((t, i) => (i + 1) + '. ' + t.replace(/&[a-z]+;/g, '')).join('\n') + '\n\n' +
+    'A leggere la tua richiesta è una persona: dietro cèlan ci siamo in due, e chi ti risponde è chi poi ' +
+    'viene a installare il sistema. Niente centralini, niente moduli da ricompilare.\n\n' +
+    'Se hai fretta o ti viene in mente altro, rispondi pure a questa email - arriva a noi - oppure chiamaci al ' + TEL + '.\n\n' +
+    'A presto,\n' + site + '\n' + SITO;
+
   return brevo(env, '/smtp/email', {
     sender: { name: env.SENDER_NAME || site, email: env.SENDER_EMAIL },
     to: [{ email: lead.email, name: lead.nome }],
-    replyTo: { email: env.NOTIFY_TO.split(',')[0].trim() },
-    subject: 'Abbiamo ricevuto la tua richiesta di preventivo',
-    htmlContent: html,
-    textContent: text,
+    /* il mittente e' un noreply senza casella dietro: le risposte vanno
+       dirottate sul primo indirizzo che legge davvero gli avvisi */
+    replyTo: { email: env.NOTIFY_TO.split(',')[0].trim(), name: site },
+    subject: 'La tua richiesta è arrivata: ti scriviamo ' + tempi,
+    htmlContent: guscio('Ti scriviamo ' + tempi + ' con il preventivo ' + tuo + '.', corpo,
+      '<strong style="color:' + INK + '">c&egrave;lan</strong> &middot; Gestionale per ristoranti, pizzerie e locali<br>' +
+      '<a href="' + SITO + '" style="color:' + MUTO + ';text-decoration:none">celan.it</a>' +
+      ' &middot; Commerciale <a href="tel:+393452933633" style="color:' + MUTO + ';text-decoration:none">345 293 3633</a>' +
+      ' &middot; Tecnico <a href="tel:+393457606166" style="color:' + MUTO + ';text-decoration:none">345 760 6166</a>'),
+    textContent: testo,
     tags: ['conferma', lead.verticale]
   });
 }

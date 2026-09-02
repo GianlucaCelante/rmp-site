@@ -12,7 +12,7 @@ ALLOWED_ORIGINS = "https://gianlucacelante.github.io,https://www.celan.it,https:
 # due perche' il biglietto da visita stampa celan-rmp@ col trattino mentre
 # qui c'e' il punto: sono due caselle diverse, e finche' non e' chiaro
 # quale sia quella buona la richiesta arriva comunque.
-NOTIFY_TO = "celan.rmp@gmail.com,gianluca.celante@gmail.com"
+NOTIFY_TO = "gianluca.celante@gmail.com,celan.rmp@gmail.com"
 # Mittente: deve essere un indirizzo (o dominio) verificato in Brevo.
 # celan.it e' autenticato su Brevo dal 02/09/2026 (DKIM via CNAME brevo1/
 # brevo2._domainkey + DMARC), quindi si spedisce dal dominio invece che dalla
