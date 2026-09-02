@@ -11,10 +11,13 @@ ALLOWED_ORIGINS = "https://gianlucacelante.github.io,https://www.celan.it,https:
 # Chi riceve l'avviso (una o piu' email separate da virgola)
 NOTIFY_TO = "celan.rmp@gmail.com"
 # Mittente: deve essere un indirizzo (o dominio) verificato in Brevo.
-# Oggi e' la casella Gmail; quando il dominio celan.it avra' SPF e DKIM su
-# Brevo conviene passare a un indirizzo del dominio (le caselle Gmail hanno
-# un DMARC che fa finire in spam la posta spedita da terzi).
-SENDER_EMAIL = "celan.rmp@gmail.com"
+# celan.it e' autenticato su Brevo dal 02/09/2026 (DKIM via CNAME brevo1/
+# brevo2._domainkey + DMARC), quindi si spedisce dal dominio invece che dalla
+# casella Gmail, che ha un DMARC che fa finire in spam la posta spedita da
+# terzi. La casella non esiste: e' un mittente di sola spedizione, le
+# eventuali risposte rimbalzano. NOTIFY_TO resta la Gmail perche' e' chi
+# legge davvero gli avvisi.
+SENDER_EMAIL = "noreply@celan.it"
 SENDER_NAME = "cèlan"
 SITE_NAME = "cèlan"
 # "true" per mandare anche la conferma al richiedente
