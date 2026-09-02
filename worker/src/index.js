@@ -116,64 +116,100 @@ async function brevo(env, path, payload) {
 
 /* ---------------- Le due email ----------------
    Regole del mezzo, non del web: tabelle invece di flex, stili in riga
-   invece di un foglio di stile, niente webfont (nessun client li carica) e
-   il marchio come PNG servito dal sito. Il logo e' su fondo bianco cotto
-   dentro l'immagine: in Gmail scuro un PNG trasparente con le lettere nere
-   sparirebbe. Le immagini restano bloccate finche' chi legge non le
-   sblocca, quindi nessuna informazione vive dentro un'immagine. */
+   invece di un foglio di stile, niente webfont ne' SVG (nessun client li
+   carica), niente JavaScript.
+
+   Il punto fermo: le immagini partono bloccate in mezzo mondo (Gmail con
+   "chiedi prima di mostrare", Outlook aziendale, quasi tutte le app in
+   anteprima). Quindi il marchio non puo' vivere solo dentro il PNG: l'alt
+   dell'immagine e' vestito con gli stili del marchio, cosi' a immagini
+   spente resta la parola "celan" grande e nel rosso giusto, e sopra c'e'
+   comunque la fascia d'accento. Nessuna informazione sta dentro un'immagine. */
 
 const SITO = 'https://celan.it';
 const LOGO = SITO + '/assets/brand/logo-celan-email.png';
 const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
-const INK = '#111110', MUTO = '#6F6D68', RIGA = '#e2e0dc', ACCENTO = '#cd3c20';
+const INK = '#111110', MUTO = '#6F6D68', RIGA = '#e4e2de', ACCENTO = '#cd3c20', CARTA = '#ffffff', FONDO = '#e9e9e9';
 
 function guscio(occhiello, corpo, piede) {
-  return '<!doctype html><html lang="it"><body style="margin:0;padding:0;background:#e9e9e9">' +
-    /* riga d'anteprima: la vede solo la casella nell'elenco dei messaggi */
-    '<div style="display:none;max-height:0;overflow:hidden;opacity:0">' + esc(occhiello) + '</div>' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e9e9e9;padding:28px 12px">' +
-    '<tr><td align="center">' +
-    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;background:#ffffff;border:1px solid ' + RIGA + ';border-radius:16px">' +
-    '<tr><td style="padding:28px 28px 4px">' +
-    '<a href="' + SITO + '" style="text-decoration:none"><img src="' + LOGO + '" alt="c&egrave;lan" width="200" style="display:block;border:0;width:200px;max-width:55%;height:auto"></a>' +
+  return '<!doctype html><html lang="it"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">' +
+    '</head><body style="margin:0;padding:0;background:' + FONDO + ';-webkit-text-size-adjust:100%">' +
+    /* riga d'anteprima: la legge solo l'elenco dei messaggi */
+    '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + esc(occhiello) + '</div>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:' + FONDO + '">' +
+    '<tr><td align="center" style="padding:28px 12px">' +
+    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;background:' + CARTA + ';border:1px solid ' + RIGA + ';border-radius:14px;overflow:hidden">' +
+    /* fascia d'accento: si vede sempre, anche a immagini spente */
+    '<tr><td style="height:5px;line-height:5px;font-size:0;background:' + ACCENTO + '">&nbsp;</td></tr>' +
+    '<tr><td style="padding:26px 30px 0">' +
+    '<a href="' + SITO + '" style="text-decoration:none;color:' + ACCENTO + '">' +
+    '<img src="' + LOGO + '" alt="c\èlan" width="190" height="64" style="display:block;border:0;width:190px;max-width:55%;height:auto;font-family:' + FONT + ';font-size:26px;font-weight:700;letter-spacing:-.02em;color:' + ACCENTO + '"></a>' +
     '</td></tr>' +
-    '<tr><td style="padding:12px 28px 30px;font-family:' + FONT + ';font-size:16px;line-height:1.6;color:' + INK + '">' + corpo + '</td></tr>' +
+    '<tr><td style="padding:20px 30px 32px;font-family:' + FONT + ';font-size:16px;line-height:1.6;color:' + INK + '">' + corpo + '</td></tr>' +
     '</table>' +
-    '<div style="max-width:560px;padding:16px 12px 0;font-family:' + FONT + ';font-size:12px;line-height:1.6;color:' + MUTO + ';text-align:center">' + piede + '</div>' +
+    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px">' +
+    '<tr><td style="padding:16px 12px 4px;font-family:' + FONT + ';font-size:12px;line-height:1.7;color:' + MUTO + ';text-align:center">' + piede + '</td></tr>' +
+    '</table>' +
     '</td></tr></table></body></html>';
 }
 
+/* etichetta piccola in maiuscoletto sopra un titolo */
+function occhiello(t) {
+  return '<p style="margin:0 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:' + ACCENTO + ';font-weight:700">' + esc(t) + '</p>';
+}
+function titolo(t) {
+  return '<p style="margin:0;font-size:23px;line-height:1.25;font-weight:700;color:' + INK + '">' + esc(t) + '</p>';
+}
+
 function righe(coppie) {
-  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:18px 0 4px">' +
-    coppie.map(function ([k, v]) {
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:20px 0 0">' +
+    coppie.map(function ([k, v], i) {
+      const bordo = i ? 'border-top:1px solid ' + RIGA + ';' : '';
       return '<tr>' +
-        '<td style="padding:9px 12px 9px 0;border-bottom:1px solid ' + RIGA + ';color:' + MUTO + ';font-size:13px;vertical-align:top;white-space:nowrap">' + esc(k) + '</td>' +
-        '<td style="padding:9px 0;border-bottom:1px solid ' + RIGA + ';font-size:15px;font-weight:600;vertical-align:top">' + esc(v) + '</td>' +
+        '<td style="' + bordo + 'padding:10px 14px 10px 0;color:' + MUTO + ';font-size:13px;vertical-align:top;white-space:nowrap">' + esc(k) + '</td>' +
+        '<td style="' + bordo + 'padding:10px 0;font-size:15px;font-weight:600;vertical-align:top;color:' + INK + '">' + v + '</td>' +
         '</tr>';
     }).join('') + '</table>';
+}
+
+/* bottone che regge anche in Outlook: e' una tabella, non un <a> stilizzato */
+function bottone(testo, href) {
+  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 0">' +
+    '<tr><td style="background:' + ACCENTO + ';border-radius:999px">' +
+    '<a href="' + href + '" style="display:inline-block;padding:13px 26px;font-family:' + FONT + ';font-size:15px;font-weight:700;color:#ffffff;text-decoration:none">' + esc(testo) + '</a>' +
+    '</td></tr></table>';
 }
 
 function sendNotification(env, lead) {
   const verticale = VERTICALI[lead.verticale];
   const dove = lead.citta ? lead.locale + ', ' + lead.citta : lead.locale;
-  const coppie = [['Nome', lead.nome], ['Locale', lead.locale]];
-  if (lead.citta) coppie.push(['Città', lead.citta]);
-  coppie.push(['Email', lead.email]);
-  if (lead.telefono) coppie.push(['Telefono', lead.telefono]);
-  coppie.push(['Formula', formulaDi(lead)]);
-  if (lead.aggiunte.length) coppie.push(['Aggiunte', lead.aggiunte.join(', ')]);
-  coppie.push(['Sezione', verticale]);
+  const link = (href, testo) => '<a href="' + href + '" style="color:' + ACCENTO + ';text-decoration:none">' + esc(testo) + '</a>';
 
-  const corpo =
-    '<p style="margin:0 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:' + ACCENTO + '">Nuova richiesta</p>' +
-    '<p style="margin:0;font-size:22px;line-height:1.3;font-weight:700">' + esc(dove) + '</p>' +
-    righe(coppie) +
-    '<p style="margin:22px 0 0;font-size:14px;color:' + MUTO + '">Rispondi a questa email per scrivere direttamente a ' + esc(lead.nome) + '.' +
-    (lead.pagina ? '<br>Arrivata da <a href="' + esc(lead.pagina) + '" style="color:' + ACCENTO + '">' + esc(lead.pagina) + '</a>' : '') +
-    '</p>';
+  const coppie = [['Nome', esc(lead.nome)], ['Locale', esc(lead.locale)]];
+  if (lead.citta) coppie.push(['Citt\à', esc(lead.citta)]);
+  coppie.push(['Email', link('mailto:' + lead.email, lead.email)]);
+  if (lead.telefono) coppie.push(['Telefono', link('tel:' + lead.telefono.replace(/[^0-9+]/g, ''), lead.telefono)]);
+  coppie.push(['Formula', esc(formulaDi(lead))]);
+  if (lead.aggiunte.length) coppie.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
+  coppie.push(['Sezione', esc(verticale)]);
+
+  const corpo = occhiello('Nuova richiesta') + titolo(dove) + righe(coppie) +
+    '<p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:' + MUTO + '">' +
+    'Rispondi a questa email per scrivere direttamente a ' + esc(lead.nome) + '.' +
+    (lead.pagina ? '<br>Arrivata da ' + link(esc(lead.pagina), lead.pagina) : '') + '</p>';
+
+  const piatto = [['Nome', lead.nome], ['Locale', lead.locale]];
+  if (lead.citta) piatto.push(['Citt\à', lead.citta]);
+  piatto.push(['Email', lead.email]);
+  if (lead.telefono) piatto.push(['Telefono', lead.telefono]);
+  piatto.push(['Formula', formulaDi(lead)]);
+  if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  piatto.push(['Sezione', verticale]);
 
   const testo = 'NUOVA RICHIESTA - ' + dove + '\n\n' +
-    coppie.map(([k, v]) => k + ': ' + v).join('\n') +
+    piatto.map(([k, v]) => k + ': ' + v).join('\n') +
     '\n\nRispondi a questa email per scrivere direttamente a ' + lead.nome + '.' +
     (lead.pagina ? '\nArrivata da ' + lead.pagina : '');
 
@@ -182,7 +218,8 @@ function sendNotification(env, lead) {
     to: env.NOTIFY_TO.split(',').map((e) => ({ email: e.trim() })),
     replyTo: { email: lead.email, name: lead.nome },
     subject: '[' + (env.SITE_NAME || 'Sito') + '] ' + dove + ' - richiesta di preventivo',
-    htmlContent: guscio(coppie.map(([k, v]) => k + ': ' + v).join(' - '), corpo, 'Avviso automatico dal modulo di ' + SITO.replace('https://', '')),
+    htmlContent: guscio(piatto.map(([k, v]) => k + ': ' + v).join(' - '), corpo,
+      'Avviso automatico dal modulo di ' + SITO.replace('https://', '')),
     textContent: testo,
     tags: ['preventivo', lead.verticale]
   });
@@ -191,25 +228,31 @@ function sendNotification(env, lead) {
 function sendConfirmation(env, lead) {
   const tempi = lead.verticale === 'pizzerie' ? 'entro un giorno lavorativo' : 'entro due giorni lavorativi';
   const site = env.SITE_NAME || 'il sito';
-  const recap = [['La tua richiesta', lead.locale + (lead.citta ? ', ' + lead.citta : '')]];
-  if (haScelto(lead)) recap.push(['Formula', formulaDi(lead)]);
-  if (lead.aggiunte.length) recap.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  const recap = [['Locale', esc(lead.locale) + (lead.citta ? ', ' + esc(lead.citta) : '')]];
+  if (haScelto(lead)) recap.push(['Formula', esc(formulaDi(lead))]);
+  if (lead.aggiunte.length) recap.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
 
-  const corpo =
-    '<p style="margin:0 0 16px">Ciao ' + esc(lead.nome) + ',</p>' +
-    '<p style="margin:0 0 16px">la tua richiesta per <strong>' + esc(lead.locale) + '</strong> &egrave; arrivata. La legge una persona: dietro c&egrave;lan ci siamo in due, e chi ti risponde &egrave; chi poi installa il sistema nel tuo locale.</p>' +
-    '<p style="margin:0 0 4px">Ti scriviamo <strong>' + tempi + '</strong> con il preventivo, e dentro ci trovi la lista dell\'attrezzatura che serve al tuo locale, modello per modello, ai prezzi del negozio.</p>' +
+  const corpo = occhiello('Richiesta ricevuta') +
+    titolo('Ciao ' + lead.nome + ', ci siamo.') +
+    '<p style="margin:18px 0 0">La tua richiesta per <strong>' + esc(lead.locale) + '</strong> &egrave; arrivata, e la legge una persona: dietro c&egrave;lan ci siamo in due, e chi ti risponde &egrave; chi poi viene a installare il sistema nel tuo locale.</p>' +
+    '<p style="margin:14px 0 0">Ti scriviamo <strong>' + tempi + '</strong> con il preventivo. Dentro trovi la lista dell\'attrezzatura che serve al tuo locale, modello per modello, ai prezzi del negozio: su quella non ci mettiamo ricarichi.</p>' +
     righe(recap) +
-    '<p style="margin:22px 0 0">Se nel frattempo ti viene in mente altro, rispondi pure a questa email: arriva a noi.</p>' +
+    bottone('Rivedi cosa fa il gestionale', SITO + '/pizzerie/') +
+    '<p style="margin:26px 0 0">Se nel frattempo ti viene in mente altro, rispondi pure a questa email: arriva a noi.</p>' +
     '<p style="margin:16px 0 0">A presto,<br><strong>' + esc(site) + '</strong></p>';
 
-  const testo = 'Ciao ' + lead.nome + ',\n\n' +
-    'la tua richiesta per ' + lead.locale + ' e\' arrivata. La legge una persona: dietro celan ci siamo in due, ' +
-    'e chi ti risponde e\' chi poi installa il sistema nel tuo locale.\n\n' +
-    'Ti scriviamo ' + tempi + ' con il preventivo, e dentro ci trovi la lista dell\'attrezzatura che serve ' +
-    'al tuo locale, modello per modello, ai prezzi del negozio.\n\n' +
-    recap.map(([k, v]) => k + ': ' + v).join('\n') +
-    '\n\nSe nel frattempo ti viene in mente altro, rispondi pure a questa email: arriva a noi.\n\nA presto,\n' + site;
+  const piatto = [['Locale', lead.locale + (lead.citta ? ', ' + lead.citta : '')]];
+  if (haScelto(lead)) piatto.push(['Formula', formulaDi(lead)]);
+  if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+
+  const testo = 'Ciao ' + lead.nome + ', ci siamo.\n\n' +
+    'La tua richiesta per ' + lead.locale + ' e\' arrivata, e la legge una persona: dietro celan ci siamo in due, ' +
+    'e chi ti risponde e\' chi poi viene a installare il sistema nel tuo locale.\n\n' +
+    'Ti scriviamo ' + tempi + ' con il preventivo. Dentro trovi la lista dell\'attrezzatura che serve al tuo ' +
+    'locale, modello per modello, ai prezzi del negozio: su quella non ci mettiamo ricarichi.\n\n' +
+    piatto.map(([k, v]) => k + ': ' + v).join('\n') +
+    '\n\nSe nel frattempo ti viene in mente altro, rispondi pure a questa email: arriva a noi.\n\n' +
+    'A presto,\n' + site + '\n' + SITO + ' - Commerciale 345 293 3633 - Tecnico 345 760 6166';
 
   return brevo(env, '/smtp/email', {
     sender: { name: env.SENDER_NAME || site, email: env.SENDER_EMAIL },
@@ -217,10 +260,12 @@ function sendConfirmation(env, lead) {
     /* il mittente e' un noreply senza casella dietro: le risposte vanno
        dirottate sul primo indirizzo che legge davvero gli avvisi */
     replyTo: { email: env.NOTIFY_TO.split(',')[0].trim(), name: site },
-    subject: 'La tua richiesta è arrivata',
+    subject: 'La tua richiesta \è arrivata',
     htmlContent: guscio('Ti scriviamo ' + tempi + ' con il preventivo.', corpo,
-      'c&egrave;lan &middot; Gestionale per ristoranti, pizzerie e locali<br>' +
-      '<a href="' + SITO + '" style="color:' + MUTO + '">celan.it</a> &middot; Commerciale 345 293 3633 &middot; Tecnico 345 760 6166'),
+      '<strong style="color:' + INK + '">c\èlan</strong> &middot; Gestionale per ristoranti, pizzerie e locali<br>' +
+      '<a href="' + SITO + '" style="color:' + MUTO + ';text-decoration:none">celan.it</a>' +
+      ' &middot; Commerciale <a href="tel:+393452933633" style="color:' + MUTO + ';text-decoration:none">345 293 3633</a>' +
+      ' &middot; Tecnico <a href="tel:+393457606166" style="color:' + MUTO + ';text-decoration:none">345 760 6166</a>'),
     textContent: testo,
     tags: ['conferma', lead.verticale]
   });

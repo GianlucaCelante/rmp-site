@@ -88,7 +88,7 @@ await t('invio completo: avviso + contatto + conferma', async () => {
   /* il marchio arriva dal sito, non incorporato: se sparisce l'immagine
      l'email deve restare leggibile, quindi c'e' anche l'alt */
   assert.match(notify.body.htmlContent, /https:\/\/celan\.it\/assets\/brand\/logo-celan-email\.png/);
-  assert.match(notify.body.htmlContent, /alt="c&egrave;lan"/);
+  assert.match(notify.body.htmlContent, /alt="cèlan"/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'mario@example.it');
   assert.match(confirm.body.textContent, /due giorni lavorativi/);
   /* il mittente e' un noreply senza casella: le risposte devono tornare
