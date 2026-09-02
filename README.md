@@ -22,6 +22,8 @@ privacy/              informativa privacy e cookie (linkata da checkbox e footer
 assets/               risorse condivise tra le sezioni
   brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg)
   css/fonts.css       @font-face dei webfont auto-hostati
+  css/consent.css     stile del banner cookie
+  js/consent.js       banner cookie + Google Analytics 4 (caricato solo dopo il consenso)
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   favicon.svg         favicon sagre (accento ambra)
@@ -48,11 +50,20 @@ Basta aprire `pizzerie/index.html` nel browser. Meglio servirlo via HTTP, così 
 
 Prima del primo deploy, nelle impostazioni del repository GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-## Niente statistiche, niente cookie
+## Statistiche e banner cookie
 
-Il sito non usa cookie, né strumenti di statistica o di tracciamento, e nemmeno i font di Google: i webfont sono in `assets/fonts/`, così la visita non manda l'indirizzo IP a server terzi. È quello che dichiara `privacy/index.html`, ed è il motivo per cui non c'è un banner da accettare.
+Le visite si contano con Google Analytics 4 (ID `G-4ZMKC3B4FJ`), acceso da `assets/js/consent.js`, incluso in fondo a sagre, pizzerie e privacy:
 
-Se un giorno servono le statistiche: il banner con Google Consent Mode e GA4 c'era, è stato tolto il 1/9/2026 e si recupera dalla storia di git (`git show <commit>^:assets/js/consent.js`). Va rimessa anche la sezione "Cookie" dell'informativa, che oggi dichiara il contrario.
+```html
+<script src="../assets/js/consent.js" data-ga-id="G-4ZMKC3B4FJ" data-policy-url="../privacy/#cookie"></script>
+```
+
+- Lo script di Google si scarica **solo dopo** che qualcuno ha premuto "Accetta" (Consent Mode con i default a `denied`): prima non parte nessuna richiesta verso Google e nessun cookie viene creato.
+- "Accetta" e "Rifiuta" hanno la stessa evidenza, come chiedono le linee guida del Garante; chiudere senza scegliere vale come rifiuto. La scelta sta in `localStorage` (`rmp-consent`) e dura 6 mesi.
+- Il link "Preferenze cookie" nel footer (`data-consent-open`) riapre il banner.
+- Svuotare `data-ga-id` spegne tutto: niente banner, niente cookie, niente Google.
+- I webfont restano auto-hostati: anche col consenso, il sito non chiede i caratteri a Google.
+- La sezione "Cookie" di `privacy/index.html` descrive questo comportamento: se cambia, va aggiornata.
 
 ## Note
 
