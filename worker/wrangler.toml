@@ -8,8 +8,11 @@ compatibility_date = "2026-08-01"
 # Origini autorizzate a chiamare il Worker (separate da virgola). Aggiungere
 # il dominio definitivo quando c'e'. Vuoto = tutte (solo per prove).
 ALLOWED_ORIGINS = "https://gianlucacelante.github.io,https://www.celan.it,https://celan.it"
-# Chi riceve l'avviso (una o piu' email separate da virgola)
-NOTIFY_TO = "celan.rmp@gmail.com"
+# Chi riceve l'avviso (una o piu' email separate da virgola). Ce ne sono
+# due perche' il biglietto da visita stampa celan-rmp@ col trattino mentre
+# qui c'e' il punto: sono due caselle diverse, e finche' non e' chiaro
+# quale sia quella buona la richiesta arriva comunque.
+NOTIFY_TO = "celan.rmp@gmail.com,gianluca.celante@gmail.com"
 # Mittente: deve essere un indirizzo (o dominio) verificato in Brevo.
 # celan.it e' autenticato su Brevo dal 02/09/2026 (DKIM via CNAME brevo1/
 # brevo2._domainkey + DMARC), quindi si spedisce dal dominio invece che dalla
@@ -23,6 +26,6 @@ SITE_NAME = "cèlan"
 # "true" per mandare anche la conferma al richiedente
 SEND_CONFIRMATION = "true"
 # ID numerico della lista Brevo in cui salvare i contatti (vuoto = solo attributi)
-BREVO_LIST_ID = ""
+BREVO_LIST_ID = "3"
 # "true" = valida e risponde ok senza chiamare Brevo (per prove)
 DRY_RUN = "false"
