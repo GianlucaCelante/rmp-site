@@ -83,10 +83,17 @@ await t('invio completo: avviso + contatto + conferma', async () => {
   assert.deepEqual(paths, ['/contacts', '/smtp/email', '/smtp/email']);
   const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
   assert.equal(notify.body.replyTo.email, 'mario@example.it');
-  assert.match(notify.body.subject, /Sagre e feste di paese: Sagra del Pesce, Caorle/);
+  assert.match(notify.body.subject, /\[Infornato\] Sagra del Pesce, Caorle - richiesta di preventivo/);
   assert.match(notify.body.htmlContent, /Festa M/);
+  /* il marchio arriva dal sito, non incorporato: se sparisce l'immagine
+     l'email deve restare leggibile, quindi c'e' anche l'alt */
+  assert.match(notify.body.htmlContent, /https:\/\/celan\.it\/assets\/brand\/logo-celan-email\.png/);
+  assert.match(notify.body.htmlContent, /alt="c&egrave;lan"/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'mario@example.it');
   assert.match(confirm.body.textContent, /due giorni lavorativi/);
+  /* il mittente e' un noreply senza casella: le risposte devono tornare
+     al primo indirizzo degli avvisi, non nel vuoto */
+  assert.equal(confirm.body.replyTo.email, 'owner@example.com');
   const contact = calls.find((c) => c.url.endsWith('/contacts'));
   assert.deepEqual(contact.body.listIds, [7]);
   assert.equal(contact.body.attributes.FORMULA, 'Festa M');
@@ -96,8 +103,12 @@ await t('HTML nei campi viene neutralizzato', async () => {
   calls.length = 0;
   await worker.fetch(req('POST', { ...lead, nome: '<img src=x onerror=1>' }, ORIGIN, '8.8.8.8'), env);
   const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
-  assert.doesNotMatch(notify.body.htmlContent, /<img/);
-  assert.match(notify.body.htmlContent, /&lt;img/);
+  /* il guscio ha una sua <img>, il logo: quello che non deve esistere e'
+     un secondo tag nato dal campo compilato */
+  const tagImg = notify.body.htmlContent.match(/<img[^>]*>/g) || [];
+  assert.equal(tagImg.length, 1);
+  assert.match(tagImg[0], /logo-celan-email.png/);
+  assert.match(notify.body.htmlContent, /&lt;img src=x onerror=1&gt;/);
 });
 await t('avviso fallito -> 502', async () => {
   globalThis.__failBrevo = true;
@@ -115,10 +126,10 @@ await t('pizzerie: invio completo con aggiunte', async () => {
   const r = await worker.fetch(req('POST', leadPizza, ORIGIN, '4.4.4.2'), env);
   assert.equal(r.status, 200);
   const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
-  assert.match(notify.body.textContent, /Citta: Nervesa della Battaglia/);
+  assert.match(notify.body.textContent, /Citt\u00e0: Nervesa della Battaglia/);
   assert.match(notify.body.textContent, /Telefono: 0422 885 200/);
   assert.match(notify.body.textContent, /Aggiunte: Ordini online, Fatture e documenti/);
-  assert.match(notify.body.subject, /Pizzerie, ristoranti e locali: Da Ottavio/);
+  assert.match(notify.body.subject, /Da Ottavio, Nervesa della Battaglia - richiesta di preventivo/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'giulia@example.it');
   assert.match(confirm.body.textContent, /un giorno lavorativo/);
   assert.match(confirm.body.textContent, /Canone completo/);
@@ -134,7 +145,8 @@ await t('pizzerie: formula non scelta', async () => {
   assert.match(notify.body.textContent, /Formula: Da definire insieme/);
   assert.doesNotMatch(notify.body.textContent, /Aggiunte:/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'giulia@example.it');
-  assert.doesNotMatch(confirm.body.textContent, /formula indicata/);
+  /* senza scelta il riepilogo non inventa una formula */
+  assert.doesNotMatch(confirm.body.textContent, /Formula:/);
 });
 await t('limite di frequenza per IP', async () => {
   let last;
