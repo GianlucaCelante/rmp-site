@@ -56,6 +56,6 @@ Se un giorno servono le statistiche: il banner con Google Consent Mode e GA4 c'e
 
 ## Note
 
-- Il form "Richiedi il preventivo" invia a `data-endpoint` del `<form id="quoteForm">` (l'URL del Worker in `worker/`). Finché l'attributo è vuoto l'invio è simulato.
+- Il form "Richiedi il preventivo" invia al Worker in `worker/` (`data-endpoint` del `<form id="quoteForm">`), collegato dal 2/9/2026: avviso al titolare, conferma al richiedente, contatto nella lista Brevo "Preventivi sito". Svuotare l'attributo torna all'invio simulato, comodo per le anteprime.
 - `privacy/index.html` è compilata: titolare, indirizzo, conservazione, fornitori. Nessun segnaposto aperto. La P.IVA non c'è perché il titolare non ne ha ancora una: quando arriva va aggiunta al punto 1.
 - Il marchio del prodotto è **cèlan** (dominio www.celan.it, contatti celan.rmp@gmail.com). La landing sagre porta ancora il vecchio nome "Infornato" in `<title>`, nella nav e nel footer, e non è linkata da nessuna parte: va rifatta con il marchio nuovo.
