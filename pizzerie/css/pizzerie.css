@@ -1142,6 +1142,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   background:#0d0c0b;
 }
 .galleria__fig img{ display:block; margin:auto; max-width:100%; height:auto; }
+.galleria__nota{ display:none; }
 .galleria__piede{ display:flex; align-items:center; justify-content:center; gap:18px; padding:2px 4px 4px; }
 .galleria__conta{ font:600 14px/1 'Archivo',sans-serif; color:rgba(255,255,255,.7); font-variant-numeric:tabular-nums; }
 .galleria__nav{
@@ -1163,8 +1164,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .galleria__nav[disabled]:hover{ border-color:rgba(255,255,255,.34); }
 @media (max-width:820px){
   /* Sul telefono l'immagine sta alta quanto lo schermo e si scorre di lato:
-     cosi' si legge senza dover ingrandire niente. */
+     cosi' si legge senza dover ingrandire niente. Ma una fetta di schermata,
+     senza una parola che lo spieghi, sembra un difetto: da qui la nota. */
   .galleria__fig img{ max-width:none; width:auto; height:100%; margin:0; }
+  .galleria__nota{
+    display:block;
+    padding:8px 4px 0;
+    font:400 12.5px/1.45 'Archivo',sans-serif;
+    color:rgba(255,255,255,.62);
+    text-align:center;
+  }
 }
 @media (prefers-reduced-motion:reduce){
   .galleria__fig{ scroll-behavior:auto; }

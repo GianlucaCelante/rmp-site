@@ -585,7 +585,7 @@
      misura: per leggerle si ingrandisce, e ingrandendo il dito finiva nel
      nastro che scorre, cambiando schermata invece di spostare la pagina.
      Qui sotto non c'&egrave; nessuno scorrimento che rubi il gesto. -->
-<div class="galleria" id="galleria" hidden>
+<div class="galleria" id="galleria" hidden data-lenis-prevent>
   <div class="galleria__sfondo" data-chiudi-galleria></div>
   <div class="galleria__box" role="dialog" aria-modal="true" aria-labelledby="galleriaTitolo">
     <div class="galleria__testa">
@@ -595,6 +595,7 @@
     <div class="galleria__fig">
       <img id="galleriaImg" src="" alt="">
     </div>
+    <p class="galleria__nota">Scorri di lato per leggere tutta la schermata, pizzica per rimpicciolirla.</p>
     <div class="galleria__piede">
       <button type="button" class="galleria__nav galleria__nav--prev" id="galleriaPrev" aria-label="Schermata precedente"></button>
       <span class="galleria__conta" id="galleriaConta"></span>
