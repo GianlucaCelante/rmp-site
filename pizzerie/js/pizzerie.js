@@ -166,10 +166,11 @@
       'Schermata comande: presa ordini al banco e al telefono.',
       'Schermata forno: fasce orarie con il tetto di ordini per ogni slot.',
       'Schermata sala: planimetria dei tavoli con stato libero, prenotato, occupato.',
-      'Schermata rubrica: clienti con telefono e indirizzo.',
-      'Schermata prenotazioni: calendario di tavoli e asporti.',
-      'Schermata conto della giornata: in arrivo.',
-      'Schermata magazzino: in arrivo.'
+      'Schermata rubrica: elenco dei clienti con telefono e indirizzo, con la ricerca per nome.',
+      'Schermata prenotazioni: calendario del mese e dettaglio del giorno scelto.',
+      'Schermata storico ordini: filtri per periodo e tipo, totale e elenco degli ordini.',
+      'Schermata quantita: panetti per impasto, soglia di avviso e cosa fare quando finiscono.',
+      'Schermata aspetto: tavolozze pronte e colori dell\'app, con anteprima dal vivo.'
     ];
 
     var track = document.getElementById('tabletTrack');
