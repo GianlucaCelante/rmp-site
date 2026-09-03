@@ -1108,7 +1108,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* la schermata si apre anche toccandola: che sia toccabile deve vedersi */
 .tablet__slide{ cursor:zoom-in; }
 
-.galleria{ position:fixed; inset:0; z-index:130; }
+/* sopra il banner cookie (z-index 200): la galleria e' una finestra che
+   l'utente ha appena aperto, e i suoi comandi stanno in fondo, proprio
+   dove il banner si appoggia. Chiudendola il banner torna raggiungibile. */
+.galleria{ position:fixed; inset:0; z-index:210; }
 .galleria[hidden]{ display:none; }
 .galleria__sfondo{ position:absolute; inset:0; background:#0b0a09; }
 .galleria__box{
