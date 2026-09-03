@@ -229,8 +229,13 @@
       var n = Math.max(0, Math.min(slides.length - 1, i));
       track.scrollTo({ left: n * track.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
     }
+    window.vaiAllaSchermata = vaiA;
     if (prevBtn) prevBtn.addEventListener('click', function () { vaiA(current - 1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { vaiA(current + 1); });
+    var lente = document.getElementById('tabletLente');
+    if (lente) lente.addEventListener('click', function () {
+      if (window.apriGalleria) window.apriGalleria(Math.max(0, current));
+    });
     /* frecce della tastiera quando il nastro ha il fuoco */
     track.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { e.preventDefault(); vaiA(current + 1); }
@@ -267,6 +272,17 @@
     }, { threshold: 0.7 });
     nudgeIO.observe(track);
     track.addEventListener('pointerdown', function () { nudged = true; }, { once: true });
+
+    /* Pagina ingrandita col pinch: il nastro smette di scorrere, cosi' il
+       trascinamento sposta la pagina invece di cambiare schermata. Era la
+       segnalazione: "se zoommo e mi sposto cambio foto". */
+    if (window.visualViewport) {
+      var vv = window.visualViewport;
+      var guardaZoom = function () { root.classList.toggle('is-zoomato', vv.scale > 1.02); };
+      vv.addEventListener('resize', guardaZoom);
+      vv.addEventListener('scroll', guardaZoom);
+      guardaZoom();
+    }
 
     /* al ridimensionamento il passo cambia: si riallinea alla schermata
        corrente (timer locale: la debounce del file vive in un altro scope) */
@@ -306,6 +322,89 @@
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !modal.hidden) chiudi();
+    });
+  })();
+
+  /* ---------------- Galleria delle schermate ----------------
+     Nel tablet le schermate stanno a un quarto della loro misura: per
+     leggerle bisogna ingrandire, e ingrandendo il dito finiva nel nastro
+     che scorre. Qui l'immagine si apre da sola, senza niente sotto che
+     rubi il gesto. Vive fuori dalla IIFE del carosello perche' deve
+     funzionare anche con le animazioni ridotte, dove le schermate sono
+     impilate e il carosello non parte. */
+  (function () {
+    var galleria = document.getElementById('galleria');
+    var img = document.getElementById('galleriaImg');
+    var titolo = document.getElementById('galleriaTitolo');
+    var conta = document.getElementById('galleriaConta');
+    var prev = document.getElementById('galleriaPrev');
+    var next = document.getElementById('galleriaNext');
+    var fig = galleria ? galleria.querySelector('.galleria__fig') : null;
+    var schermate = Array.prototype.slice.call(document.querySelectorAll('.tablet__slide'));
+    if (!galleria || !img || !schermate.length) return;
+
+    /* il titolo lo prende dalla didascalia della stessa schermata */
+    var titoli = {};
+    document.querySelectorAll('.tablet-demo__caption-item').forEach(function (c) {
+      var h = c.querySelector('h3');
+      if (h) titoli[c.dataset.index] = h.textContent.trim();
+    });
+
+    var indice = 0, ultimoFuoco = null;
+
+    function mostra(i) {
+      indice = Math.max(0, Math.min(schermate.length - 1, i));
+      var s = schermate[indice];
+      img.src = s.currentSrc || s.src;
+      img.alt = titoli[s.dataset.index] || '';
+      if (titolo) titolo.textContent = titoli[s.dataset.index] || '';
+      if (conta) conta.textContent = (indice + 1) + ' di ' + schermate.length;
+      if (prev) prev.disabled = (indice === 0);
+      if (next) next.disabled = (indice === schermate.length - 1);
+      if (fig) { fig.scrollLeft = 0; fig.scrollTop = 0; }
+    }
+
+    function apri(i) {
+      ultimoFuoco = document.activeElement;
+      mostra(i);
+      galleria.hidden = false;
+      document.body.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
+      var x = galleria.querySelector('.galleria__x');
+      if (x) x.focus();
+    }
+    function chiudi() {
+      galleria.hidden = true;
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
+      /* la pagina resta dov'era: il carosello si allinea a cio' che si
+         stava guardando, non a dove era rimasto prima */
+      if (window.vaiAllaSchermata) window.vaiAllaSchermata(indice);
+      if (ultimoFuoco && ultimoFuoco.focus) ultimoFuoco.focus({ preventScroll: true });
+    }
+    window.apriGalleria = apri;
+
+    /* Toccare la schermata la apre. La soglia sui 10 px distingue il tocco
+       dallo scorrimento: chi sfoglia col dito non se la vede spuntare. */
+    schermate.forEach(function (s, i) {
+      var x0 = 0, y0 = 0, mosso = false;
+      s.addEventListener('pointerdown', function (e) { x0 = e.clientX; y0 = e.clientY; mosso = false; });
+      s.addEventListener('pointermove', function (e) {
+        if (Math.abs(e.clientX - x0) > 10 || Math.abs(e.clientY - y0) > 10) mosso = true;
+      });
+      s.addEventListener('click', function () { if (!mosso) apri(i); });
+    });
+
+    galleria.querySelectorAll('[data-chiudi-galleria]').forEach(function (el) {
+      el.addEventListener('click', chiudi);
+    });
+    if (prev) prev.addEventListener('click', function () { mostra(indice - 1); });
+    if (next) next.addEventListener('click', function () { mostra(indice + 1); });
+    document.addEventListener('keydown', function (e) {
+      if (galleria.hidden) return;
+      if (e.key === 'Escape') { e.preventDefault(); chiudi(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); mostra(indice + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); mostra(indice - 1); }
     });
   })();
 

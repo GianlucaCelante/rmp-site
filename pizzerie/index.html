@@ -195,6 +195,7 @@
               <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
               <div class="scrolly-dots" id="scrollyDots" role="tablist" aria-label="Schermate del gestionale"></div>
               <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
+              <button type="button" class="tablet-lente" id="tabletLente">Ingrandisci</button>
             </div>
             <p class="scrolly-hint" aria-hidden="true">
               <span class="scrolly-hint__txt scrolly-hint__txt--touch">Scorri col dito</span>
@@ -576,6 +577,28 @@
     <div class="video-modal__frame">
       <p id="videoTitolo">Il video sta arrivando.</p>
       <span>Stiamo registrando una serata vera: il cameriere che prende la comanda al tavolo e la manda in cucina.</span>
+    </div>
+  </div>
+</div>
+
+<!-- Le schermate a tutto schermo. Nel tablet stanno a un quarto della loro
+     misura: per leggerle si ingrandisce, e ingrandendo il dito finiva nel
+     nastro che scorre, cambiando schermata invece di spostare la pagina.
+     Qui sotto non c'&egrave; nessuno scorrimento che rubi il gesto. -->
+<div class="galleria" id="galleria" hidden>
+  <div class="galleria__sfondo" data-chiudi-galleria></div>
+  <div class="galleria__box" role="dialog" aria-modal="true" aria-labelledby="galleriaTitolo">
+    <div class="galleria__testa">
+      <p class="galleria__titolo" id="galleriaTitolo"></p>
+      <button type="button" class="galleria__x" aria-label="Chiudi" data-chiudi-galleria></button>
+    </div>
+    <div class="galleria__fig">
+      <img id="galleriaImg" src="" alt="">
+    </div>
+    <div class="galleria__piede">
+      <button type="button" class="galleria__nav galleria__nav--prev" id="galleriaPrev" aria-label="Schermata precedente"></button>
+      <span class="galleria__conta" id="galleriaConta"></span>
+      <button type="button" class="galleria__nav galleria__nav--next" id="galleriaNext" aria-label="Schermata successiva"></button>
     </div>
   </div>
 </div>
