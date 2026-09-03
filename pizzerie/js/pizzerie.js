@@ -339,6 +339,7 @@
     var conta = document.getElementById('galleriaConta');
     var prev = document.getElementById('galleriaPrev');
     var next = document.getElementById('galleriaNext');
+    var adatta = document.getElementById('galleriaAdatta');
     var fig = galleria ? galleria.querySelector('.galleria__fig') : null;
     var schermate = Array.prototype.slice.call(document.querySelectorAll('.tablet__slide'));
     if (!galleria || !img || !schermate.length) return;
@@ -364,8 +365,24 @@
       if (fig) { fig.scrollLeft = 0; fig.scrollTop = 0; }
     }
 
+    /* Due misure: "leggi" (alta quanto lo schermo, si scorre di lato) e
+       "intera" (ci sta tutta, piccola). Il pizzico non basta: sa solo
+       ingrandire, sotto la scala 1 il browser non scende. */
+    function misura(intera) {
+      galleria.classList.toggle('is-intera', intera);
+      if (adatta) {
+        adatta.textContent = intera ? 'Leggi' : 'Vedi tutta';
+        adatta.setAttribute('aria-pressed', intera ? 'true' : 'false');
+      }
+      if (fig) { fig.scrollLeft = 0; fig.scrollTop = 0; }
+    }
+    if (adatta) adatta.addEventListener('click', function () {
+      misura(!galleria.classList.contains('is-intera'));
+    });
+
     function apri(i) {
       ultimoFuoco = document.activeElement;
+      misura(false);
       mostra(i);
       galleria.hidden = false;
       document.body.style.overflow = 'hidden';

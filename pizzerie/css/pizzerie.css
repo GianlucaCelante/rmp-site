@@ -1122,7 +1122,26 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   gap:8px;
 }
 .galleria__testa{ display:flex; align-items:center; gap:14px; padding:2px 4px; }
-.galleria__titolo{ flex:1 1 auto; min-width:0; font:600 15px/1.35 'Archivo',sans-serif; color:#fff; }
+.galleria__titolo{
+  flex:1 1 auto; min-width:0;
+  font:600 15px/1.35 'Archivo',sans-serif; color:#fff;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+/* Passa fra le due misure. Serve un bottone perche' il pizzico sa solo
+   ingrandire: sotto la scala 1 il browser non scende, quindi "rimpicciolire
+   con le dita" non esiste. Solo dove le due misure sono diverse: da
+   desktop l'immagine ci sta gia' tutta. */
+.galleria__adatta{
+  display:none;
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.34); border-radius:var(--radius-pill);
+  background:transparent; color:#fff;
+  padding:8px 14px;
+  font:600 13px/1 'Archivo',sans-serif;
+  cursor:pointer;
+}
+.galleria__adatta:hover{ border-color:#fff; }
+.galleria__adatta:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
 .galleria__x{
   flex:0 0 auto;
   width:40px; height:40px;
@@ -1167,6 +1186,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
      cosi' si legge senza dover ingrandire niente. Ma una fetta di schermata,
      senza una parola che lo spieghi, sembra un difetto: da qui la nota. */
   .galleria__fig img{ max-width:none; width:auto; height:100%; margin:0; }
+  .galleria__adatta{ display:inline-block; }
+  /* schermata intera: piccola, ma si vede tutta in un colpo */
+  .galleria.is-intera .galleria__fig img{ max-width:100%; width:auto; height:auto; margin:auto; }
+  .galleria.is-intera .galleria__nota{ visibility:hidden; }
   .galleria__nota{
     display:block;
     padding:8px 4px 0;
