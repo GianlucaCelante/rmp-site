@@ -174,26 +174,6 @@ function righe(coppie) {
     }).join('') + '</table>';
 }
 
-/* passi numerati: la sequenza e' vera (prima il preventivo, poi il
-   sopralluogo, poi l'installazione), non un ornamento */
-function passi(voci) {
-  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:8px 0 0">' +
-    voci.map(function (t, i) {
-      return '<tr>' +
-        '<td width="30" style="padding:9px 12px 0 0;vertical-align:top;font-size:15px;font-weight:700;color:' + ACCENTO + '">' + (i + 1) + '.</td>' +
-        '<td style="padding:9px 0 0;vertical-align:top;font-size:15px;line-height:1.55;color:' + INK + '">' + t + '</td>' +
-        '</tr>';
-    }).join('') + '</table>';
-}
-
-/* bottone che regge anche in Outlook: e' una tabella, non un <a> stilizzato */
-function bottone(testo, href) {
-  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 0">' +
-    '<tr><td style="background:' + ACCENTO + ';border-radius:999px">' +
-    '<a href="' + href + '" style="display:inline-block;padding:13px 26px;font-family:' + FONT + ';font-size:15px;font-weight:700;color:#ffffff;text-decoration:none">' + esc(testo) + '</a>' +
-    '</td></tr></table>';
-}
-
 function sendNotification(env, lead) {
   const verticale = VERTICALI[lead.verticale];
   const dove = lead.citta ? lead.locale + ', ' + lead.citta : lead.locale;
@@ -239,47 +219,30 @@ function sendNotification(env, lead) {
 
 function sendConfirmation(env, lead) {
   const sagre = lead.verticale === 'sagre';
-  const tempi = sagre ? 'entro due giorni lavorativi' : 'entro un giorno lavorativo';
-  const luogo = sagre ? 'la festa' : 'il locale';
-  const tuo = sagre ? 'della tua festa' : 'del tuo locale';
   const site = env.SITE_NAME || 'il sito';
-  const TEL = '345 293 3633';
 
   const recap = [[sagre ? 'Festa' : 'Locale', esc(lead.locale) + (lead.citta ? ', ' + esc(lead.citta) : '')]];
   if (haScelto(lead)) recap.push(['Formula', esc(formulaDi(lead))]);
   if (lead.aggiunte.length) recap.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
 
-  const voci = [
-    'Ti mandiamo il preventivo scritto e ne parliamo con calma, anche al telefono se preferisci.',
-    'Se ti convince, veniamo a vedere ' + luogo + ' e guardiamo cosa dell\'attrezzatura che hai già si può tenere.',
-    'Il menù e la lista dei clienti li carichiamo noi prima di arrivare. Il giorno dell\'installazione montiamo, configuriamo e ti lasciamo il sistema acceso, con la formazione già fatta.'
-  ];
-
+  /* Nessuna promessa di tempi: "prima possibile" non impegna a una
+     scadenza che poi va rispettata anche nelle settimane piene. */
   const corpo = occhiello('Richiesta ricevuta') +
-    titolo('Grazie ' + lead.nome + ', l\'abbiamo presa in carico.') +
-    '<p style="margin:18px 0 0">Ti scriviamo <strong>' + tempi + '</strong> con il preventivo per <strong>' + esc(lead.locale) + '</strong>. Non è un listino: dentro c\'è quello che serve davvero, con la lista dell\'attrezzatura modello per modello, ai prezzi del negozio. Su quella non mettiamo ricarichi.</p>' +
+    titolo('Grazie ' + lead.nome + ', abbiamo preso in carico la tua richiesta.') +
+    '<p style="margin:18px 0 0">Ti scriviamo <strong>prima possibile</strong> con il preventivo per <strong>' + esc(lead.locale) + '</strong>.</p>' +
     righe(recap) +
-    '<p style="margin:26px 0 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:' + MUTO + ';font-weight:700">Come si va avanti</p>' +
-    passi(voci) +
-    '<p style="margin:26px 0 0">A leggere la tua richiesta è una persona: dietro c&egrave;lan ci siamo in due, e chi ti risponde è chi poi viene a installare il sistema. Niente centralini, niente moduli da ricompilare.</p>' +
-    '<p style="margin:14px 0 0">Se hai fretta o ti viene in mente altro, rispondi pure a questa email &mdash; arriva a noi &mdash; oppure chiamaci.</p>' +
-    bottone('Chiamaci: ' + TEL, 'tel:+393452933633') +
-    '<p style="margin:26px 0 0">A presto,<br><strong>' + esc(site) + '</strong></p>';
+    '<p style="margin:26px 0 0">Se hai fretta o hai richieste particolari, rispondi pure a questa email.</p>' +
+    '<p style="margin:20px 0 0">A presto,<br><strong>' + esc(site) + '</strong></p>';
 
   const piatto = [[sagre ? 'Festa' : 'Locale', lead.locale + (lead.citta ? ', ' + lead.citta : '')]];
   if (haScelto(lead)) piatto.push(['Formula', formulaDi(lead)]);
   if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
 
-  const testo = 'Grazie ' + lead.nome + ', l\'abbiamo presa in carico.\n\n' +
-    'Ti scriviamo ' + tempi + ' con il preventivo per ' + lead.locale + '. Non è un listino: dentro c\'è ' +
-    'quello che serve davvero, con la lista dell\'attrezzatura modello per modello, ai prezzi del negozio. ' +
-    'Su quella non mettiamo ricarichi.\n\n' +
+  const testo = 'Grazie ' + lead.nome + ', abbiamo preso in carico la tua richiesta.\n\n' +
+    'Ti scriviamo prima possibile con il preventivo per ' + lead.locale + '.\n\n' +
     piatto.map(([k, v]) => k + ': ' + v).join('\n') + '\n\n' +
-    'COME SI VA AVANTI\n' + voci.map((t, i) => (i + 1) + '. ' + t.replace(/&[a-z]+;/g, '')).join('\n') + '\n\n' +
-    'A leggere la tua richiesta è una persona: dietro cèlan ci siamo in due, e chi ti risponde è chi poi ' +
-    'viene a installare il sistema. Niente centralini, niente moduli da ricompilare.\n\n' +
-    'Se hai fretta o ti viene in mente altro, rispondi pure a questa email - arriva a noi - oppure chiamaci al ' + TEL + '.\n\n' +
-    'A presto,\n' + site + '\n' + SITO;
+    'Se hai fretta o hai richieste particolari, rispondi pure a questa email.\n\n' +
+    'A presto,\n' + site + '\n' + SITO + ' - Commerciale 345 293 3633 - Tecnico 345 760 6166';
 
   return brevo(env, '/smtp/email', {
     sender: { name: env.SENDER_NAME || site, email: env.SENDER_EMAIL },
@@ -287,8 +250,8 @@ function sendConfirmation(env, lead) {
     /* il mittente e' un noreply senza casella dietro: le risposte vanno
        dirottate sul primo indirizzo che legge davvero gli avvisi */
     replyTo: { email: env.NOTIFY_TO.split(',')[0].trim(), name: site },
-    subject: 'La tua richiesta è arrivata: ti scriviamo ' + tempi,
-    htmlContent: guscio('Ti scriviamo ' + tempi + ' con il preventivo ' + tuo + '.', corpo,
+    subject: 'La tua richiesta è arrivata',
+    htmlContent: guscio('Ti scriviamo prima possibile con il preventivo.', corpo,
       '<strong style="color:' + INK + '">c&egrave;lan</strong> &middot; Gestionale per ristoranti, pizzerie e locali<br>' +
       '<a href="' + SITO + '" style="color:' + MUTO + ';text-decoration:none">celan.it</a>' +
       ' &middot; Commerciale <a href="tel:+393452933633" style="color:' + MUTO + ';text-decoration:none">345 293 3633</a>' +

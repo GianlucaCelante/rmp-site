@@ -90,7 +90,7 @@ await t('invio completo: avviso + contatto + conferma', async () => {
   assert.match(notify.body.htmlContent, /https:\/\/celan\.it\/assets\/brand\/logo-celan-email\.png/);
   assert.match(notify.body.htmlContent, /alt="cèlan"/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'mario@example.it');
-  assert.match(confirm.body.textContent, /due giorni lavorativi/);
+  assert.match(confirm.body.textContent, /prima possibile/);
   /* il mittente e' un noreply senza casella: le risposte devono tornare
      al primo indirizzo degli avvisi, non nel vuoto */
   assert.equal(confirm.body.replyTo.email, 'owner@example.com');
@@ -131,7 +131,7 @@ await t('pizzerie: invio completo con aggiunte', async () => {
   assert.match(notify.body.textContent, /Aggiunte: Ordini online, Fatture e documenti/);
   assert.match(notify.body.subject, /Da Ottavio, Nervesa della Battaglia - richiesta di preventivo/);
   const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'giulia@example.it');
-  assert.match(confirm.body.textContent, /un giorno lavorativo/);
+  assert.match(confirm.body.textContent, /prima possibile/);
   assert.match(confirm.body.textContent, /Canone completo/);
   const contact = calls.find((c) => c.url.endsWith('/contacts'));
   assert.equal(contact.body.attributes.CITTA, 'Nervesa della Battaglia');
