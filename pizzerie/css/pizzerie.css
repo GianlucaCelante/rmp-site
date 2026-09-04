@@ -691,6 +691,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* Frecce piccole nella riga dei pallini: un solo gruppo di controlli,
    sotto il tablet, che si legge al volo come "questo e' uno slider". */
 .scrolly-row{ display:flex; align-items:center; gap:14px; }
+/* frecce e pallini viaggiano insieme: sono un comando solo */
+.scrolly-nav{ display:flex; align-items:center; gap:14px; }
 .tablet-demo.js-ready .tablet-nav{
   display:grid;
   place-items:center;
@@ -736,6 +738,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
      cosi' si capisce al volo che e' uno slider. Il cue e la didascalia
      sono fratelli dentro __text: si scambiano con order. */
   .tablet-demo.js-ready .scrolly-cue{ order:-1; margin-top:2px; }
+  /* Sul telefono "Ingrandisci" sta sopra le frecce: e' quello che si cerca
+     per leggere una schermata, e col pollice si arriva prima. */
+  .tablet-demo.js-ready .scrolly-row{ flex-direction:column-reverse; gap:12px; }
   /* Mobile: schermate GRANDI. Cornice ridotta all'osso e larghezza quasi
      piena: il "tablet" diventa poco piu' di un bordo attorno allo schermo.
      Specificita' composta: la regola base ".tablet-demo .tablet{width:min(70vw,...)}"
