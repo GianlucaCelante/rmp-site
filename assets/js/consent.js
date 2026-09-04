@@ -102,7 +102,7 @@
       '<div class="consent__box">' +
         '<div class="consent__txt">' +
           '<strong id="consentTitle">Cookie e statistiche</strong>' +
-          '<p>Contiamo le visite con Google Analytics, ma solo se lo accetti. Puoi cambiare idea quando vuoi.</p>' +
+          '<p>Questo sito usa cookie tecnici e, con il tuo consenso, cookie statistici per capire come viene usato. Puoi cambiare idea in ogni momento.</p>' +
           '<a class="consent__link" href="' + POLICY_URL + '">Informativa cookie</a>' +
         '</div>' +
         '<div class="consent__btns">' +

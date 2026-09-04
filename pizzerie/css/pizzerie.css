@@ -29,6 +29,7 @@ input,button{font-size:inherit;}
   --muted-tx:  #676560;      /* AA-safe reading color derived from --muted, see report */
   --accent:    #F0563C;      /* decorativo: bordi, punti, superfici senza testo */
   --accent-strong: #CC3D20;  /* riempimenti bottone con testo bianco, 4.9:1 */
+  --on-accent-strong: #ffffff;
   --accent-text:   #B03621;  /* accent usato come testo su fondi chiari, 5:1 */
   --dark:      #141312;
   --card:      #FCFBFA;
