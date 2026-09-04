@@ -740,13 +740,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
      piena: il "tablet" diventa poco piu' di un bordo attorno allo schermo.
      Specificita' composta: la regola base ".tablet-demo .tablet{width:min(70vw,...)}"
      arriva dopo nel foglio e a pari specificita' vincerebbe lei. */
+  /* Il tablet arriva a 8 px dai due bordi dello schermo. Niente 100vw:
+     dove la barra di scorrimento occupa spazio (parecchi Android, e il
+     desktop) 100vw la conta lo stesso, il box diventa piu' largo dello
+     spazio disponibile e sborda a destra — che con overflow-x:clip qui
+     sopra vuol dire tagliato. Invece si allarga la riga fino ai bordi e si
+     mangia il padding del contenitore con due margini negativi uguali:
+     misure vere, sempre simmetriche. */
   .tablet-demo.js-ready .tablet{
-    width:calc(100vw - 16px);
+    width:auto;
     max-width:none;
-    /* il parent ha padding orizzontale: "margin auto" non ricentra un box
-       piu' largo del content-box (sborda solo a destra). I margini negativi
-       simmetrici lo riportano al centro del viewport. */
-    margin-inline:calc((100% - (100vw - 16px)) / 2);
+    align-self:stretch;
+    margin-inline:calc(8px - var(--wrap-pad));
     padding:8px;
     border-radius:18px;
   }
@@ -1017,7 +1022,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   position:absolute;
   /* sopra il cerchio: nella reference il telefono copre il bordo del disco */
   z-index:2;
-  right:clamp(-30px,-1.5vw,-8px);
+  /* La rotazione allarga l'ingombro di una quarantina di px per lato:
+     con un rientro negativo il bordo della banda tranciava la colonna dei
+     pulsanti del telefono. Ora il rientro e' positivo e tiene dentro tutto
+     l'apparecchio, che resta comunque appoggiato al bordo. */
+  right:clamp(14px,3vw,46px);
   bottom:clamp(-72px,-4.5vw,-40px);
   height:calc(100% + clamp(8px,2vw,28px));
   width:auto;
@@ -1499,6 +1508,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .extra__head{ display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
 .extra__name{ font:700 19px/1.3 'Archivo',sans-serif; color:var(--card); }
 .extra__price{ font:700 17px/1.2 'Archivo',sans-serif; color:var(--accent); white-space:nowrap; }
+/* Non e' un prezzo: e' un "non ancora". Niente colore d'accento, che qui
+   dentro vuol dire "questa cifra la puoi pagare". */
+.extra__price--arrivo{
+  font-weight:600;
+  color:rgba(252,251,250,.62);
+  border:1px solid rgba(252,251,250,.28);
+  border-radius:var(--radius-pill);
+  padding:3px 12px;
+  font-size:13px;
+}
 .extra__desc{ font:500 15px/1.55 'Archivo',sans-serif; color:rgba(252,251,250,0.7); }
 @media (max-width:900px){
   .extras__grid{ grid-template-columns:1fr; }
