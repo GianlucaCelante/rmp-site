@@ -38,7 +38,7 @@
 }
 .consent__btns{ display:flex; gap:10px; flex:0 0 auto; margin-left:auto; }
 .consent__btn{
-  border:2px solid var(--accent-strong, #cd3c20);
+  border:2px solid transparent;
   border-radius:var(--radius-pill, 999px);
   padding:11px 22px;
   font:600 15px/1 'Archivo',sans-serif;
@@ -47,12 +47,12 @@
 }
 .consent__btn:hover{ transform:translateY(-1px); }
 .consent__btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
-/* stessa evidenza per Accetta e Rifiuta: cambia solo il riempimento */
-/* il colore del testo sul pieno lo decide la pagina: ambra vuole scritte
-   scure, il rosso cèlan le vuole bianche */
-.consent__btn--yes{ background:var(--accent-strong, #cd3c20); color:var(--on-accent-strong, #ffffff); }
+/* Accetta bianco pieno, Rifiuta senza contorno. Stessa misura, stesso
+   corpo di testo, stessa spaziatura: le linee guida del Garante chiedono
+   che rifiutare non costi piu' fatica che accettare. */
+.consent__btn--yes{ background:#ffffff; color:var(--ink, #111110); }
 .consent__btn--no{ background:transparent; color:var(--card, #FCFBFA); }
-.consent__btn--no:hover{ background:rgba(252,251,250,.08); }
+.consent__btn--no:hover{ background:rgba(252,251,250,.12); }
 @media (max-width:600px){
   .consent__btns{ width:100%; margin-left:0; }
   .consent__btn{ flex:1 1 0; text-align:center; }
