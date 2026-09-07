@@ -23,6 +23,7 @@
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 /* finche' gli script non girano (anteprima di iPhone) i comandi non servono */
 .senzaScript .comandi, .senzaScript .secondari, .senzaScript .tasti, .senzaScript .strumenti, .senzaScript .contatore { display: none !important; }
 @supports (height: 100dvh) { html, body { height: 100dvh; } }
@@ -190,6 +191,7 @@ button { font: inherit; cursor: pointer; }
   }
 
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }   /* Safari su iPhone non gonfi i testi quando la pagina e' piu' larga dello schermo */
   body {
     margin: 0; background: var(--fondo); color: var(--testo);
     font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
@@ -2371,9 +2373,11 @@ const PASSI = P1.concat(P2);
   const app = q("#sorgente").textContent.replace(/<\\\/script>/g, CHIUDI);
   const stub = "<script>(function(){var m={};var ls={getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:ls,configurable:true})}catch(e){}})()" + CHIUDI;
   const accesso = "<script>window.demoAccesso={get S(){return S},set S(v){S=v},prod:prod,etichettaDi:etichettaDi,b0:b0,salva:salva,misureViste:misureViste,storie:storie,get ingrandita(){return ingrandita},azzera:function(){S=partenza();misureViste.clear();storie.clear();ingrandita=null;azzeraChiesto=false;salva();disegna()}}" + CHIUDI;
+  // su iPhone Safari gonfia i testi delle pagine piu' larghe dello schermo (text autosizing): l'app sta a 1280 px
+  // dentro un telefono da 390 e l'etichetta, ridotta con zoom, ne usciva un nastro stretto di lettere accavallate
   const fineStile = app.indexOf("</style>") + 8;
   const doc = '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="light">'
-    + stub + app.slice(0, fineStile) + "<style>[hidden]{display:none!important}" + (TEL ? "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}" : "") + "</style></head><body>" + app.slice(fineStile) + accesso + "</body></html>";
+    + stub + app.slice(0, fineStile) + "<style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%;text-size-adjust:100%}" + (TEL ? "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}" : "") + "</style></head><body>" + app.slice(fineStile) + accesso + "</body></html>";
 
   let w = null, d = null, A = null, pronto = false, n = -1, rettUltimo = null, auto = null, occupato = false;
 
