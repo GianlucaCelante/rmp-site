@@ -19,6 +19,8 @@ pizzerie/             landing "pizzerie, ristoranti e locali" (marchio cèlan)
 privacy/              informativa privacy e cookie (linkata da checkbox e footer)
   index.html
   css/privacy.css
+demo/                 presentazioni guidate dei prodotti, non linkate dal sito e noindex
+  banco-etichette/    banco etichette: index.html (scelta PC/telefono), pc.html, telefono.html, fonts/
 assets/               risorse condivise tra le sezioni
   brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg)
   css/fonts.css       @font-face dei webfont auto-hostati
@@ -70,4 +72,5 @@ Le visite si contano con Google Analytics 4 (ID `G-4ZMKC3B4FJ`), acceso da `asse
 - Il form "Richiedi il preventivo" invia al Worker in `worker/` (`data-endpoint` del `<form id="quoteForm">`), collegato dal 2/9/2026: avviso al titolare, conferma al richiedente, contatto nella lista Brevo "Preventivi sito". Svuotare l'attributo torna all'invio simulato, comodo per le anteprime.
 - `privacy/index.html` è compilata: titolare, indirizzo, conservazione, fornitori. Nessun segnaposto aperto. La P.IVA non c'è perché il titolare non ne ha ancora una: quando arriva va aggiunta al punto 1.
 - Le immagini del sito sono in **WebP**, scelto per quello che contengono: le schermate del gestionale in «quasi senza perdita» (misurato: nessun pixel si scosta più di 6 su 255), le foto scontornate con perdita a qualità 90, marchi e loghi senza perdita, che su una tinta piatta è anche più piccolo. Restano PNG solo la favicon, l'icona Apple e il logo delle email, dove il WebP non arriva. Chi aggiunge immagini segua lo stesso criterio.
+- `demo/banco-etichette/` contiene le due presentazioni guidate del banco etichette, ognuna in un solo file con l'app dentro. Sono generate da uno script esterno al repo (`costruisci.mjs --sito`, nel materiale del banco etichette), non si modificano a mano: chi le rigenera ricopi `pc.html` e `telefono.html`. I caratteri (Bricolage Grotesque, Atkinson Hyperlegible) stanno in `fonts/` accanto alle pagine, così anche qui niente richieste a Google. Le pagine sono `noindex` e si mandano come link: dentro le anteprime di iPhone (WhatsApp, Mail, File) il file da solo non parte, perché lì gli script non girano.
 - Il marchio del prodotto è **cèlan** (dominio www.celan.it, contatti celan.rmp@gmail.com). La landing sagre porta ancora il vecchio nome "Infornato" in `<title>`, nella nav e nel footer, e non è linkata da nessuna parte: va rifatta con il marchio nuovo.
