@@ -148,6 +148,21 @@ await t('pizzerie: formula non scelta', async () => {
   /* senza scelta il riepilogo non inventa una formula */
   assert.doesNotMatch(confirm.body.textContent, /Formula:/);
 });
+await t('sagre: form senza formula, con serate e casse', async () => {
+  calls.length = 0;
+  const leadSagra = {
+    nome: 'Luca', locale: 'Festa del Radicchio', citta: 'Arcade', email: 'luca@example.it',
+    serate: '4', casse: '3', verticale: 'sagre', pagina: 'https://x/sagre/'
+  };
+  const r = await worker.fetch(req('POST', leadSagra, ORIGIN, '4.4.4.4'), env);
+  assert.equal(r.status, 200);
+  const notify = calls.find((c) => c.body.to && c.body.to[0].email === 'owner@example.com');
+  assert.match(notify.body.textContent, /Serate: 4/);
+  assert.match(notify.body.textContent, /Casse: 3/);
+  const confirm = calls.find((c) => c.body.to && c.body.to[0].email === 'luca@example.it');
+  assert.match(confirm.body.textContent, /Serate: 4/);
+  assert.doesNotMatch(confirm.body.textContent, /Formula:/);
+});
 await t('limite di frequenza per IP', async () => {
   let last;
   for (let i = 0; i < 6; i++) last = await worker.fetch(req('POST', lead, ORIGIN, '5.5.5.5'), { ...env, DRY_RUN: 'true' });

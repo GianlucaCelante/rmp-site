@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Infornato · Il gestionale per sagre e feste di paese</title>
-<meta name="description" content="Casse touch, comande in cucina e conti di fine serata. Hardware e assistenza compresi, prezzo a evento in chiaro.">
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<title>cèlan - Il gestionale per sagre e feste di paese</title>
+<meta name="description" content="Il gestionale per sagre e feste di paese: casse touch, comande in cucina e conti di fine serata. Prezzo a evento, in provincia di Treviso.">
+<link rel="icon" type="image/png" href="../assets/brand/favicon-celan.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon-celan.svg">
+<link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
 
 <!-- Webfont auto-hostati (assets/fonts): nessuna dipendenza da Google Fonts in produzione -->
 <link rel="preload" href="../assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -17,12 +19,31 @@
 <body>
 <nav class="nav" id="siteNav">
   <div class="nav-inner">
-    <a href="#top" class="nav-brand">Infornato</a>
+    <a href="../" class="nav-brand" aria-label="cèlan, torna alla home">
+      <span class="nav-brand__mark" aria-hidden="true">
+        <img class="petal" style="--da:0deg;--d:100ms;--t:380ms" src="../assets/brand/petalo-1.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-45deg;--d:142ms;--t:415ms" src="../assets/brand/petalo-2.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-90deg;--d:208ms;--t:450ms" src="../assets/brand/petalo-3.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-135deg;--d:298ms;--t:485ms" src="../assets/brand/petalo-4.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-180deg;--d:412ms;--t:520ms" src="../assets/brand/petalo-5.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-225deg;--d:550ms;--t:555ms" src="../assets/brand/petalo-6.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-270deg;--d:712ms;--t:590ms" src="../assets/brand/petalo-7.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-315deg;--d:898ms;--t:625ms" src="../assets/brand/petalo-8.webp" alt="" width="176" height="176">
+      </span>
+      <span class="nav-brand__word" aria-hidden="true">
+        <img class="lt" style="--d:260ms" src="../assets/brand/parola-1.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:410ms" src="../assets/brand/parola-2.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:560ms" src="../assets/brand/parola-3.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:710ms" src="../assets/brand/parola-4.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:860ms" src="../assets/brand/parola-5.webp" alt="" width="631" height="322">
+        <img class="accent" style="--d:1500ms" src="../assets/brand/parola-accento.webp" alt="" width="631" height="322">
+      </span>
+    </a>
     <div class="nav-links">
       <a href="#cosa-fa" class="nav-link nav-hide-mobile">Cosa fa</a>
-      <a href="#tagli" class="nav-link nav-hide-mobile">Le formule</a>
+      <a href="#tagli" class="nav-link nav-hide-mobile">Il preventivo</a>
       <a href="#domande" class="nav-link nav-hide-mobile">Domande</a>
-      <a href="#contatti" class="nav-cta">Richiedi il preventivo scritto</a>
+      <a href="#contatti" class="nav-cta">Richiedi il preventivo</a>
     </div>
   </div>
 </nav>
@@ -32,10 +53,6 @@
 <section id="hero" class="hero">
   <div class="wrap">
     <div class="hero-top">
-      <div class="fade-up" style="display:flex;flex-direction:column;gap:12px;max-width:40ch;">
-        <p class="hero-kicker" style="margin:0;">Il gestionale per sagre e feste di paese.</p>
-        <p style="margin:0;font:400 16px/1.5 'Archivo',sans-serif;color:var(--muted-tx);">Casse, comande in cucina e conti di fine serata. Hardware e assistenza li portiamo noi: i volontari battono solo gli ordini.</p>
-      </div>
     </div>
   </div>
   <div class="display-wrap hero-title">
@@ -46,44 +63,58 @@
       </div>
     </div>
     <h1 class="display reveal-onload">
-      <span class="line-mask"><span class="line-inner" style="--i:0">LA FILA SCORRE.</span></span>
-      <span class="line-mask"><span class="line-inner" style="--i:1">I CONTI TORNANO.</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:0">GESTISCI AL MEGLIO</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:1">LA TUA SAGRA.</span></span>
           </h1>
   </div>
   <div class="wrap">
     <div class="hero-visual">
       <div class="hero-circle">
-        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi il preventivo scritto">
+        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi il preventivo">
           <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
             <defs><path id="cta-ring-a" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO SCRITTO &#183; RICHIEDI IL PREVENTIVO SCRITTO &#183; </textPath></text>
+            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
           </svg>
           <span class="circle-cta__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#111110" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a></span>
       </div>
-      <!-- Palco hero: tablet con la cassa (la schermata piu' leggibile) e
-           schede grandi che raccontano cosa sta succedendo. Le schede sono
-           grafica dichiarata con dati demo, non finti screenshot. -->
-      <div class="hero-stage fade-up">
-        <div class="hero-tablet">
-          <div class="hero-tablet__screen parallax-frame">
-            <img class="parallax-img" src="img/demo-kds-cucina.jpg" alt="Lo schermo della cucina: la lista delle comande coi tempi di attesa e il vassoio che si compone coi piatti fotografati." width="1600" height="900" fetchpriority="high" loading="eager" onerror="this.closest('.hero-stage').classList.add('img-fallback');this.remove();">
-          </div>
-        </div>
-        <div class="hero-chip hero-chip--1" aria-hidden="true">
-          <span class="chip-dot"></span>
-          <span class="chip-txt"><strong>Funziona senza internet</strong>Anche senza rete al campo</span>
-        </div>
-        <div class="hero-chip hero-chip--2" aria-hidden="true">
-          <span class="chip-check"></span>
-          <span class="chip-txt"><strong>Rendiconto a fine festa</strong></span>
-        </div>
-        <div class="hero-chip hero-chip--3" aria-hidden="true">
-          <span class="chip-dot chip-dot--amber"></span>
-          <span class="chip-txt"><strong>Preordine ricevuto</strong>Ritiro alle 20:30</span>
-        </div>
+      <!-- Patatine che volano: immagine gia' scontornata da Gianluca, divisa qui in un
+           file per pezzo. Ognuna ondeggia per conto suo. Decorative: aria-hidden. -->
+      <div class="hero-patatine" aria-hidden="true">
+        <img src="img/patatina-01.webp" alt="" width="224" height="264" loading="eager"
+             style="left:28.0%;top:34.8%;width:30.4%;--rot:-0.7deg;--amp:4.5px;--t:5.0s;--d:1.5s">
+        <img src="img/patatina-02.webp" alt="" width="180" height="171" loading="eager"
+             style="left:26.2%;top:25.0%;width:24.5%;--rot:5.9deg;--amp:6.5px;--t:5.8s;--d:1.2s">
+        <img src="img/patatina-03.webp" alt="" width="143" height="179" loading="eager"
+             style="left:54.8%;top:13.2%;width:19.4%;--rot:0.1deg;--amp:8.5px;--t:6.6s;--d:1.5s">
+        <img src="img/patatina-04.webp" alt="" width="199" height="138" loading="eager"
+             style="left:52.3%;top:46.5%;width:27.0%;--rot:-4.4deg;--amp:10.5px;--t:7.4s;--d:1.3s">
+        <img src="img/patatina-05.webp" alt="" width="191" height="189" loading="eager"
+             style="left:71.3%;top:38.7%;width:26.0%;--rot:1.8deg;--amp:12.5px;--t:8.2s;--d:2.1s">
+        <img src="img/patatina-06.webp" alt="" width="129" height="199" loading="eager"
+             style="left:15.1%;top:66.3%;width:17.5%;--rot:-5.7deg;--amp:4.5px;--t:9.0s;--d:0.8s">
+        <img src="img/patatina-07.webp" alt="" width="167" height="145" loading="eager"
+             style="left:3.3%;top:38.5%;width:22.7%;--rot:-5.7deg;--amp:6.5px;--t:5.0s;--d:2.1s">
+        <img src="img/patatina-08.webp" alt="" width="199" height="94" loading="eager"
+             style="left:31.2%;top:64.7%;width:27.0%;--rot:2.7deg;--amp:8.5px;--t:5.8s;--d:0.1s">
+        <img src="img/patatina-09.webp" alt="" width="114" height="175" loading="eager"
+             style="left:40.8%;top:72.1%;width:15.5%;--rot:6.8deg;--amp:10.5px;--t:6.6s;--d:2.5s">
+        <img src="img/patatina-10.webp" alt="" width="144" height="92" loading="eager"
+             style="left:8.7%;top:18.8%;width:19.6%;--rot:2.2deg;--amp:12.5px;--t:7.4s;--d:1.6s">
+        <img src="img/patatina-11.webp" alt="" width="170" height="140" loading="eager"
+             style="left:29.8%;top:2.4%;width:23.1%;--rot:-4.8deg;--amp:4.5px;--t:8.2s;--d:0.0s">
+        <img src="img/patatina-12.webp" alt="" width="108" height="164" loading="eager"
+             style="left:58.6%;top:67.7%;width:14.7%;--rot:0.4deg;--amp:6.5px;--t:9.0s;--d:0.2s">
+        <img src="img/patatina-13.webp" alt="" width="144" height="137" loading="eager"
+             style="left:63.6%;top:5.6%;width:19.6%;--rot:-4.3deg;--amp:8.5px;--t:5.0s;--d:0.6s">
+        <img src="img/patatina-14.webp" alt="" width="165" height="52" loading="eager"
+             style="left:75.0%;top:28.1%;width:22.4%;--rot:-6.6deg;--amp:10.5px;--t:5.8s;--d:1.2s">
+        <img src="img/patatina-15.webp" alt="" width="112" height="99" loading="eager"
+             style="left:78.0%;top:70.2%;width:15.2%;--rot:-0.8deg;--amp:12.5px;--t:6.6s;--d:2.2s">
+        <img src="img/patatina-16.webp" alt="" width="22" height="34" loading="eager"
+             style="left:44.6%;top:6.2%;width:3.0%;--rot:0.3deg;--amp:4.5px;--t:7.4s;--d:1.7s">
       </div>
     </div>
   </div>
@@ -134,8 +165,6 @@
               <img class="tablet__slide" data-index="5" loading="lazy" width="1366" height="768" src="img/demo-cassa-6.jpg" alt="">
             </div>
           </div>
-          <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
-          <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
         </div>
         <div class="tablet-demo__text">
           <div class="tablet-demo__caption">
@@ -164,10 +193,15 @@
               <p>Ora, importo e pagamento di ogni ordine della giornata, con la ristampa a un tocco. Il direttivo chiude la serata coi numeri in mano.</p>
             </div>
           </div>
-          <div class="scrolly-cue" id="scrollyCue" aria-hidden="true">
-            <div class="scrolly-progress"><span id="scrollyBar"></span></div>
-            <p class="scrolly-hint">
-              <span class="scrolly-hint__n"><span id="scrollyNum">1</span> di <span id="scrollyTot">6</span></span>
+          <div class="scrolly-cue" id="scrollyCue">
+            <div class="scrolly-row">
+              <div class="scrolly-nav">
+                <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
+                <div class="scrolly-dots" id="scrollyDots" role="tablist" aria-label="Schermate della demo cassa"></div>
+                <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
+              </div>
+            </div>
+            <p class="scrolly-hint" aria-hidden="true">
               <span class="scrolly-hint__txt scrolly-hint__txt--touch">Scorri col dito</span>
               <span class="scrolly-hint__txt scrolly-hint__txt--mouse">Usa le frecce</span>
               <span class="scrolly-hint__chev"></span>
@@ -218,9 +252,9 @@
     <div class="wrap vband__more">
       <div class="vband__more-txt">
         <h3>Volete vedere anche la cucina?</h3>
-        <p>La demo non finisce alla cassa: c'è anche la parte cucina, con le comande sugli schermi (KDS) e il monitor che chiama i numeri. Ve la mostriamo dal vivo; il preventivo è gratuito e senza impegno.</p>
+        <p>La demo non finisce alla cassa: c'è anche la parte cucina, con le comande sugli schermi (KDS) e il monitor che chiama i numeri.</p>
       </div>
-      <span class="pop"><a href="#contatti" class="pill">Richiedi un preventivo gratuito</a></span>
+      <span class="pop"><a href="#contatti" class="pill">Richiedi il preventivo</a></span>
     </div>
   </div>
 </section>
@@ -228,73 +262,82 @@
 <section class="statement-section section-pad sheet" style="--sheet-i:1">
   <div class="wrap">
     <div class="statement">
-      <p class="fade-up">Funziona anche senza internet. Al campo la rete va e viene: il sistema lavora sulla sua rete locale e non perde una comanda.</p>
+      <p class="fade-up">Il nostro gestionale lavora sulla rete locale, veloce e sicuro anche offline.</p>
     </div>
   </div>
 </section>
 <section id="tagli" class="pricing section-pad section-dark sheet" style="--sheet-i:2">
   <div class="display-wrap pricing-head-row">
     <h2 class="display display-on-dark">
-      <span class="line-mask"><span class="line-inner" style="--i:0">TRE FORMULE.</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:0">IL PREVENTIVO.</span></span>
     </h2>
   </div>
   <div class="wrap">
-    <p class="pricing-sub fade-up">Prezzo a evento, IVA esclusa. Niente canone mensile: la festa paga quando c'è la festa.</p>
+    <p class="pricing-sub fade-up">Strutturiamo insieme il preventivo più adatto per le vostre esigenze.</p>
 
-    <div class="price-cards">
-      <article class="price-card fade-up" style="--i:0">
-        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
-        <h3 class="price-card-name">La base</h3>
-        <p class="price-card-from">149 € <span>a evento</span></p>
-        <p class="price-card-desc">Per le feste piccole, fino a 5 serate. Sul vostro hardware.</p>
-        <ul class="price-card-list">
-          <li><strong>Software cassa e comande.</strong> 1 o 2 casse più stampante in cucina.</li>
-          <li><strong>Menù e prezzi configurati da noi.</strong></li>
-          <li><strong>Esauriti condivisi tra le casse.</strong></li>
-          <li><strong>Report incassi e rendiconto finale.</strong></li>
-          <li><strong>Assistenza telefonica nelle serate.</strong></li>
-        </ul>
-        <p class="price-card-desc">Con hardware nostro a noleggio: 390 €, consegnato configurato e ritirato a fine festa (entro 30 km).</p>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="lite">Richiedi il preventivo scritto</a></span>
-      </article>
-      <article class="price-card price-card--featured fade-up" style="--i:1">
-        <span class="price-card-badge">La più richiesta</span>
-        <h3 class="price-card-name">Festa M</h3>
-        <p class="price-card-from">1.690 € <span>a evento</span></p>
-        <p class="price-card-desc">Chiavi in mano, fino a 8 serate.</p>
-        <ul class="price-card-list">
-          <li><strong>4 casse touch.</strong> Hardware a noleggio compreso.</li>
-          <li><strong>3 punti comanda tra cucina, griglia e bar.</strong></li>
-          <li><strong>Monitor «ordini pronti» per chi aspetta.</strong></li>
-          <li><strong>Tecnico al campo la prima serata.</strong> Reperibilità le altre.</li>
-          <li><strong>Hardware di scorta già sul posto.</strong></li>
-          <li><strong>Formazione dei volontari.</strong> Un'ora.</li>
-        </ul>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="completa">Richiedi il preventivo scritto</a></span>
-      </article>
-      <article class="price-card fade-up" style="--i:2">
-        <span class="price-card-badge price-card-badge--ghost" aria-hidden="true">&nbsp;</span>
-        <h3 class="price-card-name">Festa L</h3>
-        <p class="price-card-from">2.990 € <span>a evento</span></p>
-        <p class="price-card-desc">Per le feste grandi, fino a 12 serate.</p>
-        <ul class="price-card-list">
-          <li><strong>6 casse touch e 4 punti comanda.</strong></li>
-          <li><strong>2 monitor che chiamano i numeri e 1 totem per ordinare da soli.</strong></li>
-          <li><strong>Magazzino completo con soglie di allarme.</strong></li>
-          <li><strong>Preordini su WhatsApp.</strong></li>
-          <li><strong>Tecnico al campo le prime 2 serate.</strong></li>
-        </ul>
-        <span class="pop"><a href="#contatti" class="pill pill--block" data-exp="premium">Richiedi il preventivo scritto</a></span>
-      </article>
-    </div>
-    <div class="custom-box fade-up">
-      <div class="custom-box__txt">
-        <h3 class="custom-box__title">Nessuna delle tre vi torna?</h3>
-        <p class="custom-box__desc">Ogni formula si può modificare: aggiungete quello che vi serve, togliete quello che non usate. Il prezzo cambia di conseguenza e ve lo scriviamo nero su bianco.</p>
+    <div class="quote-items">
+      <div class="quote-item fade-up" style="--i:0">
+        <h3 class="quote-item__title">Postazione cassa</h3>
+        <p class="quote-item__desc">PC all in one touch da 20 pollici con la stampante degli scontrini di rete.</p>
       </div>
-      <span class="pop"><a href="#contatti" class="pill custom-box__cta" data-exp="custom">Richiedi il preventivo scritto</a></span>
+      <div class="quote-item fade-up" style="--i:1">
+        <h3 class="quote-item__title">Punto comanda in cucina</h3>
+        <p class="quote-item__desc">Stampante termica da 80 mm di rete, indirizzata per reparto: cucina, griglia, bar.</p>
+      </div>
+      <div class="quote-item fade-up" style="--i:2">
+        <h3 class="quote-item__title">Postazione eliminacoda</h3>
+        <p class="quote-item__desc">Un PC dedicato a chiamare i numeri, separato dalle casse.</p>
+      </div>
+      <div class="quote-item fade-up" style="--i:3">
+        <h3 class="quote-item__title">Monitor chiamata numero</h3>
+        <p class="quote-item__desc">Lo schermo rivolto al pubblico con il numero che state servendo.</p>
+      </div>
     </div>
-    <p class="pricing-note fade-up">Serata extra: 20 € per La base (30 € con hardware nostro), 120 € per Festa M, 150 € per Festa L. Eventi commerciali con partita IVA: listino maggiorato del 30 per cento.</p>
+
+    <div class="quote-included fade-up">
+      <h3 class="quote-included__title">Incluso nel nostro preventivo troverai sempre:</h3>
+      <div class="quote-included__list">
+        <div class="quote-item">
+          <h4 class="quote-item__title">L'assistenza durante la festa</h4>
+          <p class="quote-item__desc">Per tutte le serate rispondiamo al telefono: risolviamo da remoto e, se serve, veniamo al campo.</p>
+        </div>
+        <div class="quote-item">
+          <h4 class="quote-item__title">L'hardware di scorta</h4>
+          <p class="quote-item__desc">Un PC e una stampante in più, già configurati, che restano al campo pronti a sostituire.</p>
+        </div>
+        <div class="quote-item">
+          <h4 class="quote-item__title">Menù caricato e montaggio</h4>
+          <p class="quote-item__desc">Menù e prezzi li carichiamo noi, poi montiamo, indirizziamo le comande e proviamo la stampa su ogni postazione.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-columns">
+      <div class="quote-column fade-up" style="--i:0">
+        <h3 class="quote-column__title">Compreso nel prezzo</h3>
+        <ul class="quote-column__list">
+          <li>Hardware per tutta la durata della festa</li>
+          <li>Gestionale cèlan</li>
+          <li>Menù e prezzi configurati da noi</li>
+          <li>Montaggio in loco con prova di stampa su ogni postazione</li>
+          <li>Hardware di scorta sul posto</li>
+          <li>Assistenza da remoto o fisica</li>
+        </ul>
+      </div>
+      <div class="quote-column quote-column--vostro fade-up" style="--i:1">
+        <h3 class="quote-column__title">A carico vostro</h3>
+        <ul class="quote-column__list">
+          <li>Rete e cablaggio fino a ogni postazione</li>
+          <li>Switch</li>
+          <li>Alimentazione elettrica</li>
+          <li>Riparo delle postazioni dalla pioggia</li>
+          <li>Presidio durante le serate</li>
+          <li>Carta termica</li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="pop"><a href="#contatti" class="pill">Richiedi il preventivo</a></span>
   </div>
 </section>
 
@@ -322,7 +365,7 @@
       <div class="row row--plain fade-up" style="--i:2">
         <div class="row-head">
           <span class="row-title">Nessuna commissione sugli incassi.</span>
-          <span class="row-desc">Il prezzo della formula non cambia con quello che incassa la festa.</span>
+          <span class="row-desc">Il prezzo non cambia con quello che incassa la festa.</span>
         </div>
       </div>
       <div class="row row--plain fade-up" style="--i:3">
@@ -349,11 +392,11 @@
       </details>
       <details class="faq-item fade-up" style="--i:2">
         <summary>E se qualcosa si guasta il sabato sera?</summary>
-        <p class="faq-answer">Il sistema controlla da solo il suo hardware e avvisa i nostri tecnici dei possibili blocchi, prima che succedano. Con internet i tecnici intervengono da remoto; nelle formule Festa la scorta è già al campo e c'è un numero che risponde. Ultima spiaggia: il tecnico esce e viene alla festa.</p>
+        <p class="faq-answer">Il sistema controlla da solo il suo hardware e avvisa i nostri tecnici dei possibili blocchi, prima che succedano. Con internet i tecnici intervengono da remoto; la scorta è già al campo e c'è un numero che risponde. Ultima spiaggia: il tecnico esce e viene alla festa.</p>
       </details>
       <details class="faq-item fade-up" style="--i:3">
         <summary>Quanto ci mettete a montare tutto?</summary>
-        <p class="faq-answer">Nella formula base con hardware nostro arriva tutto già configurato: si accende in dieci minuti. Nelle formule Festa montiamo noi, prima che la festa apra.</p>
+        <p class="faq-answer">Arriviamo prima che la festa apra: montiamo, colleghiamo, indirizziamo le comande e proviamo la stampa su ogni postazione.</p>
       </details>
       <details class="faq-item fade-up" style="--i:4">
         <summary>E lo scontrino fiscale?</summary>
@@ -373,10 +416,10 @@
         <span class="line-mask"><span class="line-inner" style="--i:0">RICEVI PIÙ</span></span>
         <span class="line-mask"><span class="line-inner" style="--i:1">INFORMAZIONI.</span></span>
       </h2>
-      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi il preventivo scritto">
+      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi il preventivo">
         <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
           <defs><path id="cta-ring-b" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO SCRITTO &#183; RICHIEDI IL PREVENTIVO SCRITTO &#183; </textPath></text>
+          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
         </svg>
         <span class="circle-cta__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#111110" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -394,25 +437,36 @@
         <span class="field-error" id="errNome"></span>
       </div>
       <div class="field" id="fieldLocale">
-        <label for="inpLocale">Nome della festa e comune</label>
+        <label for="inpLocale">Nome della festa</label>
         <input type="text" id="inpLocale" name="locale" autocomplete="organization" aria-describedby="errLocale">
         <span class="field-error" id="errLocale"></span>
+      </div>
+      <div class="field" id="fieldCitta">
+        <label for="inpCitta">Comune</label>
+        <input type="text" id="inpCitta" name="citta" autocomplete="address-level2" aria-describedby="errCitta">
+        <span class="field-error" id="errCitta"></span>
       </div>
       <div class="field" id="fieldEmail">
         <label for="inpEmail">Email</label>
         <input type="email" id="inpEmail" name="email" inputmode="email" autocomplete="email" spellcheck="false" aria-describedby="errEmail">
         <span class="field-error" id="errEmail"></span>
       </div>
-      <div class="field" id="fieldEsperienza">
-        <label for="inpEsperienza">Formula</label>
-        <select id="inpEsperienza" name="esperienza">
-          <option value="non-so" selected>Non lo so ancora</option>
-          <option value="lite">La base</option>
-          <option value="completa">Festa M</option>
-          <option value="premium">Festa L</option>
-          <option value="custom">Su misura</option>
-        </select>
+      <div class="field" id="fieldTelefono">
+        <label for="inpTelefono">Telefono <span class="legend-nota">(facoltativo)</span></label>
+        <input type="tel" id="inpTelefono" name="telefono" inputmode="numeric" autocomplete="tel" aria-describedby="errTelefono">
+        <span class="field-error" id="errTelefono"></span>
       </div>
+      <div class="field-row">
+        <div class="field" id="fieldSerate">
+          <label for="inpSerate">Quante serate dura la festa <span class="legend-nota">(facoltativo)</span></label>
+          <input type="text" id="inpSerate" name="serate" inputmode="numeric">
+        </div>
+        <div class="field" id="fieldCasse">
+          <label for="inpCasse">Quante casse pensate di usare <span class="legend-nota">(facoltativo)</span></label>
+          <input type="text" id="inpCasse" name="casse" inputmode="numeric">
+        </div>
+      </div>
+      <p class="field-hint">Se non lo sapete ancora lasciate vuoto, lo vediamo insieme.</p>
       <div class="field field--check" id="fieldPrivacy">
         <label class="check" for="inpPrivacy">
           <input type="checkbox" id="inpPrivacy" name="privacy" aria-describedby="errPrivacy">
@@ -420,28 +474,29 @@
         </label>
         <span class="field-error" id="errPrivacy"></span>
       </div>
-      <button type="submit" class="pill pill--block form-submit-inline">Richiedi il preventivo scritto</button>
+      <button type="submit" class="pill pill--block form-submit-inline">Richiedi il preventivo</button>
       <p class="form-error" id="formError" hidden></p>
-      <p class="form-note">Vi rispondiamo via email entro due giorni lavorativi con il preventivo scritto.</p>
+      <p class="form-note">Vi rispondiamo via email.</p>
     </form>
 
     <div class="form-success" id="formSuccess" hidden>
       <h3>Richiesta ricevuta.</h3>
-      <p>Grazie<span id="successName"></span>, vi rispondiamo via email entro due giorni lavorativi con il preventivo scritto.</p>
-      <p class="summary-recap">Formula indicata: <strong id="successExp"></strong>.</p>
+      <p>Grazie<span id="successName"></span>, vi rispondiamo via email con il preventivo.</p>
     </div>
 
     <div class="footer">
       <div class="footer-brand">
-        <strong>Infornato</strong>
-        <span>Gestionale per sagre e feste di paese. Treviso e dintorni.</span>
+        <img class="footer-logo" src="../assets/brand/logo-celan.webp" alt="cèlan" width="1906" height="644">
+        <span>Gestionale per sagre e feste di paese.</span>
       </div>
       <div class="footer-links">
         <a href="#cosa-fa">Cosa fa</a>
         <span class="footer-sep">&middot;</span>
-        <a href="#tagli">Le formule</a>
+        <a href="#tagli">Il preventivo</a>
         <span class="footer-sep">&middot;</span>
         <a href="#domande">Domande</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="../pizzerie/">Per il tuo locale</a>
         <span class="footer-sep">&middot;</span>
         <a href="../privacy/">Privacy e cookie</a>
         <span class="footer-sep">&middot;</span>

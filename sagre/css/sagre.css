@@ -27,10 +27,10 @@ input,button{font-size:inherit;}
   --ink:       #111110;
   --muted:     #6F6D68;      /* token as specified in the brief */
   --muted-tx:  #676560;      /* AA-safe reading color derived from --muted, see report */
-  --accent:    #FFAA00;      /* decorativo: bordi, punti, superfici senza testo */
-  --accent-strong: #FFAA00;  /* riempimenti bottone: testo/icone sopra sono SCURI (var(--ink)), non bianchi */
+  --accent:    #F8C800;      /* il giallo delle schermate della demo sagre */
+  --accent-strong: #F8C800;  /* riempimenti bottone con testo nero, 12:1 */
   --on-accent-strong: #111110;
-  --accent-text:   #8A5300;  /* accent usato come testo su fondi chiari, ~5:1 */
+  --accent-text:   #7A5400;  /* accent usato come testo su fondi chiari, 5:1 */
   --dark:      #141312;
   --card:      #FCFBFA;
   --line:      rgba(17,17,16,0.14);
@@ -179,7 +179,7 @@ html.js .fade-up.is-visible{
   height:clamp(150px, 16vw, 220px);
   border-radius:50%;
   background:var(--accent-strong);
-  color:var(--ink);
+  color:var(--on-accent-strong);
   border:none;
   cursor:pointer;
   padding:0;
@@ -204,7 +204,7 @@ html.js .fade-up.is-visible{
   font-family:'Archivo',sans-serif;
   font-weight:700;
   font-size:19px;
-  fill:#111110;
+  fill:var(--on-accent-strong);
 }
 .circle-cta__icon{
   display:flex;
@@ -224,7 +224,7 @@ html.js .fade-up.is-visible{
   align-items:center;
   justify-content:center;
   background:var(--accent-strong);
-  color:var(--ink);
+  color:var(--on-accent-strong);
   font:600 18px/1.2 'Archivo',sans-serif;
   padding:16px 28px;
   border-radius:var(--radius-pill);
@@ -268,6 +268,51 @@ html.js .fade-up.is-visible{
 .nav.nav-on-dark.is-scrolled{ background:rgba(20,19,18,0.72); }
 .nav.nav-on-dark .nav-brand,
 .nav.nav-on-dark .nav-links a:not(.nav-cta){ color:var(--card); }
+.nav.nav-on-dark .nav-cta{ color:var(--accent); }  /* sul fondo scuro l'ocra non si legge: giallo pieno */
+/* Logo animato all'ingresso. La girandola: il petalo di destra appare per
+   primo, gli altri escono da lui ruotando in senso orario, veloci all'inizio
+   e via via piu' lenti, fermandosi ognuno al suo posto. Intanto le lettere
+   compaiono da sinistra a destra; per ultimo arriva l'accento sulla E.
+   Con "riduci movimento" il logo e' subito completo. */
+.nav-brand{ display:flex; align-items:center; text-decoration:none; }
+.nav-brand__mark{ position:relative; width:44px; height:44px; flex:0 0 auto; }
+.nav-brand__mark .petal{
+  position:absolute; inset:0; width:100%; height:100%;
+  transform:rotate(var(--da));
+  transform-origin:47.4% 47.8%;
+  opacity:0;
+  animation:petalIn var(--t,.45s) cubic-bezier(.25,.6,.35,1) var(--d,0ms) forwards;
+}
+@keyframes petalIn{
+  0%{ transform:rotate(var(--da)); opacity:0; }
+  14%{ opacity:1; }
+  100%{ transform:rotate(0deg); opacity:1; }
+}
+.nav-brand__word{ position:relative; width:calc(44px * 1262 / 644); height:44px; flex:0 0 auto; }
+.nav-brand__word img{
+  position:absolute; inset:0; width:100%; height:100%;
+  opacity:0;
+  animation:brandFade .34s ease-out var(--d,0ms) forwards;
+}
+.nav-brand__word .accent{
+  transform:scale(.55);
+  transform-origin:31% 6%;
+  animation:accentPop .4s cubic-bezier(.34,1.4,.5,1) var(--d,0ms) forwards;
+}
+@keyframes brandFade{
+  from{ opacity:0; transform:translateY(4px); }
+  to{ opacity:1; transform:none; }
+}
+@keyframes accentPop{
+  from{ opacity:0; transform:scale(.55); }
+  to{ opacity:1; transform:scale(1); }
+}
+/* sul fondo scuro le lettere nere passano in bianco; girandola, accento e
+   payoff restano arancioni (sono immagini monocrome: il filtro e' esatto) */
+.nav.nav-on-dark .nav-brand__word .lt{ filter:brightness(0) invert(1); }
+@media (prefers-reduced-motion:reduce){
+  .nav-brand__mark .petal, .nav-brand__word img{ animation:none; transform:none; opacity:1; }
+}
 .nav-inner{
   width:100%;
   max-width:1440px;
@@ -277,11 +322,6 @@ html.js .fade-up.is-visible{
   align-items:center;
   justify-content:space-between;
   gap:24px;
-}
-.nav-brand{
-  font:700 18px/1 'Archivo',sans-serif;
-  color:var(--ink);
-  text-decoration:none;
 }
 .nav-links{
   display:flex;
@@ -307,12 +347,6 @@ html.js .fade-up.is-visible{
 .nav-hide-mobile{ display:inline-flex; }
 @media (max-width:760px){
   .nav-hide-mobile{ display:none; }
-  /* label CTA piu' lunga della versione pizzeria: sulla riga unica mobile
-     riduciamo leggermente il font invece di spezzare il testo */
-  .nav-cta{ font-size:14px; }
-}
-@media (max-width:400px){
-  .nav-cta{ font-size:12.5px; }
 }
 
 #top{ height:1px; }
@@ -349,72 +383,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   position:relative;
   min-height:120px;
 }
-.hero-stage{
-  position:relative;
-  /* z-index esplicito: il transform del fade-up crea uno stacking context
-     e senza questo la fetta (z4) coprirebbe le schede. Con z4 e DOM
-     successivo, il palco sta sopra la fetta (che finisce con la punta
-     dietro al tablet: profondita' voluta) e sotto il cerchio (z5). */
-  z-index:4;
-  width:min(78%, 1000px);
-  margin-left:auto;
-}
-.hero-tablet{
-  padding:var(--tablet-bezel);
-  border-radius:var(--tablet-radius);
-  background:linear-gradient(135deg,#2e2b28,#100e0c);
-  box-shadow:0 30px 80px rgba(17,17,16,.28);
-}
-.hero-tablet__screen{
-  /* stesso formato della schermata cucina della demo (16:9): niente tagli */
-  aspect-ratio:1600/900;
-  overflow:hidden;
-  border-radius:calc(var(--tablet-radius) - var(--tablet-bezel));
-  background:#0d0c0b;
-}
-.hero-tablet__screen img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+
+
+
 
 /* Schede-racconto sopra il tablet: grandi, leggibili, con dati demo */
-.hero-chip{
-  position:absolute;
-  z-index:6;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:var(--card);
-  border-radius:14px;
-  padding:12px 16px;
-  box-shadow:0 16px 40px rgba(17,17,16,.20);
-  pointer-events:none;
-  user-select:none;
-}
-.chip-txt{ font:400 13.5px/1.35 'Archivo',sans-serif; color:var(--muted-tx); }
-.chip-txt strong{ display:block; font-weight:600; font-size:14.5px; color:var(--ink); }
-.chip-dot{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:#3E9B4F; }
-.chip-dot--amber{ background:#E0A100; }
-.chip-check{
-  flex:0 0 auto;
-  width:22px; height:22px;
-  border-radius:50%;
-  background:#3E9B4F;
-  position:relative;
-}
-.chip-check::after{
-  content:"";
-  position:absolute;
-  left:6px; top:7px;
-  width:9px; height:5px;
-  border-left:2.5px solid #fff;
-  border-bottom:2.5px solid #fff;
-  transform:rotate(-45deg);
-}
-.hero-chip--1{ left:-6%; top:16%; }
-.hero-chip--2{ right:14%; top:-22px; }
-.hero-chip--3{ left:26%; bottom:-20px; }
+
+
 @media (prefers-reduced-motion: no-preference){
-  .hero-chip--1{ animation:chipFloat 5.5s ease-in-out infinite alternate; }
-  .hero-chip--2{ animation:chipFloat 6.5s ease-in-out .8s infinite alternate; }
-  .hero-chip--3{ animation:chipFloat 7.5s ease-in-out .4s infinite alternate-reverse; }
+  
+  
+  
 }
 @keyframes chipFloat{
   from{ transform:translateY(-5px); }
@@ -432,14 +412,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 @media (max-width:900px){
   .hero-top{ justify-content:flex-start; }
   .hero-kicker{ text-align:left; max-width:38ch; }
-  .hero-stage{ width:100%; margin-top:10px; }
-  .hero-chip{ padding:10px 13px; }
-  .chip-txt{ font-size:12.5px; }
-  .chip-txt strong{ font-size:13.5px; }
-  .hero-chip--1{ left:-8px; top:10%; }
-  .hero-chip--2{ right:-6px; top:-16px; }
-  .hero-chip--3{ left:16px; bottom:-16px; }
-  .hero-circle{ position:static; display:inline-flex; margin:0 0 24px; }
+  
+  
+  
+.hero-circle{ position:static; display:inline-flex; margin:0 0 24px; }
 }
 
 /* ---------- Numbered rows (Cosa fa / Parliamoci chiaro) ---------- */
@@ -525,25 +501,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .tablet-demo__track{ display:flex; flex-direction:column; pointer-events:none; }
 .step-trigger{ height:0; } /* senza JS: nessuna distanza di scroll */
 
-/* Un solo trigger: ~95svh se li prende il giro del tablet, il resto e' la
-   sosta in cui il tablet resta fermo e si sfogliano le schermate col dito.
-   Serve sosta abbondante: se la sezione scappa via mentre uno sfoglia,
-   l'interazione non si scopre nemmeno. */
-.js-ready .step-trigger[data-index="0"]{ height:230vh; height:230svh; }
-/* Lo stage e' alto quanto il suo contenuto, NON quanto lo schermo: cosi'
-   la sezione non si porta dietro fasce vuote ne' in testa ne' in coda.
-   Il centering nel viewport lo fa il top misurato dal JS (--stage-top). */
-.js-ready .tablet-demo__sticky{
-  position:sticky;
-  top:var(--stage-top, 12px);
-  align-self:start;
-  height:auto;
-  contain:layout paint;
-}
-/* Durante il giro la prospettiva proietta il tablet fuori dal box dello
-   stage e il paint containment lo taglia (bordo sotto mozzato). Solo
-   layout finche' il giro non e' chiuso; a giro finito torna il paint. */
-.tablet-demo.js-flip:not(.flip-done) .tablet-demo__sticky{ contain:layout; }
+.js-ready .step-trigger[data-index="0"]{ height:0; } /* niente pin: la sezione scorre normale (come pizzerie.css) */
+.js-ready .tablet-demo__sticky{ position:static; height:auto; }
 /* Le schermate si sfogliano di lato: un nastro orizzontale con l'aggancio
    nativo del browser (scroll-snap), non un finto slider in JS. Cosi' il
    gesto ha l'inerzia del sistema e il dito lo trova dove se lo aspetta. */
@@ -560,6 +519,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   scroll-behavior:smooth;
 }
 .tablet-demo.js-ready .tablet__track::-webkit-scrollbar{ display:none; }
+/* Mentre la pagina e' ingrandita col pinch, il nastro smette di scorrere:
+   il trascinamento serve a spostarsi dentro la pagina, non a cambiare
+   schermata. Con overflow-x:hidden il gesto passa alla pagina, ma lo
+   scorrimento da JS (frecce, pallini) continua a funzionare. */
+.tablet-demo.js-ready.is-zoomato .tablet__track{ overflow-x:hidden; overscroll-behavior-x:auto; }
 .tablet-demo.js-ready .tablet__track:focus-visible{ outline:2px solid var(--accent-text); outline-offset:-4px; }
 .tablet-demo.js-ready .tablet__slide{
   flex:0 0 100%;
@@ -573,50 +537,54 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .tablet-demo.js-ready .tablet__track{ scroll-behavior:auto; }
 }
 
-/* Frecce: solo con mouse. Su touch si scorre col dito e sarebbero ingombro. */
+/* Frecce piccole nella riga dei pallini: un solo gruppo di controlli,
+   sotto il tablet, che si legge al volo come "questo e' uno slider"
+   (stessa meccanica di pizzerie.css). */
 .tablet-nav{ display:none; }
-@media (hover:hover) and (pointer:fine){
-  .tablet-demo.js-ready .tablet-nav{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    display:grid;
-    place-items:center;
-    width:44px; height:44px;
-    border:none;
-    border-radius:50%;
-    background:rgba(252,251,250,.92);
-    box-shadow:0 6px 20px rgba(17,17,16,.22);
-    cursor:pointer;
-    z-index:4;
-    transition:opacity .3s var(--ease), transform .3s var(--ease);
-  }
-  .tablet-demo.js-ready .tablet-nav::before{
-    content:"";
-    width:9px; height:9px;
-    border-right:2.5px solid var(--ink);
-    border-bottom:2.5px solid var(--ink);
-  }
-  .tablet-nav--prev{ left:-22px; }
-  .tablet-nav--prev::before{ transform:rotate(135deg); margin-left:3px; }
-  .tablet-nav--next{ right:-22px; }
-  .tablet-nav--next::before{ transform:rotate(-45deg); margin-right:3px; }
-  .tablet-demo.js-ready .tablet-nav:hover{ transform:translateY(-50%) scale(1.06); }
-  .tablet-demo.js-ready .tablet-nav[disabled]{ opacity:.32; cursor:default; box-shadow:none; }
-  .tablet-demo.js-ready .tablet-nav[disabled]:hover{ transform:translateY(-50%); }
-  /* Prima del giro completo le frecce ruoterebbero col tablet: nascoste
-     finche' l'animazione non e' finita, poi entrano in dissolvenza. */
-  .tablet-demo.js-flip:not(.flip-done) .tablet-nav{ opacity:0; pointer-events:none; }
+.scrolly-row{ display:flex; align-items:center; gap:14px; }
+/* frecce e pallini viaggiano insieme: sono un comando solo */
+.scrolly-nav{ display:flex; align-items:center; gap:14px; }
+.tablet-demo.js-ready .tablet-nav{
+  display:grid;
+  place-items:center;
+  width:28px; height:28px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--card);
+  cursor:pointer;
+  padding:0;
+  transition:opacity .3s var(--ease), transform .3s var(--ease), border-color .3s var(--ease);
 }
+.tablet-demo.js-ready .tablet-nav::before{
+  content:"";
+  width:7px; height:7px;
+  border-right:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+}
+.tablet-nav--prev::before{ transform:rotate(135deg); margin-left:2px; }
+.tablet-nav--next::before{ transform:rotate(-45deg); margin-right:2px; }
+.tablet-demo.js-ready .tablet-nav:hover{ transform:scale(1.1); border-color:var(--ink); }
+.tablet-demo.js-ready .tablet-nav[disabled]{ opacity:.32; cursor:default; }
+.tablet-demo.js-ready .tablet-nav[disabled]:hover{ transform:none; border-color:var(--line); }
+/* Pallini del carosello: la convenzione che tutti conoscono dal telefono.
+   Quello attivo si allunga in una pillola arancione. Cliccabili. */
+.scrolly-dots{ display:flex; gap:9px; align-items:center; }
+.scrolly-dots button{
+  width:11px; height:11px; border-radius:999px;
+  border:none; padding:0; cursor:pointer;
+  background:rgba(17,17,16,.22);
+  transition:width .35s var(--ease), background .35s var(--ease);
+}
+.scrolly-dots button.on{ width:30px; background:var(--accent); }
+.scrolly-dots button:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
 
 /* MOBILE (<768px): tablet compatto pinnato in alto, niente 100svh morti */
 @media (max-width:600px){
   .hero-marquee__track span{ font-size:clamp(80px, 30vw, 150px); }
-  .hero-chip--3{ display:none; }
-  .hero-chip--2{ right:12px; }
+  
+  
 }
 @media (max-width:47.99em){
-  .js-ready .step-trigger[data-index="0"]{ height:205vh; height:205svh; }
   .js-ready .tablet-demo__sticky{
     padding-block:0;
     overflow-x:clip;
@@ -624,8 +592,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   /* Respiro attorno alla didascalia: su mobile il tablet e' quasi a tutta
      larghezza e il testo gli restava appiccicato sopra e sotto. */
   .tablet-demo.js-ready .tablet-demo__row{ gap:30px; }
-  .tablet-demo.js-ready .tablet-demo__caption{ padding-inline:6px; }
-  .tablet-demo.js-ready .scrolly-cue{ margin-top:26px; }
+  .tablet-demo.js-ready .tablet-demo__caption{ padding-inline:6px; margin-top:20px; }
+  /* Su mobile i pallini vanno SUBITO sotto il tablet, prima del testo:
+     cosi' si capisce al volo che e' uno slider. Il cue e la didascalia
+     sono fratelli dentro __text: si scambiano con order (come pizzerie.css). */
+  .tablet-demo.js-ready .scrolly-cue{ order:-1; margin-top:2px; }
   /* Mobile: schermate GRANDI. Cornice ridotta all'osso e larghezza quasi
      piena: il "tablet" diventa poco piu' di un bordo attorno allo schermo.
      Specificita' composta: la regola base ".tablet-demo .tablet{width:min(70vw,...)}"
@@ -683,45 +654,20 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* stesso formato delle schermate della demo: niente tagli */
 .tablet-demo.js-ready .tablet__screen{ aspect-ratio:1366/768; }
 
-/* ---------- Flip d'ingresso del tablet (classe js-flip messa solo dal JS,
-   solo con Lenis attivo e senza reduced-motion) ---------- */
+/* ---------- Ingresso del tablet: slide dal basso (classe tablet-in messa
+   dal JS quando la sezione entra in vista). Sostituisce il giro 3D legato
+   allo scroll (js-flip, tolto): nei test le persone si bloccavano credendo
+   la pagina rotta. Stessa meccanica di pizzerie.css. ---------- */
 .tablet__back{ display:none; }
-.js-flip .tablet-demo__row{ perspective:1900px; }
-.js-flip .tablet{ transform-style:preserve-3d; will-change:transform; }
-.js-flip.flip-done .tablet{ will-change:auto; }
-.js-flip .tablet__screen,
-.js-flip .tablet__cam{ backface-visibility:hidden; }
-.js-flip .tablet__back{
-  display:block;
-  position:absolute; inset:0;
-  border-radius:inherit;
-  background:linear-gradient(150deg,#403c37,#171512 65%);
-  /* il retro sta 14px dietro al fronte: e' lo spessore della "scocca" */
-  transform:rotateY(180deg) translateZ(14px);
-  backface-visibility:hidden;
-}
-/* Fianchi laterali: due lamelle ruotate di 90 gradi che collegano fronte e
-   retro. Durante il giro si vede il bordo, come un tablet vero, non un
-   cartoncino. Inset verticale per non sbordare dagli angoli arrotondati. */
-/* Spessore a lastre: copie della piastra ARROTONDATA sfalsate in profondita'
-   fino al retro (-14px). Di taglio si leggono come una parete continua, e la
-   sagoma resta stondata da ogni angolazione: niente lamelle squadrate che
-   sporgono agli angoli. */
 .tablet__ply{ display:none; }
-.js-flip .tablet__ply{
-  display:block;
-  position:absolute; inset:0;
-  border-radius:inherit;
-  background:#1b1916;
-  transform:translateZ(var(--z, -7px));
+.js-ready .tablet-demo__row{
+  opacity:0;
+  transform:translateY(72px);
+  transition:opacity .9s var(--ease-reveal), transform .9s var(--ease-reveal);
 }
-.js-flip .tablet__back::after{
-  content:"";
-  position:absolute; top:14px; right:16px;
-  width:14px; height:14px;
-  border-radius:50%;
-  background:#0a0a0b;
-  box-shadow:0 0 0 3px rgba(255,255,255,.07);
+.tablet-demo.tablet-in .tablet-demo__row{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){
+  .js-ready .tablet-demo__row{ opacity:1; transform:none; transition:none; }
 }
 
 .tablet-demo__text{
@@ -983,96 +929,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .vband__more .pill{ width:100%; text-align:center; }
 }
 
-/* ---------- Prezzi "a partire da" e dettagli card ---------- */
-.price-card-from{
-  font:600 26px/1.1 'Archivo',sans-serif;
-  color:var(--ink);
-  margin:6px 0 12px;
-}
-.price-card-from span{
-  display:block;
-  font:400 15px/1.4 'Archivo',sans-serif;
-  color:var(--muted-tx);
-  margin-top:4px;
-}
-/* Cosa comprende: elenco sempre in chiaro, niente pannello da aprire.
-   La spunta davanti a ogni voce la fa leggere come "incluso" e non come
-   un paragrafo qualsiasi. */
-/* segnaposto invisibile del badge: tiene i nomi e i prezzi delle tre schede
-   sulla stessa riga quando sono affiancate. Su mobile sono in colonna e
-   sarebbe solo spazio sprecato. */
-/* selettore composto: la regola .price-card-badge arriva dopo nel foglio e
-   a pari specificita' vincerebbe lei, rimettendo in scena il segnaposto */
-.price-card .price-card-badge--ghost{ visibility:hidden; }
-@media (max-width:900px){ .price-card .price-card-badge--ghost{ display:none; } }
-.price-card-inherit{
-  font:600 14.5px/1.4 'Archivo',sans-serif;
-  color:var(--ink);
-  margin:0;
-}
-.price-card-list{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.price-card-list li{
-  position:relative;
-  padding-left:24px;
-  font:400 14.5px/1.5 'Archivo',sans-serif;
-  color:var(--muted-tx);
-}
-.price-card-list li::before{
-  content:"";
-  position:absolute;
-  left:2px; top:.34em;
-  width:6px; height:11px;
-  border-right:2px solid var(--accent-text);
-  border-bottom:2px solid var(--accent-text);
-  transform:rotate(45deg);
-}
-.price-card-list li strong{ color:var(--ink); font-weight:600; }
-/* la CTA scende sempre in fondo: con elenchi di lunghezza diversa i tre
-   pulsanti restano comunque allineati tra loro */
-.price-card > .pop{ margin-top:auto; padding-top:4px; }
-/* Riquadro "su misura": sta sul fondo scuro della sezione piani, quindi
-   contorno chiaro invece di card bianca (le card bianche sono i tre piani,
-   questo e' un'altra cosa e deve leggersi come tale). */
-.custom-box{
-  margin-top:clamp(28px,4vw,40px);
-  padding:clamp(22px,3vw,30px);
-  border:1px solid rgba(252,251,250,0.22);
-  border-radius:var(--radius);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:clamp(20px,3vw,40px);
-  flex-wrap:wrap;
-}
-.custom-box__title{ font:700 20px/1.3 'Archivo',sans-serif; color:var(--card); }
-.custom-box__desc{
-  margin-top:8px;
-  font:400 16px/1.55 'Archivo',sans-serif;
-  color:rgba(252,251,250,0.72);
-  max-width:60ch;
-}
-.custom-box__cta{ white-space:nowrap; }
-@media (max-width:600px){
-  .custom-box{ flex-direction:column; align-items:stretch; }
-  /* label CTA unificata piu' lunga: su una sola riga non ci starebbe in
-     larghezza piena mobile, meglio due righe leggibili che testo tagliato */
-  .custom-box__cta{ width:100%; white-space:normal; }
-}
-.pricing-note{
-  margin-top:22px;
-  font:400 14px/1.5 'Archivo',sans-serif;
-  color:rgba(252,251,250,0.55);
-}
-@media (min-width:768px){
-  .price-card--featured{ transform:scale(1.03); }
-}
+/* ---------- "+ IVA": classe generica, non piu' referenziata da #tagli ---------- */
+.offer__iva{ font:600 13px/1 'Archivo',sans-serif; letter-spacing:.06em; color:var(--muted-tx); }
 
 /* ---------- Statement ---------- */
 .statement p{
@@ -1091,42 +949,112 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   margin-top:20px;
 }
 
-.price-cards{
+/* ---------- Preventivo (#tagli): voci contate, incluso fisso, colonne, condizioni ---------- */
+.quote-items{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:32px clamp(24px,4vw,56px);
+  margin-top:clamp(40px,6vw,64px);
+}
+.quote-item{
+  border-top:1px solid var(--line-inv);
+  padding-top:18px;
+}
+.quote-item__title{
+  font:700 19px/1.3 'Archivo',sans-serif;
+  color:var(--card);
+}
+.quote-item__desc{
+  margin-top:8px;
+  font:400 15px/1.6 'Archivo',sans-serif;
+  color:rgba(252,251,250,.62);
+  max-width:40ch;
+}
+@media (max-width:700px){
+  .quote-items{ grid-template-columns:1fr; }
+}
+/* Blocco fisso: gestionale, hardware di scorta, montaggio. Un riquadro col
+   bordo chiaro, non una card bianca: qui non e' un'opzione da scegliere,
+   e' incluso sempre. */
+.quote-included{
+  margin-top:clamp(40px,6vw,64px);
+  padding:clamp(24px,3vw,32px);
+  border:1px solid var(--line-inv);
+  border-radius:var(--radius);
+}
+.quote-included__title{
+  font:700 clamp(19px,2vw,22px)/1.3 'Archivo',sans-serif;
+  color:var(--card);
+}
+.quote-included__list{
+  margin-top:20px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:28px;
-  margin-top:clamp(48px,7vw,80px);
-}
-.price-card{
-  background:var(--card);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 20px 50px rgba(0,0,0,.35);
-  color:var(--ink);
-  border-radius:var(--radius);
-  padding:32px;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  border:2px solid transparent; /* riservato per non far "saltare" le card quando .price-card--featured aggiunge il bordo accent */
-  transition:transform .5s var(--ease);
-}
-.price-card:hover{ transform:translateY(-4px); }
-.price-card--featured{ border-color:var(--accent); }
-.price-card-badge{
-  display:inline-flex;
-  align-self:flex-start;
-  font:600 13px/1 'Archivo',sans-serif;
-  color:var(--accent-text);
-  background:rgba(255,170,0,.18);
-  padding:8px 14px;
-  border-radius:var(--radius-pill);
-}
-.price-card-name{ font:700 24px/1.2 'Archivo',sans-serif; }
-.price-card-desc{
-  font:500 15px/1.5 'Archivo',sans-serif;
-  color:var(--muted-tx);
+  gap:24px;
 }
 @media (max-width:900px){
-  .price-cards{ grid-template-columns:1fr; }
+  .quote-included__list{ grid-template-columns:1fr; }
+}
+/* Due colonne: compreso nel prezzo / a carico vostro. Elenco puntato
+   asciutto: qui non si vende niente, si elenca solo chi porta cosa. */
+.quote-columns{
+  margin-top:clamp(40px,6vw,64px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(32px,4vw,56px);
+}
+.quote-column{ min-width:0; }
+.quote-column__title{
+  font:700 17px/1.3 'Archivo',sans-serif;
+  color:var(--card);
+  margin-bottom:16px;
+}
+.quote-column__list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.quote-column__list li{
+  position:relative;
+  padding-left:20px;
+  font:400 15px/1.5 'Archivo',sans-serif;
+  color:rgba(252,251,250,.62);
+}
+.quote-column__list li::before{
+  content:"";
+  position:absolute;
+  left:2px;
+  top:.55em;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--accent);
+}
+/* la colonna degli oneri usa un pallino neutro: il giallo dice "compreso" */
+.quote-column--vostro .quote-column__list li::before{ background:rgba(252,251,250,.34); }
+@media (max-width:700px){
+  .quote-columns{ grid-template-columns:1fr; gap:32px; }
+}
+/* Condizioni: righe brevi, etichetta in grassetto seguita dal testo. */
+.quote-terms{
+  margin-top:clamp(40px,6vw,64px);
+  padding-top:24px;
+  border-top:1px solid var(--line-inv);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.quote-term{
+  font:400 15px/1.6 'Archivo',sans-serif;
+  color:rgba(252,251,250,.62);
+  max-width:66ch;
+}
+.quote-term strong{
+  color:var(--card);
+  font-weight:700;
+}
+.pricing .wrap > .pop{
+  margin-top:clamp(40px,6vw,64px);
 }
 
 /* ---------- Come si parte ---------- */
@@ -1189,6 +1117,25 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .field{ display:flex; flex-direction:column; gap:8px; margin-bottom:32px; }
 .field label{ font:600 14px/1.3 'Archivo',sans-serif; color:var(--ink); }
+.legend-nota{ font-weight:400; color:var(--muted-tx); }
+/* Due campi brevi affiancati (serate, casse): stessa riga su desktop,
+   impilati su mobile. */
+.field-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap:24px;
+  row-gap:32px;
+}
+.field-row .field{ margin-bottom:0; }
+.field-hint{
+  margin-top:8px;
+  margin-bottom:32px;
+  font:400 14px/1.4 'Archivo',sans-serif;
+  color:var(--muted-tx);
+}
+@media (max-width:600px){
+  .field-row{ grid-template-columns:1fr; }
+}
 /* consenso: casella e testo sulla stessa riga, area di tocco generosa */
 .field--check{ margin-bottom:24px; }
 .check{
@@ -1289,6 +1236,7 @@ html.js .form-success.is-in{
   align-items:center;
   justify-content:space-between;
 }
+.footer-logo{ height:30px; width:auto; display:block; align-self:flex-start; }
 .footer-brand{ display:flex; flex-direction:column; gap:4px; }
 .footer-brand strong{ font:700 16px/1 'Archivo',sans-serif; color:var(--ink); }
 .footer-brand span{ font:400 15px/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
@@ -1433,19 +1381,49 @@ html.js .statement p.is-lit .w{ color:var(--ink); }
   .nav.nav--hidden{ transform:none; }
 }
 
-/* ---- 6. Stagger esteso: le voci dell'elenco dentro ogni card prezzi
-   entrano una dopo l'altra (stesso principio del .fade-up con --i usato
-   dalle righe di "Parliamoci chiaro" e dalle FAQ). ---- */
-html.js .price-card-list li{
-  opacity:0;
-  transform:translateY(6px);
-  transition:opacity .5s var(--ease-reveal), transform .5s var(--ease-reveal);
+/* ---- Patatine che volano nell'hero -------------------------------------
+   Stessa posizione della fetta di pizza sulla pagina dei locali: in alto a
+   destra, sporgente oltre il bordo dell'hero. Ogni patatina e' un file suo
+   e ondeggia con ampiezza, rotazione, durata e ritardo propri, cosi' il
+   gruppo non si muove a tempo. Decorative, non cliccabili. */
+.hero-patatine{
+  position:absolute;
+  z-index:4;
+  right:clamp(20px, 5vw, 96px);
+  /* sale all'altezza del titolo: su questa pagina il testo sta a destra,
+     quindi il gruppo parte sotto al kicker e affianca le due righe grandi */
+  top:clamp(-330px, -21vw, -190px);
+  width:clamp(230px, 28vw, 410px);
+  aspect-ratio:1 / 1;
+  pointer-events:none;
+  user-select:none;
 }
-html.js .price-card.is-visible .price-card-list li{ opacity:1; transform:translateY(0); }
-html.js .price-card-list li:nth-child(1){ transition-delay:0ms; }
-html.js .price-card-list li:nth-child(2){ transition-delay:45ms; }
-html.js .price-card-list li:nth-child(3){ transition-delay:90ms; }
-html.js .price-card-list li:nth-child(4){ transition-delay:135ms; }
-@media (prefers-reduced-motion:reduce){
-  html.js .price-card-list li{ opacity:1; transform:none; transition:none; }
+.hero-patatine img{
+  position:absolute;
+  height:auto;
+  transform:rotate(var(--rot, 0deg));
+  filter:drop-shadow(0 14px 22px rgba(17,17,16,.22));
 }
+@media (prefers-reduced-motion: no-preference){
+  .hero-patatine img{
+    animation:patatinaFloat var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+}
+@keyframes patatinaFloat{
+  from{ transform:translateY(calc(var(--amp, 8px) * -1)) rotate(calc(var(--rot, 0deg) - 3deg)); }
+  to{   transform:translateY(var(--amp, 8px)) rotate(calc(var(--rot, 0deg) + 3deg)); }
+}
+@media (max-width:900px){
+  /* su mobile il gruppo si allunga in verticale e scende sopra il bollino:
+     piu' stretto, piu' alto, e spostato verso il centro. Resta decorativo e
+     non intercetta il tocco, quindi il bottone sotto si preme lo stesso. */
+  .hero-patatine{
+    /* accostate al bordo destro dello schermo, senza toccarlo */
+    right:calc(-1 * var(--wrap-pad) + 8px);
+    top:-34px;
+    width:min(56vw, 228px);
+    aspect-ratio:0.58 / 1;
+    z-index:6;
+  }
+}
+

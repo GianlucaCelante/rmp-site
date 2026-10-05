@@ -181,6 +181,19 @@
     if (!track || !slides.length) return;
 
     var current = -1;
+    /* pallini: uno per schermata, cliccabili (stessa meccanica di pizzerie.js) */
+    var dotsBox = document.getElementById('scrollyDots');
+    var dots = [];
+    if (dotsBox) {
+      slides.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Vai alla schermata ' + (i + 1));
+        b.addEventListener('click', function () { vaiA(i); });
+        dotsBox.appendChild(b);
+        dots.push(b);
+      });
+    }
     /* aggiorna solo la didascalia e gli indicatori: quale schermata si vede
        lo decide il nastro, non piu' una classe */
     function activate(i) {
@@ -190,16 +203,11 @@
         el.classList.toggle('is-active', Number(el.dataset.index) === i);
       });
       if (tablet && labels[i]) tablet.setAttribute('aria-label', labels[i]);
-      var bar = document.getElementById('scrollyBar');
-      if (bar) bar.style.transform = 'scaleX(' + ((i + 1) / slides.length) + ')';
-      var num = document.getElementById('scrollyNum');
-      if (num) num.textContent = String(i + 1);
-      var tot = document.getElementById('scrollyTot');
-      if (tot) tot.textContent = String(slides.length);
       var cue = document.getElementById('scrollyCue');
       if (cue) cue.classList.toggle('is-last', i === slides.length - 1);
       if (prevBtn) prevBtn.disabled = (i === 0);
       if (nextBtn) nextBtn.disabled = (i === slides.length - 1);
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
     }
 
     /* la schermata "in scena" e' quella che occupa il nastro: root e' il
@@ -235,6 +243,37 @@
       vaiA(current + (e.deltaX > 0 ? 1 : -1));
       setTimeout(function () { wheelLock = false; }, 420);
     }, { passive: false });
+    /* la prima volta che il nastro entra bene in vista, un piccolo scivolo
+       laterale mostra che le schermate scorrono. Solo una volta, mai se
+       l'utente ha gia' toccato, mai con reduced motion. */
+    var nudged = false;
+    function nudge() {
+      if (nudged || reduce || current > 0 || track.scrollLeft > 4) { nudged = true; return; }
+      nudged = true;
+      track.scrollTo({ left: 44, behavior: 'smooth' });
+      setTimeout(function () {
+        if (track.scrollLeft < track.clientWidth * 0.4) track.scrollTo({ left: 0, behavior: 'smooth' });
+      }, 520);
+    }
+    var nudgeIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { setTimeout(nudge, 900); nudgeIO.disconnect(); }
+      });
+    }, { threshold: 0.7 });
+    nudgeIO.observe(track);
+    track.addEventListener('pointerdown', function () { nudged = true; }, { once: true });
+
+    /* Pagina ingrandita col pinch: il nastro smette di scorrere, cosi' il
+       trascinamento sposta la pagina invece di cambiare schermata. Era la
+       segnalazione: "se zoommo e mi sposto cambio foto". */
+    if (window.visualViewport) {
+      var vv = window.visualViewport;
+      var guardaZoom = function () { root.classList.toggle('is-zoomato', vv.scale > 1.02); };
+      vv.addEventListener('resize', guardaZoom);
+      vv.addEventListener('scroll', guardaZoom);
+      guardaZoom();
+    }
+
     /* al ridimensionamento il passo cambia: si riallinea alla schermata
        corrente (timer locale: la debounce del file vive in un altro scope) */
     var tRes;
@@ -246,34 +285,12 @@
     });
   })();
 
-  /* ---------------- Preselezione esperienza dalle card "Tre tagli" ----------------
-     Il click su un CTA con data-exp imposta il select del form (logica presa
-     dal donatore). L'href nativo (#contatti) resta il fallback funzionante
-     senza JS. */
-  (function () {
-    var select = document.getElementById('inpEsperienza');
-    if (!select) return;
-    document.querySelectorAll('[data-exp]').forEach(function (link) {
-      link.addEventListener('click', function () {
-        var value = link.getAttribute('data-exp');
-        var hasOption = Array.prototype.some.call(select.options, function (o) { return o.value === value; });
-        if (!hasOption) return;
-        select.value = value;
-        select.dispatchEvent(new Event('change', { bubbles: true }));
-      });
-    });
-  })();
-
   /* ================================================================
      FORM DI CONTATTO
      ================================================================ */
   var form = document.getElementById('quoteForm');
   var successBox = document.getElementById('formSuccess');
   var successNameEl = document.getElementById('successName');
-  var successExpEl = document.getElementById('successExp');
-
-  var ESPERIENZA_LABELS = { 'non-so': 'Non lo so ancora', 'lite': 'La base', 'completa': 'Festa M', 'premium': 'Festa L', 'custom': 'Su misura' };
-
   function setFieldError(fieldId, message){
     var fieldEl = document.getElementById(fieldId);
     if (!fieldEl) return;
@@ -285,16 +302,24 @@
   function validateForm(data){
     var errors = {};
     if (!data.nome || data.nome.trim().length < 2) {
-      errors.fieldNome = 'Inserisci il tuo nome.';
+      errors.fieldNome = 'Manca il vostro nome: scrivetelo per farvi rispondere.';
     }
     if (!data.locale || data.locale.trim().length < 2) {
-      errors.fieldLocale = 'Inserisci il nome della festa e il comune.';
+      errors.fieldLocale = 'Manca il nome della festa: scrivetelo per preparare il preventivo giusto.';
+    }
+    if (!data.citta || data.citta.trim().length < 2) {
+      errors.fieldCitta = 'Manca il comune della festa: scrivetelo qui sopra.';
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((data.email || '').trim())) {
-      errors.fieldEmail = 'Inserisci un indirizzo email valido.';
+      errors.fieldEmail = 'Serve un indirizzo email per rispondervi: controllate che ci sia la chiocciola.';
+    }
+    var telDigits = (data.telefono || '').match(/\d/g);
+    var telCount = telDigits ? telDigits.length : 0;
+    if (data.telefono && data.telefono.trim() && telCount < 8) {
+      errors.fieldTelefono = 'Il numero di telefono sembra incompleto: servono almeno 8 cifre.';
     }
     if (!data.privacy) {
-      errors.fieldPrivacy = 'Serve il consenso per poterti ricontattare.';
+      errors.fieldPrivacy = 'Serve il consenso per potervi ricontattare.';
     }
     return errors;
   }
@@ -302,7 +327,7 @@
   if (form) {
     var chk = document.getElementById('inpPrivacy');
     if (chk) chk.addEventListener('change', function(){ if (chk.checked) setFieldError('fieldPrivacy', ''); });
-    ['inpNome','inpLocale','inpEmail'].forEach(function(inputId){
+    ['inpNome','inpLocale','inpCitta','inpEmail','inpTelefono'].forEach(function(inputId){
       var el = document.getElementById(inputId);
       if (!el) return;
       el.addEventListener('input', function(){
@@ -310,17 +335,20 @@
         if (fieldEl && fieldEl.classList.contains('has-error')) setFieldError(fieldEl.id, '');
       });
     });
-
     form.addEventListener('submit', function(e){
       e.preventDefault();
       var data = {
         nome: document.getElementById('inpNome').value,
         locale: document.getElementById('inpLocale').value,
+        citta: document.getElementById('inpCitta').value,
         email: document.getElementById('inpEmail').value,
+        telefono: document.getElementById('inpTelefono').value,
+        serate: document.getElementById('inpSerate').value,
+        casse: document.getElementById('inpCasse').value,
         privacy: document.getElementById('inpPrivacy') ? document.getElementById('inpPrivacy').checked : true
       };
       var errors = validateForm(data);
-      ['fieldNome','fieldLocale','fieldEmail','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
+      ['fieldNome','fieldLocale','fieldCitta','fieldEmail','fieldTelefono','fieldPrivacy'].forEach(function(id){ setFieldError(id, ''); });
       var errorKeys = Object.keys(errors);
       if (errorKeys.length) {
         errorKeys.forEach(function(fieldId){ setFieldError(fieldId, errors[fieldId]); });
@@ -330,13 +358,8 @@
         return;
       }
 
-      var expSelect = document.getElementById('inpEsperienza');
-      var expValue = expSelect ? expSelect.value : 'non-so';
-      var expLabel = ESPERIENZA_LABELS[expValue] || expValue;
-
       function showSuccess(){
         if (successNameEl) successNameEl.textContent = data.nome ? (' ' + data.nome.trim()) : '';
-        if (successExpEl) successExpEl.textContent = expLabel;
 
         /* Il bollino rotante e' un submit del form: senza form non fa piu'
            nulla, quindi esce di scena insieme a lui. */
@@ -392,8 +415,11 @@
       var payload = {
         nome: data.nome.trim(),
         locale: data.locale.trim(),
+        citta: data.citta.trim(),
         email: data.email.trim(),
-        esperienza: expValue,
+        telefono: data.telefono.trim(),
+        serate: data.serate.trim(),
+        casse: data.casse.trim(),
         verticale: form.getAttribute('data-verticale') || '',
         website: hp ? hp.value : '',
         pagina: location.href
@@ -533,61 +559,24 @@
       });
     }
 
-    /* ---- 7. Ingresso del tablet: entra di schiena e si gira con lo scroll.
-       Scrub guidato da lenis.on('scroll') (niente listener nativi): mentre
-       la sezione entra si vede il retro in piccolo; nei primi ~55svh di pin
-       il tablet ruota (rotateY 180 -> 0) e sale a dimensione piena; poi
-       partono i cambi di schermata. Senza Lenis o con reduced-motion la
-       classe js-flip non viene mai messa: tablet dritto da subito. ---- */
-    /* Centering misurato dello stage pinnato: top = (viewport - contenuto)/2.
-       Sostituisce lo stage a schermo pieno, che lasciava fasce vuote. */
-    var stageEl = document.querySelector('.tablet-demo__sticky');
-    var measureStage = function () {
-      if (!stageEl) return;
-      var t = Math.max(8, Math.round((window.innerHeight - stageEl.offsetHeight) / 2));
-      stageEl.style.setProperty('--stage-top', t + 'px');
-    };
-    if (stageEl) {
-      measureStage();
-      window.addEventListener('load', measureStage);
-      window.addEventListener('resize', debounce(measureStage, 150));
-      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measureStage); }
-    }
-
-    var flipRoot = document.querySelector('.tablet-demo');
-    var flipSection = document.getElementById('dentro');
-    var flipTablet = flipRoot ? flipRoot.querySelector('.tablet') : null;
-    if (lenis && flipRoot && flipSection && flipTablet) {
-      flipRoot.classList.add('js-flip');
-      var flipDone = false;
-      var easeOutCubic = function (t) { return 1 - Math.pow(1 - t, 3); };
-      var applyFlip = function () {
-        var rect = flipSection.getBoundingClientRect();
-        var vh = window.innerHeight;
-        var raw;
-        if (rect.top >= 0) {
-          raw = 0; /* la sezione sta ancora entrando: retro, gia' a larghezza piena */
-        } else {
-          raw = Math.min(1, -rect.top / (vh * 0.95)); /* giro lento: ~un viewport di corsa */
-        }
-        if (raw >= 1) {
-          if (!flipDone) {
-            flipDone = true;
-            flipTablet.style.transform = '';
-            flipRoot.classList.add('flip-done');
-          }
-          return;
-        }
-        if (flipDone) { flipDone = false; flipRoot.classList.remove('flip-done'); }
-        var p = easeOutCubic(raw);
-        var rot = 180 * (1 - p);
-        /* solo rotazione: niente scala ne' spostamenti, i bordi restano fissi
-           ai margini per tutta la durata del giro */
-        flipTablet.style.transform = 'rotateY(' + rot + 'deg)';
-      };
-      applyFlip();
-      lenis.on('scroll', applyFlip);
-      window.addEventListener('resize', debounce(applyFlip, 150));
+    /* ---- 7. Ingresso del tablet: slide dal basso quando la sezione entra
+       in vista (stessa meccanica di pizzerie.js). Il giro 3D legato allo
+       scroll (js-flip) e' stato tolto: nei test le persone si bloccavano
+       credendo la pagina rotta. ---- */
+    var revealRoot = document.querySelector('.tablet-demo');
+    if (revealRoot) {
+      var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (noMotion) {
+        revealRoot.classList.add('tablet-in');
+      } else {
+        var inIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { revealRoot.classList.add('tablet-in'); inIO.disconnect(); }
+          });
+        }, { threshold: 0.22 });
+        inIO.observe(revealRoot);
+      }
     }
   })();
 })();
+

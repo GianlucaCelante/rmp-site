@@ -3,15 +3,197 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>c&egrave;lan</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=pizzerie/">
+<title>cèlan - Gestisci il tuo locale o la tua sagra</title>
+<meta name="description" content="Il gestionale per pizzerie, ristoranti e sagre in provincia di Treviso: comande, cassa, cucina e conti di fine serata. Lo montiamo e lo assistiamo noi.">
 <link rel="icon" type="image/png" href="assets/brand/favicon-celan.png">
 <link rel="icon" type="image/svg+xml" href="assets/brand/favicon-celan.svg">
-<script>location.replace('pizzerie/' + location.hash);</script>
-<style>body{font-family:'Archivo',system-ui,sans-serif;background:#E9E9E9;color:#111110;display:grid;place-items:center;min-height:100vh;margin:0}</style>
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+
+<!-- Webfont auto-hostati (assets/fonts): nessuna richiesta a server terzi,
+     cosi' la visita non trasferisce l'IP a Google (vedi privacy/). -->
+<link rel="preload" href="assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="assets/css/consent.css">
 </head>
 <body>
-<p>Reindirizzamento a <a href="pizzerie/">c&egrave;lan, il gestionale per il tuo locale</a>&hellip;</p>
+<nav class="nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand" aria-label="cèlan, connessione continua">
+      <span class="nav-brand__mark" aria-hidden="true">
+        <img class="petal" style="--da:0deg;--d:100ms;--t:380ms" src="assets/brand/petalo-1.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-45deg;--d:142ms;--t:415ms" src="assets/brand/petalo-2.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-90deg;--d:208ms;--t:450ms" src="assets/brand/petalo-3.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-135deg;--d:298ms;--t:485ms" src="assets/brand/petalo-4.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-180deg;--d:412ms;--t:520ms" src="assets/brand/petalo-5.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-225deg;--d:550ms;--t:555ms" src="assets/brand/petalo-6.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-270deg;--d:712ms;--t:590ms" src="assets/brand/petalo-7.webp" alt="" width="176" height="176">
+        <img class="petal" style="--da:-315deg;--d:898ms;--t:625ms" src="assets/brand/petalo-8.webp" alt="" width="176" height="176">
+      </span>
+      <span class="nav-brand__word" aria-hidden="true">
+        <img class="lt" style="--d:260ms" src="assets/brand/parola-1.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:410ms" src="assets/brand/parola-2.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:560ms" src="assets/brand/parola-3.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:710ms" src="assets/brand/parola-4.webp" alt="" width="631" height="322">
+        <img class="lt" style="--d:860ms" src="assets/brand/parola-5.webp" alt="" width="631" height="322">
+        <img class="accent" style="--d:1500ms" src="assets/brand/parola-accento.webp" alt="" width="631" height="322">
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="pizzerie/" class="nav-link nav-hide-mobile">Per il tuo locale</a>
+      <a href="sagre/" class="nav-link nav-hide-mobile">Per la tua sagra</a>
+      <a href="#chi-siamo" class="nav-link nav-hide-mobile">Chi siamo</a>
+    </div>
+  </div>
+</nav>
+<div id="top"></div>
+
+<main>
+<section id="hero" class="hero">
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="hero-marquee__track">
+      <span>GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; </span>
+      <span>GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; </span>
+    </div>
+    <div class="hero-marquee__track hero-marquee__track--rev">
+      <span>RISTORANTE &middot; RISTORANTE &middot; RISTORANTE &middot; RISTORANTE &middot; </span>
+      <span>RISTORANTE &middot; RISTORANTE &middot; RISTORANTE &middot; RISTORANTE &middot; </span>
+    </div>
+    <div class="hero-marquee__track">
+      <span>SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; </span>
+      <span>SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; </span>
+    </div>
+  </div>
+  <div class="wrap hero-inner">
+    <p class="hero-kicker fade-up" style="--i:0">Casse, comande, asporto.<br>Tutto in un unico software.</p>
+    <div class="display-wrap hero-title-wrap">
+      <h1 class="display hero-h1">
+        <span class="line-mask"><span class="line-inner" style="--i:0">GESTISCI IL TUO LOCALE</span></span>
+        <span class="line-mask"><span class="line-inner" style="--i:1">O LA TUA SAGRA.</span></span>
+      </h1>
+    </div>
+    <div class="hero-row">
+      <div class="hero-copy">
+        <div class="hero-ctas">
+          <a href="pizzerie/" class="pill fade-up" style="--i:2">
+            <span>Per il tuo locale</span>
+            <span class="pill-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+          <a href="sagre/" class="pill pill--sagra fade-up" style="--i:3">
+            <span>Per la tua sagra</span>
+            <span class="pill-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#111110" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+    <!-- Spaghetti sulla forchetta (immagine fornita da Gianluca, tagliata sul lato
+               destro: sta attaccata al bordo destro e ondeggia solo in verticale). Decorativa. -->
+          <div class="hero-pasta" aria-hidden="true">
+            <img src="img/spaghetti-forchetta.webp" alt="" width="1200" height="1749" loading="eager" fetchpriority="high">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scegli" class="section-pad scegli">
+  <div class="display-wrap">
+    <h2 class="display">
+      <span class="line-mask"><span class="line-inner" style="--i:0">SCEGLI IL PIANO</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:1">PIÙ ADATTO A TE.</span></span>
+    </h2>
+  </div>
+  <div class="wrap">
+    <div class="scelta-grid">
+      <a class="scelta-card fade-up" style="--i:0" href="pizzerie/">
+        <div class="scelta-card__shell">
+          <div class="scelta-card__core">
+            <div class="scelta-card__img">
+              <img src="img/scelta-pizzerie.webp" width="1400" height="788" alt="Due pizze appena sfornate sul banco, con la pala del pizzaiolo." loading="lazy">
+            </div>
+            <div class="scelta-card__body">
+              <h3 class="scelta-card__title">PIZZERIE, RISTORANTI E LOCALI</h3>
+              <p class="scelta-card__txt">Gestisci il tuo locale, pizzeria (anche solo asporto), bar o ristorante con un unico software veloce e intuitivo.</p>
+              <span class="pill scelta-card__cta">
+                <span>Per il tuo locale</span>
+                <span class="pill-ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </a>
+      <a class="scelta-card fade-up" style="--i:1" href="sagre/">
+        <div class="scelta-card__shell">
+          <div class="scelta-card__core">
+            <div class="scelta-card__img">
+              <img src="img/scelta-sagre.webp" width="1400" height="788" alt="Salsicce e costine sulla griglia a carbone di una festa di paese." loading="lazy">
+            </div>
+            <div class="scelta-card__body">
+              <h3 class="scelta-card__title">SAGRE E FESTE DI PAESE</h3>
+              <p class="scelta-card__txt">Il nostro gestionale è pensato per gestire grandi numeri di clienti in poco tempo e organizzare al meglio il tuo evento.</p>
+              <span class="pill pill--sagra scelta-card__cta">
+                <span>Per la tua sagra</span>
+                <span class="pill-ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#111110" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="chi-siamo" class="section-pad section-dark">
+  <div class="display-wrap">
+    <h2 class="display display-on-dark">
+      <span class="line-mask"><span class="line-inner" style="--i:0">CHI SIAMO.</span></span>
+    </h2>
+  </div>
+  <div class="wrap">
+    <div class="statement">
+      <p class="fade-up">Dietro cèlan ci sono tre fratelli: uno sviluppatore, un graphic designer e Ralby. Il gestionale è nato all'Osteria ai Pioppi di Nervesa della Battaglia, studiato appositamente per gestire grandi numeri di clienti in poco tempo.</p>
+    </div>
+    <a class="cliente-uno cliente-uno--dark fade-up" href="https://www.aipioppi.com/it" target="_blank" rel="noopener">
+      <img src="pizzerie/img/logo-aipioppi.webp" alt="Il logo dell'Osteria ai Pioppi" width="288" height="288">
+      <span class="cliente-uno__txt">
+        <strong>Già in servizio all'Osteria ai Pioppi</strong>
+        <small>Nervesa della Battaglia (TV) · aipioppi.com</small>
+      </span>
+    </a>
+  </div>
+</section>
+</main>
+
+<footer class="footer-wrap">
+  <div class="wrap">
+    <div class="footer">
+      <div class="footer-brand">
+        <img class="footer-logo" src="assets/brand/logo-celan.webp" alt="cèlan" width="1906" height="644">
+        <span>Gestionale per ristoranti, pizzerie, sagre e feste di paese.</span>
+      </div>
+      <div class="footer-links">
+        <a href="pizzerie/">Per il tuo locale</a>
+        <span class="footer-sep">·</span>
+        <a href="sagre/">Per la tua sagra</a>
+        <span class="footer-sep">·</span>
+        <a href="#chi-siamo">Chi siamo</a>
+        <span class="footer-sep">·</span>
+        <a href="privacy/">Privacy e cookie</a>
+        <span class="footer-sep">·</span>
+        <a href="#" data-consent-open>Preferenze cookie</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/home.js"></script>
+<script src="assets/js/consent.js" data-ga-id="G-4ZMKC3B4FJ" data-policy-url="privacy/#cookie"></script>
 </body>
 </html>

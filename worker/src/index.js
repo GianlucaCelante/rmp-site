@@ -77,6 +77,8 @@ function validate(body) {
     email: clean(body.email, 200),
     telefono: clean(body.telefono, 40),
     esperienza: clean(body.esperienza, 20),
+    serate: clean(body.serate, 40),
+    casse: clean(body.casse, 40),
     aggiunte: (Array.isArray(body.aggiunte) ? body.aggiunte : []).slice(0, 10).map((v) => clean(v, 120)).filter(Boolean),
     verticale: clean(body.verticale, 20) || 'sagre',
     pagina: clean(body.pagina, 300)
@@ -185,6 +187,8 @@ function sendNotification(env, lead) {
   if (lead.telefono) coppie.push(['Telefono', link('tel:' + lead.telefono.replace(/[^0-9+]/g, ''), lead.telefono)]);
   coppie.push(['Formula', esc(formulaDi(lead))]);
   if (lead.aggiunte.length) coppie.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
+  if (lead.serate) coppie.push(['Serate', esc(lead.serate)]);
+  if (lead.casse) coppie.push(['Casse', esc(lead.casse)]);
   coppie.push(['Sezione', esc(verticale)]);
 
   const corpo = occhiello('Nuova richiesta') + titolo(dove) + righe(coppie) +
@@ -198,6 +202,8 @@ function sendNotification(env, lead) {
   if (lead.telefono) piatto.push(['Telefono', lead.telefono]);
   piatto.push(['Formula', formulaDi(lead)]);
   if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  if (lead.serate) piatto.push(['Serate', lead.serate]);
+  if (lead.casse) piatto.push(['Casse', lead.casse]);
   piatto.push(['Sezione', verticale]);
 
   const testo = 'NUOVA RICHIESTA - ' + dove + '\n\n' +
@@ -224,6 +230,8 @@ function sendConfirmation(env, lead) {
   const recap = [[sagre ? 'Festa' : 'Locale', esc(lead.locale) + (lead.citta ? ', ' + esc(lead.citta) : '')]];
   if (haScelto(lead)) recap.push(['Formula', esc(formulaDi(lead))]);
   if (lead.aggiunte.length) recap.push(['Aggiunte', esc(lead.aggiunte.join(', '))]);
+  if (lead.serate) recap.push(['Serate', esc(lead.serate)]);
+  if (lead.casse) recap.push(['Casse', esc(lead.casse)]);
 
   /* Nessuna promessa di tempi: "prima possibile" non impegna a una
      scadenza che poi va rispettata anche nelle settimane piene. */
@@ -237,6 +245,8 @@ function sendConfirmation(env, lead) {
   const piatto = [[sagre ? 'Festa' : 'Locale', lead.locale + (lead.citta ? ', ' + lead.citta : '')]];
   if (haScelto(lead)) piatto.push(['Formula', formulaDi(lead)]);
   if (lead.aggiunte.length) piatto.push(['Aggiunte', lead.aggiunte.join(', ')]);
+  if (lead.serate) piatto.push(['Serate', lead.serate]);
+  if (lead.casse) piatto.push(['Casse', lead.casse]);
 
   const testo = 'Grazie ' + lead.nome + ', abbiamo preso in carico la tua richiesta.\n\n' +
     'Ti scriviamo prima possibile con il preventivo per ' + lead.locale + '.\n\n' +
