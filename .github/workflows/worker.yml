@@ -1,0 +1,50 @@
+name: Deploy del Worker su Cloudflare
+
+# Parte solo quando un push su master tocca il Worker (o a mano dal tab
+# Actions): le modifiche al sito restano a deploy.yml.
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'worker/**'
+      - '.github/workflows/worker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - name: Dipendenze
+        run: npm ci
+
+      # Se un test fallisce il deploy non parte: resta in linea la versione di prima.
+      - name: Test
+        run: npm test
+
+      # Il token sta nei secret del repository (CLOUDFLARE_API_TOKEN), mai nel
+      # codice; l'account e' in wrangler.toml. La chiave Brevo non passa di qui:
+      # vive nei secret del Worker e un deploy non la tocca.
+      - name: Deploy
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -38,6 +38,13 @@ npx wrangler deploy
 
 Wrangler stampa l'URL del Worker, tipo `https://rmp-site-form.<account>.workers.dev`.
 
+Dopo il primo deploy non serve piu' farlo a mano: ogni push su `master` che tocca `worker/` avvia `.github/workflows/worker.yml`, che fa girare i test e, se passano, pubblica il Worker. Si puo' lanciare anche a mano dal tab Actions ("Deploy del Worker su Cloudflare" → Run workflow). Il workflow entra in Cloudflare con un token nei secret del repository:
+
+- in Cloudflare: My Profile → API Tokens → Create Token → modello **Edit Cloudflare Workers**, account e zone del sito;
+- in GitHub: Settings → Secrets and variables → Actions → New repository secret, nome `CLOUDFLARE_API_TOKEN` (oppure `gh secret set CLOUDFLARE_API_TOKEN`).
+
+L'account (`account_id`) sta in `wrangler.toml`. La chiave Brevo resta nei secret del Worker: il deploy non la tocca.
+
 4. Nel sito, mettere quell'URL nell'attributo `data-endpoint` del `<form id="quoteForm">` di `sagre/index.html` e `pizzerie/index.html`. Con `data-endpoint` vuoto l'invio è simulato (utile per anteprime).
 
 ## Prova locale

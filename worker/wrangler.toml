@@ -1,6 +1,9 @@
 name = "rmp-site-form"
 main = "src/index.js"
 compatibility_date = "2026-08-01"
+# Account Cloudflare del Worker (non e' un segreto): serve al deploy da
+# GitHub Actions, che entra con un token e non con `wrangler login`.
+account_id = "ebe6f798b85d9f201e057483a7b3ad76"
 
 # Variabili NON segrete. La chiave Brevo va messa come secret:
 #   npx wrangler secret put BREVO_API_KEY

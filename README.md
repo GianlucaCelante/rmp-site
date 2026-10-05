@@ -32,6 +32,7 @@ assets/               risorse condivise tra le sezioni
 worker/               Cloudflare Worker che inoltra il form con Brevo (vedi worker/README.md)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages
+  worker.yml          test e deploy del Worker su Cloudflare (solo se cambia worker/)
 ```
 
 Ogni verticale è autonomo: una cartella con `index.html`, `css/`, `js/`, `img/`. La home segue lo stesso schema, solo che la sua cartella è la radice. Le due landing condividono la stessa impalcatura (nav, hero, tablet, formule, FAQ, form) ma con stile e testi propri, per questo CSS e JS sono per cartella e non condivisi; in `assets/` sta solo ciò che è davvero comune. Le prossime sezioni seguono lo stesso schema.
@@ -47,7 +48,7 @@ Basta aprire `index.html` nel browser. Meglio servirlo via HTTP, così font e im
 
 ## Branch e deploy
 
-- `master`: produzione. Ogni push avvia il workflow `deploy.yml` che pubblica il sito su GitHub Pages.
+- `master`: produzione. Ogni push avvia il workflow `deploy.yml` che pubblica il sito su GitHub Pages. Se il push tocca `worker/`, parte anche `worker.yml`, che pubblica il Worker del form (vedi `worker/README.md`).
 - `develop`: sviluppo. I branch di feature si staccano da `develop` e vi rientrano con pull request; `develop` viene poi unito in `master` per la pubblicazione.
 
 Prima del primo deploy, nelle impostazioni del repository GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
