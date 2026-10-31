@@ -180,3 +180,13 @@ h1,h2,h3,h4,summary{ text-wrap:balance; }
 @keyframes menuStella{ to{ transform:rotate(360deg); } }
 @media (prefers-reduced-motion:reduce){ .nav-panel__star{ animation:none; } }
 
+
+/* Link "Vai al contenuto": visibile solo con il focus da tastiera. */
+.skip-link{
+  position:fixed; top:8px; left:8px; z-index:10000;
+  padding:10px 16px; background:#fff; color:#111110; font:600 14px/1.2 'Archivo',system-ui,sans-serif;
+  border-radius:4px; text-decoration:none;
+  transform:translateY(-200%);
+}
+.skip-link:focus{ transform:none; outline:3px solid #F0563C; outline-offset:2px; }
+main:focus{ outline:none; }

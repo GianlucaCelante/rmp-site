@@ -12,3 +12,7 @@ Thumbs.db
 worker/node_modules/
 worker/.wrangler/
 worker/.dev.vars
+
+# Build del sito
+dist/
+build/node_modules/

@@ -232,7 +232,7 @@
       if (cue) cue.classList.toggle('is-last', i === slides.length - 1);
       if (prevBtn) prevBtn.disabled = (i === 0);
       if (nextBtn) nextBtn.disabled = (i === slides.length - 1);
-      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); d.setAttribute('aria-current', k === i ? 'true' : 'false'); });
     }
 
     /* la schermata "in scena" e' quella che occupa il nastro: root e' il
@@ -647,3 +647,6 @@
   })();
 })();
 
+
+/* "Vai al contenuto": con lo smooth scroll il salto non sposta il focus, lo portiamo noi. */
+(function(){var s=document.querySelector(".skip-link"),m=document.getElementById("contenuto");if(s&&m)s.addEventListener("click",function(){setTimeout(function(){m.focus({preventScroll:true});},0);});})();

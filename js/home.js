@@ -175,6 +175,12 @@
         if (i === sheets.length - 1) { sheet.classList.remove('sheet--pin'); return; }
         var h = sheet.offsetHeight;
         sheet.style.setProperty('--pin-top', Math.min(0, vh - h) + 'px');
+        /* Sosta: un foglio piu' alto dello schermo, una volta fermo col fondo in
+           basso, resta li' per ~metà schermo di scorrimento prima che il
+           successivo salga. Senza, l'ultimo elemento (es. il pulsante "Per la tua
+           sagra") restava libero per un attimo e veniva coperto subito. Il margine
+           cade sotto lo schermo, mentre il foglio e' fermo: non si vede. */
+        sheet.style.marginBottom = (h > vh ? Math.round(vh * 0.5) : 0) + 'px';
         sheet.style.transformOrigin = '50% ' + Math.max(h / 2, h - vh / 2) + 'px';   /* scala attorno alla parte visibile */
         sheet.classList.add('sheet--pin');
       });
@@ -200,3 +206,6 @@
   }
 })();
 
+
+/* "Vai al contenuto": con lo smooth scroll il salto non sposta il focus, lo portiamo noi. */
+(function(){var s=document.querySelector(".skip-link"),m=document.getElementById("contenuto");if(s&&m)s.addEventListener("click",function(){setTimeout(function(){m.focus({preventScroll:true});},0);});})();

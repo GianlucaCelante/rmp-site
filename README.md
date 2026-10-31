@@ -1,6 +1,6 @@
 # rmp-site
 
-Sito vetrina del gestionale per la ristorazione. Sito statico: HTML, CSS e JS puri, nessun build step.
+Sito vetrina del gestionale per la ristorazione. Sito statico: HTML, CSS e JS puri. I sorgenti si aprono e si modificano cosi' come sono (nessun build in locale); il deploy li passa da `build/` che minifica e unisce i CSS in `dist/`.
 
 ## Struttura
 
@@ -34,6 +34,7 @@ assets/               risorse condivise tra le sezioni
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   js/menu.js          menu a pagina piena su telefono
   js/pc.js            scala il PC all-in-one nel suo contenitore
+build/                build per il deploy (esbuild): `cd build && npm ci && npm run build` produce `dist/`
 worker/               Cloudflare Worker che inoltra il form con Brevo (vedi worker/README.md)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="../assets/css/common.css">
 </head>
 <body>
+<a class="skip-link" href="#contenuto">Vai al contenuto</a>
 <nav class="nav nav-on-dark" id="siteNav">
   <div class="nav-inner">
     <a href="../" class="nav-brand" aria-label="cèlan, connessione continua">
@@ -74,7 +75,7 @@
 </nav>
 <div id="top"></div>
 
-<main>
+<main id="contenuto" tabindex="-1">
 <section id="hero" class="hero section-dark">
   <svg class="hero-art v-quadri" viewBox="0 0 200 200" aria-hidden="true"><g stroke="#F0563C" opacity=".7"><g class="h-in" style="--k:0"><g class="sq" style="--t:36s"><rect x="75" y="75" width="50" height="50" fill="none"/></g></g><g class="h-in" style="--k:0.3"><g class="sq" style="--t:42s"><rect x="72" y="72" width="55.9" height="55.9" fill="none"/></g></g><g class="h-in" style="--k:0.7"><g class="sq" style="--t:48s"><rect x="69.1" y="69.1" width="61.8" height="61.8" fill="none"/></g></g><g class="h-in" style="--k:1"><g class="sq" style="--t:54s"><rect x="66.2" y="66.2" width="67.7" height="67.7" fill="none"/></g></g><g class="h-in" style="--k:1.4"><g class="sq" style="--t:60s"><rect x="63.2" y="63.2" width="73.6" height="73.6" fill="none"/></g></g><g class="h-in" style="--k:1.8"><g class="sq" style="--t:66s"><rect x="60.2" y="60.2" width="79.5" height="79.5" fill="none"/></g></g><g class="h-in" style="--k:2.1"><g class="sq" style="--t:72s"><rect x="57.3" y="57.3" width="85.4" height="85.4" fill="none"/></g></g><g class="h-in" style="--k:2.4"><g class="sq" style="--t:78s"><rect x="54.3" y="54.3" width="91.3" height="91.3" fill="none"/></g></g><g class="h-in" style="--k:2.8"><g class="sq" style="--t:84s"><rect x="51.4" y="51.4" width="97.2" height="97.2" fill="none"/></g></g><g class="h-in" style="--k:3.1"><g class="sq" style="--t:90s"><rect x="48.5" y="48.5" width="103.1" height="103.1" fill="none"/></g></g><g class="h-in" style="--k:3.5"><g class="sq" style="--t:96s"><rect x="45.5" y="45.5" width="109" height="109" fill="none"/></g></g><g class="h-in" style="--k:3.8"><g class="sq" style="--t:102s"><rect x="42.5" y="42.5" width="114.9" height="114.9" fill="none"/></g></g><g class="h-in" style="--k:4.2"><g class="sq" style="--t:108s"><rect x="39.6" y="39.6" width="120.8" height="120.8" fill="none"/></g></g><g class="h-in" style="--k:4.5"><g class="sq" style="--t:114s"><rect x="36.6" y="36.6" width="126.7" height="126.7" fill="none"/></g></g><g class="h-in" style="--k:4.9"><g class="sq" style="--t:120s"><rect x="33.7" y="33.7" width="132.6" height="132.6" fill="none"/></g></g><g class="h-in" style="--k:5.2"><g class="sq" style="--t:126s"><rect x="30.8" y="30.8" width="138.5" height="138.5" fill="none"/></g></g></g></svg>
   <div class="wrap hero-inner">
@@ -191,7 +192,7 @@
             <div class="scrolly-row">
               <div class="scrolly-nav">
                 <button type="button" class="tablet-nav tablet-nav--prev" id="tabletPrev" aria-label="Schermata precedente" disabled></button>
-                <div class="scrolly-dots" id="scrollyDots" role="tablist" aria-label="Schermate del gestionale"></div>
+                <div class="scrolly-dots" id="scrollyDots" role="group" aria-label="Schermate del gestionale"></div>
                 <button type="button" class="tablet-nav tablet-nav--next" id="tabletNext" aria-label="Schermata successiva"></button>
               </div>
               <button type="button" class="tablet-lente" id="tabletLente">Ingrandisci</button>
@@ -221,7 +222,7 @@
       </h3>
       <p class="vband__note">Nel canone completo il programma sui telefoni dei camerieri &egrave; compreso.</p>
     </div>
-    <img class="vband__hand" src="img/palmare-mano.webp" alt="Una mano tiene il telefono del cameriere con la comanda del tavolo aperta sul men&ugrave;." width="946" height="1300" loading="lazy">
+    <img class="vband__hand" src="img/palmare-mano.webp" srcset="img/palmare-mano-640.webp 640w, img/palmare-mano.webp 946w" sizes="(max-width:720px) min(70vw,330px), 460px" alt="Una mano tiene il telefono del cameriere con la comanda del tavolo aperta sul men&ugrave;." width="946" height="1300" loading="lazy">
   </div>
 </section>
 

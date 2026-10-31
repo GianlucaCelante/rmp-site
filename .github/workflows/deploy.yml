@@ -27,10 +27,23 @@ jobs:
       - name: Configura Pages
         uses: actions/configure-pages@v5
 
-      - name: Carica il sito (statico, nessun build)
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: build/package-lock.json
+
+      - name: Build (minifica e unisce i CSS, copia solo il sito in dist/)
+        working-directory: build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Carica il sito
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
 
       - name: Deploy
         id: deployment
