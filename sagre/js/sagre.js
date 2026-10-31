@@ -26,7 +26,15 @@
       var targetEl = document.querySelector(href);
       if (!targetEl) return;
       e.preventDefault();
-      smoothScrollTo(targetEl);
+      /* dal menu telefono: lo scroll sotto e' fermo (Lenis in pausa), lo riaccendo prima di partire */
+      if (lenis && document.documentElement.classList.contains('menu-lock')) {
+        /* menu.js chiude il menu subito dopo questo gestore: parto al frame dopo,
+           a pagina gia' sbloccata (altrimenti Lenis non si muove) */
+        lenis.start();
+        requestAnimationFrame(function(){ smoothScrollTo(targetEl); });
+      } else {
+        smoothScrollTo(targetEl);
+      }
       if (history.pushState) history.pushState(null, '', href);
     });
   });
@@ -43,20 +51,37 @@
     navObserver.observe(topSentinel);
   }
 
-  /* Nav invertita mentre la sua fascia attraversa una superficie scura
-     (sezione prezzi E banda video: un Set tiene il conto, cosi' uscire da
-     una non spegne l'inversione se l'altra e' ancora sotto la nav) */
-  var darkSurfaces = document.querySelectorAll('.section-dark, .vband');
-  if (navEl && darkSurfaces.length && 'IntersectionObserver' in window) {
-    var sottoNav = new Set();
-    var darkObserver = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (entry.isIntersecting) sottoNav.add(entry.target);
-        else sottoNav.delete(entry.target);
-      });
-      navEl.classList.toggle('nav-on-dark', sottoNav.size > 0);
-    }, { rootMargin: '0px 0px -' + (window.innerHeight - 80) + 'px 0px', threshold: 0 });
-    darkSurfaces.forEach(function(el){ darkObserver.observe(el); });
+  /* Menu telefono a pagina piena (menu.js mette .menu-open sulla nav e .menu-lock su <html>):
+     Lenis intercetta la rotella e muoverebbe la pagina anche con overflow:hidden, quindi lo
+     fermo finche' il menu e' aperto e lo riaccendo alla chiusura. */
+  if (navEl && lenis && 'MutationObserver' in window) {
+    new MutationObserver(function(){
+      if (navEl.classList.contains('menu-open')) lenis.stop(); else lenis.start();
+    }).observe(navEl, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* Nav invertita quando sotto la sua fascia c'e' davvero una superficie scura.
+     Si guarda l'elemento visibile sotto il centro della nav (non la geometria
+     delle sezioni): con i fogli che salgono una sezione scura puo' restare
+     "sotto" una chiara senza vedersi. */
+  var scuriSel = '.section-dark, .vband';
+  if (navEl && document.elementsFromPoint) {
+    var navAttesa = false;
+    var aggiornaNav = function(){
+      navAttesa = false;
+      var els = document.elementsFromPoint(Math.round(window.innerWidth / 2), Math.round(navEl.offsetHeight / 2));
+      var scuro = false;
+      for (var k = 0; k < els.length; k++) {
+        if (navEl.contains(els[k])) continue;
+        scuro = !!els[k].closest(scuriSel);
+        break;
+      }
+      navEl.classList.toggle('nav-on-dark', scuro);
+    };
+    var chiediNav = function(){ if (!navAttesa) { navAttesa = true; requestAnimationFrame(aggiornaNav); } };
+    window.addEventListener('scroll', chiediNav, { passive: true });
+    window.addEventListener('resize', chiediNav);
+    aggiornaNav();
   }
 
   /* La banda video si accende: arriva chiara come la pagina e vira al nero
@@ -164,7 +189,7 @@
     if (!root || !('IntersectionObserver' in window)) return;
     root.classList.add('js-ready');
 
-    var tablet = root.querySelector('.tablet');
+    var tablet = root.querySelector('.pc-wrap');
     var labels = [
       'Demo cassa: menu fotografico con giacenze e ordine in corso.',
       'Demo cassa: quantita rapide ed esauriti condivisi.',
@@ -243,6 +268,48 @@
       vaiA(current + (e.deltaX > 0 ? 1 : -1));
       setTimeout(function () { wheelLock = false; }, 420);
     }, { passive: false });
+    /* trascinamento col mouse (su desktop): il nastro nativo si sfoglia solo con
+       dito, rotella o tastiera. Qui il gesto del mouse sposta il nastro, che e'
+       scalato e in prospettiva dentro il PC: 1 px a schermo = 1/(k*0.67) px del nastro
+       (0,67 = scala orizzontale della matrix3d dello schermo 'specchio'). Al rilascio
+       si aggancia alla schermata piu' vicina nel verso del gesto. */
+    var pcEl = root.querySelector('.pc');
+    var drag = null;
+    track.style.cursor = 'grab';
+    track.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x: e.clientX, left: track.scrollLeft, idx: current, moved: false };
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) < 5) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        track.style.scrollSnapType = 'none';
+        track.style.scrollBehavior = 'auto';
+        track.style.cursor = 'grabbing';
+      }
+      var k = parseFloat(pcEl && pcEl.style.getPropertyValue('--k')) || 1;
+      track.scrollLeft = drag.left - dx / (k * 0.67);
+    });
+    function finisciDrag(e) {
+      if (!drag) return;
+      var d = drag; drag = null;
+      if (!d.moved) return;
+      var dx = e.clientX - d.x;
+      track.style.scrollSnapType = '';
+      track.style.scrollBehavior = '';
+      track.style.cursor = 'grab';
+      var dest = d.idx;
+      if (dx < -40) dest = d.idx + 1; else if (dx > 40) dest = d.idx - 1;
+      vaiA(dest);
+    }
+    window.addEventListener('pointerup', finisciDrag);
+    window.addEventListener('pointercancel', finisciDrag);
+    /* niente trascinamento "fantasma" dell'immagine */
+    track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
     /* la prima volta che il nastro entra bene in vista, un piccolo scivolo
        laterale mostra che le schermate scorrono. Solo una volta, mai se
        l'utente ha gia' toccato, mai con reduced motion. */

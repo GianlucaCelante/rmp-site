@@ -1,0 +1,20 @@
+/* ==========================================================================
+   cèlan - bottoni coordinati (caricato da tutte le pagine, dopo il CSS di pagina)
+   Stesso linguaggio del logo: angoli netti, il colore lo decide ogni pagina (rosso sul sito, giallo nelle sagre). Vale per .pill (home, pizzerie, sagre), per i tasti del
+   banner cookie e per il pulsante Menu del telefono.
+   ========================================================================== */
+.pill,
+.pill--sagra{
+  border-radius:0;
+}
+.pill-ic{ border-radius:0; }
+
+/* banner cookie: "Accetta" pieno, "Rifiuta" resta etichetta */
+.consent__btn{ border-radius:0; }
+
+/* pulsante Menu: stesso bordo netto */
+.nav-menu-btn{ border-radius:0; }
+
+/* riquadro del banner cookie: angoli netti come i bottoni */
+.consent__box{ border-radius:0; }
+

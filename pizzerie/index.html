@@ -14,13 +14,15 @@
 <link rel="preload" href="../assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/fonts.css">
-<link rel="stylesheet" href="css/pizzerie.css">
+<link rel="stylesheet" href="../pizzerie/css/pizzerie.css">
 <link rel="stylesheet" href="../assets/css/consent.css">
+<link rel="stylesheet" href="../assets/css/bottoni.css">
+<link rel="stylesheet" href="../assets/css/common.css">
 </head>
 <body>
-<nav class="nav" id="siteNav">
+<nav class="nav nav-on-dark" id="siteNav">
   <div class="nav-inner">
-    <a href="../" class="nav-brand" aria-label="cèlan, torna alla home">
+    <a href="../" class="nav-brand" aria-label="cèlan, connessione continua">
       <span class="nav-brand__mark" aria-hidden="true">
         <img class="petal" style="--da:0deg;--d:100ms;--t:380ms" src="../assets/brand/petalo-1.webp" alt="" width="176" height="176">
         <img class="petal" style="--da:-45deg;--d:142ms;--t:415ms" src="../assets/brand/petalo-2.webp" alt="" width="176" height="176">
@@ -40,6 +42,10 @@
         <img class="accent" style="--d:1500ms" src="../assets/brand/parola-accento.webp" alt="" width="631" height="322">
       </span>
     </a>
+    <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPanel">
+      <span class="nav-menu-btn__ic" aria-hidden="true"><i></i><i></i></span>
+      <span class="nav-menu-btn__lbl">Menu</span>
+    </button>
     <div class="nav-links">
       <a href="#cosa-fa" class="nav-link nav-hide-mobile">Cosa fa</a>
       <a href="#tagli" class="nav-link nav-hide-mobile">Prezzo</a>
@@ -47,55 +53,38 @@
       <a href="#contatti" class="nav-cta">Richiedi il preventivo</a>
     </div>
   </div>
+  <!-- Menu a pagina piena su telefono (stile in assets/css/comune.css, logica in assets/js/menu.js) -->
+  <div class="nav-panel" id="navPanel" role="dialog" aria-label="Menu">
+    <ul class="nav-panel__list">
+      <li><a href="../#gestionale">Gestionale</a></li>
+      <li><a href="../#siti"><span>Siti ed <span class="nw">e-commerce</span></span></a></li>
+      <li><a href="../#su-misura">Su misura</a></li>
+      <li><a href="../#chi-siamo">Chi siamo</a></li>
+    </ul>
+    <div class="nav-panel__marquee" aria-hidden="true">
+      <div class="hero-marquee__track" style="--d:109s"><span>GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; </span><span>GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; GESTIONALE &middot; </span></div>
+      <div class="hero-marquee__track hero-marquee__track--rev" style="--d:68s"><span>SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; </span><span>SAGRA &middot; SAGRA &middot; SAGRA &middot; SAGRA &middot; </span></div>
+    </div>
+    <div class="nav-panel__foot">
+      <span class="nav-panel__tag">Scrivici:</span>
+      <a href="mailto:celan.rmp@gmail.com">celan.rmp@gmail.com</a>
+    </div>
+    <span class="nav-panel__star" aria-hidden="true"></span>
+  </div>
 </nav>
 <div id="top"></div>
 
 <main>
-<section id="hero" class="hero">
-    <div class="hero-marquee" aria-hidden="true">
-      <div class="hero-marquee__track">
-        <span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span>
-        <span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span>
-      </div>
-      <div class="hero-marquee__track hero-marquee__track--rev">
-        <span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span>
-        <span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span>
-      </div>
-      <div class="hero-marquee__track">
-        <span>FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; </span>
-        <span>FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; FUNZIONALE &middot; </span>
-      </div>
-    </div>
-  <div class="wrap">
-    <div class="hero-top">
-      <p class="hero-kicker fade-up">Prende le comande al banco, al telefono e ai tavoli e le manda in cucina.</p>
-    </div>
-  </div>
-  <div class="display-wrap hero-title">
-    <h1 class="display reveal-onload">
-      <span class="line-mask"><span class="line-inner" style="--i:0">IL GESTIONALE</span></span>
-      <span class="line-mask"><span class="line-inner" style="--i:1">PER IL TUO LOCALE.</span></span>
+<section id="hero" class="hero section-dark">
+  <svg class="hero-art v-quadri" viewBox="0 0 200 200" aria-hidden="true"><g stroke="#F0563C" opacity=".7"><g class="h-in" style="--k:0"><g class="sq" style="--t:36s"><rect x="75" y="75" width="50" height="50" fill="none"/></g></g><g class="h-in" style="--k:0.3"><g class="sq" style="--t:42s"><rect x="72" y="72" width="55.9" height="55.9" fill="none"/></g></g><g class="h-in" style="--k:0.7"><g class="sq" style="--t:48s"><rect x="69.1" y="69.1" width="61.8" height="61.8" fill="none"/></g></g><g class="h-in" style="--k:1"><g class="sq" style="--t:54s"><rect x="66.2" y="66.2" width="67.7" height="67.7" fill="none"/></g></g><g class="h-in" style="--k:1.4"><g class="sq" style="--t:60s"><rect x="63.2" y="63.2" width="73.6" height="73.6" fill="none"/></g></g><g class="h-in" style="--k:1.8"><g class="sq" style="--t:66s"><rect x="60.2" y="60.2" width="79.5" height="79.5" fill="none"/></g></g><g class="h-in" style="--k:2.1"><g class="sq" style="--t:72s"><rect x="57.3" y="57.3" width="85.4" height="85.4" fill="none"/></g></g><g class="h-in" style="--k:2.4"><g class="sq" style="--t:78s"><rect x="54.3" y="54.3" width="91.3" height="91.3" fill="none"/></g></g><g class="h-in" style="--k:2.8"><g class="sq" style="--t:84s"><rect x="51.4" y="51.4" width="97.2" height="97.2" fill="none"/></g></g><g class="h-in" style="--k:3.1"><g class="sq" style="--t:90s"><rect x="48.5" y="48.5" width="103.1" height="103.1" fill="none"/></g></g><g class="h-in" style="--k:3.5"><g class="sq" style="--t:96s"><rect x="45.5" y="45.5" width="109" height="109" fill="none"/></g></g><g class="h-in" style="--k:3.8"><g class="sq" style="--t:102s"><rect x="42.5" y="42.5" width="114.9" height="114.9" fill="none"/></g></g><g class="h-in" style="--k:4.2"><g class="sq" style="--t:108s"><rect x="39.6" y="39.6" width="120.8" height="120.8" fill="none"/></g></g><g class="h-in" style="--k:4.5"><g class="sq" style="--t:114s"><rect x="36.6" y="36.6" width="126.7" height="126.7" fill="none"/></g></g><g class="h-in" style="--k:4.9"><g class="sq" style="--t:120s"><rect x="33.7" y="33.7" width="132.6" height="132.6" fill="none"/></g></g><g class="h-in" style="--k:5.2"><g class="sq" style="--t:126s"><rect x="30.8" y="30.8" width="138.5" height="138.5" fill="none"/></g></g></g></svg>
+  <div class="wrap hero-inner">
+    <div class="display-wrap hero-title">
+      <h1 class="display hero-h1 reveal-onload">
+      <span class="line-mask"><span class="line-inner" style="--i:0">IL<br class="br-m"> GESTIONALE</span></span>
+      <span class="line-mask"><span class="line-inner" style="--i:1">PER IL<br class="br-m"> TUO LOCALE.</span></span>
           </h1>
-  </div>
-  <div class="wrap">
-    <div class="hero-visual">
-      <div class="hero-circle">
-        <span class="pop"><a href="#contatti" class="circle-cta" aria-label="Richiedi il preventivo">
-          <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-            <defs><path id="cta-ring-a" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-            <text><textPath href="#cta-ring-a" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
-          </svg>
-          <span class="circle-cta__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-        </a></span>
-      </div>
-      <!-- Fetta fotografica che levita (immagine fornita da Gianluca, scontornata,
-           stessa inclinazione della vecchia 3D). Decorativa: aria-hidden. -->
-      <div class="hero-pizza" aria-hidden="true">
-        <img src="img/pizza-fetta.webp" alt="" width="640" height="483" loading="lazy" onerror="this.closest('.hero-pizza').style.display='none'">
-      </div>
     </div>
+    <p class="hero-sub fade-up">Prende le comande al banco, al telefono e ai tavoli e le manda in cucina.</p>
   </div>
 </section>
 <!-- Primo foglio dello stack: solo look (radius+ombra+overlap sull'hero).
@@ -119,31 +108,39 @@
         <div class="step-trigger" data-index="0"></div>
       </div>
       <div class="tablet-demo__sticky">
-        <h2 class="display display--sm tablet-demo__title">
+        <h2 class="display tablet-demo__title">
           <span class="line-mask"><span class="line-inner" style="--i:0">IL GESTIONALE.</span></span>
         </h2>
         <div class="tablet-demo__row">
-        <div class="tablet" role="img" aria-label="Schermata comande: presa ordini al banco e al telefono.">
-          <span class="tablet__cam"></span>
-          <span class="tablet__back" aria-hidden="true"></span>
-          <span class="tablet__ply" style="--z:-2.8px" aria-hidden="true"></span>
-          <span class="tablet__ply" style="--z:-5.6px" aria-hidden="true"></span>
-          <span class="tablet__ply" style="--z:-8.4px" aria-hidden="true"></span>
-          <span class="tablet__ply" style="--z:-11.2px" aria-hidden="true"></span>
-          <div class="tablet__screen">
-            <!-- Solo -touch, non il prevent totale: lo smooth scroll deve
-                 mollare il dito (altrimenti la sfogliata non parte) ma tenersi
-                 la rotella, se no lo scorrimento verticale sopra il tablet
-                 diventa quello ruvido del browser. -->
-            <div class="tablet__track" id="tabletTrack" data-lenis-prevent-touch tabindex="0" role="group" aria-label="Schermate del gestionale: scorri di lato per vedere le altre">
-              <img class="tablet__slide" data-index="0" loading="eager" width="1440" height="900" src="img/schermata-comande.webp" alt="">
-              <img class="tablet__slide" data-index="1" loading="lazy" width="1440" height="900" src="img/schermata-forno.webp" alt="">
-              <img class="tablet__slide" data-index="2" loading="lazy" width="1440" height="900" src="img/schermata-sala.webp" alt="">
-              <img class="tablet__slide" data-index="3" loading="lazy" width="1440" height="900" src="img/schermata-rubrica.webp" alt="">
-              <img class="tablet__slide" data-index="4" loading="lazy" width="1440" height="900" src="img/schermata-prenotazioni.webp" alt="">
-              <img class="tablet__slide" data-index="5" loading="lazy" width="1440" height="900" src="img/schermata-storico.webp" alt="">
-              <img class="tablet__slide" data-index="6" loading="lazy" width="1440" height="900" src="img/schermata-panetti.webp" alt="">
-              <img class="tablet__slide" data-index="7" loading="lazy" width="1440" height="900" src="img/schermata-aspetto.webp" alt="">
+        <!-- PC all-in-one al posto del tablet: la foto ha lo schermo forato, il nastro
+             delle schermate (1600x900, 16:9) sta SOTTO la foto, deformato in prospettiva
+             da .pc--normale (assets/css/comune.css). Carosello, frecce, pallini e galleria
+             sono quelli di prima. Dietro, due righe di parole a contorno che scorrono. -->
+        <div class="pcdemo" role="img" aria-label="Schermata comande: presa ordini al banco e al telefono.">
+          <div class="pcdemo__marquee" aria-hidden="true">
+            <div class="hero-marquee__track" style="--d:94s"><span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span><span>SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; SEMPLICE &middot; </span></div>
+            <div class="hero-marquee__track hero-marquee__track--rev" style="--d:73s"><span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span><span>VELOCE &middot; VELOCE &middot; VELOCE &middot; VELOCE &middot; </span></div>
+            <div class="hero-marquee__track" style="--d:86s"><span>COMANDE &middot; COMANDE &middot; COMANDE &middot; COMANDE &middot; </span><span>COMANDE &middot; COMANDE &middot; COMANDE &middot; COMANDE &middot; </span></div>
+          </div>
+          <div class="pc-wrap">
+            <div class="pc pc--normale">
+              <div class="pc__screen">
+                <!-- Solo -touch, non il prevent totale: lo smooth scroll deve
+                     mollare il dito (altrimenti la sfogliata non parte) ma tenersi
+                     la rotella, se no lo scorrimento verticale sopra lo schermo
+                     diventa quello ruvido del browser. -->
+                <div class="tablet__track" id="tabletTrack" data-lenis-prevent-touch tabindex="0" role="group" aria-label="Schermate del gestionale: scorri di lato per vedere le altre">
+                  <img class="tablet__slide" data-index="0" loading="eager" width="1440" height="900" src="img/schermata-comande.webp" alt="">
+                  <img class="tablet__slide" data-index="1" loading="lazy" width="1440" height="900" src="img/schermata-forno.webp" alt="">
+                  <img class="tablet__slide" data-index="2" loading="lazy" width="1440" height="900" src="img/schermata-sala.webp" alt="">
+                  <img class="tablet__slide" data-index="3" loading="lazy" width="1440" height="900" src="img/schermata-rubrica.webp" alt="">
+                  <img class="tablet__slide" data-index="4" loading="lazy" width="1440" height="900" src="img/schermata-prenotazioni.webp" alt="">
+                  <img class="tablet__slide" data-index="5" loading="lazy" width="1440" height="900" src="img/schermata-storico.webp" alt="">
+                  <img class="tablet__slide" data-index="6" loading="lazy" width="1440" height="900" src="img/schermata-panetti.webp" alt="">
+                  <img class="tablet__slide" data-index="7" loading="lazy" width="1440" height="900" src="img/schermata-aspetto.webp" alt="">
+                </div>
+              </div>
+              <img class="pc__photo" src="img/pc-gestionale.webp" alt="" width="934" height="888">
             </div>
           </div>
         </div>
@@ -225,16 +222,6 @@
       <p class="vband__note">Nel canone completo il programma sui telefoni dei camerieri &egrave; compreso.</p>
     </div>
     <img class="vband__hand" src="img/palmare-mano.webp" alt="Una mano tiene il telefono del cameriere con la comanda del tavolo aperta sul men&ugrave;." width="946" height="1300" loading="lazy">
-    <!-- stesso bollino rotante dell'header: anello che gira, icona al centro -->
-    <span class="pop vband__playwrap"><span class="circle-cta circle-cta--static" aria-hidden="true">
-      <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-        <defs><path id="cta-ring-v" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-        <text><textPath href="#cta-ring-v" textLength="496" lengthAdjust="spacingAndGlyphs">VELOCIZZA IL SERVIZIO &#183; VELOCIZZA IL SERVIZIO &#183; </textPath></text>
-      </svg>
-      <span class="circle-cta__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M13 2.5 L5.5 13.5 H11 L9.6 21.5 L18.5 9.8 H12.4 Z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
-      </span>
-    </span></span>
   </div>
 </section>
 
@@ -246,11 +233,6 @@
   </div>
 </section>
 <section id="tagli" class="pricing section-pad section-dark sheet" style="--sheet-i:2">
-  <!-- Pomodoro fotografico (immagine fornita da Gianluca, scontornata e
-       inclinata come la fetta nell'hero). Decorativo. -->
-  <div class="veg veg--tagli" aria-hidden="true">
-    <img src="img/pomodoro.webp" alt="" width="480" height="443" loading="lazy" onerror="this.closest('.veg').style.display='none'">
-  </div>
   <div class="display-wrap pricing-head-row">
     <h2 class="display display-on-dark">
       <span class="line-mask"><span class="line-inner" style="--i:0">IL PREZZO.</span></span>
@@ -355,11 +337,11 @@
     </div>
 
     <div class="fisc-intro fade-up">
-      <h3 class="extras__title fisc-intro__title">L'attrezzatura ti aiutiamo a comprarla,<br>la parte fiscale non la seguiamo</h3>
+      <h3 class="extras__title fisc-intro__title">L'attrezzatura te la forniamo noi,<br class="br-d"> la parte fiscale non la seguiamo</h3>
     </div>
     <div class="fisc fade-up">
-      <h3 class="fisc__title">L'attrezzatura, al prezzo del negozio</h3>
-      <p class="fisc__txt">Nel preventivo trovi la lista di casse, tablet e stampanti che servono al tuo locale, modello per modello. Ti aiutiamo a comprarli e li paghi quello che costano in negozio: noi non ci mettiamo ricarichi.</p>
+      <h3 class="fisc__title">L'attrezzatura, a&nbsp;noleggio o in vendita</h3>
+      <p class="fisc__txt">Nel preventivo trovi la lista di casse, tablet e stampanti che servono al tuo locale, modello per modello. Te li forniamo noi: puoi prenderli a noleggio oppure comprarli, come ti conviene di pi&ugrave;.</p>
       <p class="fisc__txt">Se qualcosa ce l'hai gi&agrave;, al sopralluogo vediamo cosa si pu&ograve; tenere. Montaggio e configurazione sono compresi nell'avvio.</p>
     </div>
 
@@ -373,43 +355,7 @@
 </section>
 
 
-<!-- Chi siamo: la risposta a "chi c'e' dietro", subito dopo il prezzo,
-     dove il dubbio nasce. Testo onesto: niente clienti citati finche'
-     non ci sono, niente anni inventati. Nomi e foto quando Gianluca li da'. -->
-<section id="chi-siamo" class="section-pad sheet" style="--sheet-i:3">
-  <div class="display-wrap">
-    <h2 class="display">
-      <span class="line-mask"><span class="line-inner" style="--i:0">DIETRO AL PROGETTO.</span></span>
-    </h2>
-  </div>
-  <div class="wrap">
-    <div class="statement" style="margin-bottom:42px;">
-      <p class="fade-up">Dietro c&egrave;lan ci sono uno sviluppatore e un graphic designer della provincia di Treviso. Sopralluogo, installazione e assistenza li facciamo di persona: chi ti risponde al telefono &egrave; chi ha creato e installato il sistema nel tuo locale, non avrai centralini come intermediari.</p>
-    </div>
-    <div class="rows">
-      <div class="row row--plain fade-up" style="--i:0">
-        <div class="row-head">
-          <span class="row-title">Come lavoriamo</span>
-          <span class="row-desc">Prima dell'installazione raccogliamo il men&ugrave; e la lista dei clienti, cos&igrave; li trovi gi&agrave; caricati. Il giorno fissato arriviamo, montiamo, configuriamo e andiamo via con il sistema acceso.</span>
-        </div>
-      </div>
-      <div class="row row--plain fade-up" style="--i:1">
-        <div class="row-head">
-          <span class="row-title">Quando chiami</span>
-          <span class="row-desc">La tua configurazione la conosciamo perch&eacute; l'abbiamo fatta noi: capiamo subito dov'&egrave; il problema e si risolve prima.</span>
-        </div>
-      </div>
-    </div>
-    <a class="cliente-uno fade-up" href="https://www.aipioppi.com/it" target="_blank" rel="noopener">
-      <img src="img/logo-aipioppi.webp" alt="Il logo dell'Osteria ai Pioppi" width="288" height="288">
-      <span class="cliente-uno__txt">
-        <strong>Gi&agrave; in servizio all'Osteria ai Pioppi</strong>
-        <small>Nervesa della Battaglia (TV) &middot; aipioppi.com</small>
-      </span>
-    </a>
-  </div>
-</section>
-<section id="domande" class="section-pad sheet" style="--sheet-i:4">
+<section id="domande" class="section-pad sheet" style="--sheet-i:3">
   <div class="display-wrap">
     <h2 class="display">
       <span class="line-mask"><span class="line-inner" style="--i:0">DOMANDE.</span></span>
@@ -453,6 +399,12 @@
           <span class="row-desc">Men&ugrave;, clienti e storico degli ordini si esportano in un file quando vuoi, anche il giorno che decidi di cambiare sistema.</span>
         </div>
       </div>
+      <div class="row row--plain fade-up" style="--i:6">
+        <div class="row-head">
+          <span class="row-title">Funziona anche per sagre e feste di paese?</span>
+          <span class="row-desc">S&igrave;, con una formula a evento e l'attrezzatura a noleggio. &Egrave; spiegata nella <a href="../sagre/">pagina per le sagre</a>.</span>
+        </div>
+      </div>
 
     </div>
     <div class="faq-list">
@@ -467,26 +419,17 @@
     </div>
   </div>
 </section>
-<section id="contatti" class="section-pad sheet" style="--sheet-i:5">
+<section id="contatti" class="section-pad sheet" style="--sheet-i:4">
   <div class="display-wrap">
     <div class="closing-grid">
       <h2 class="display closing-title">
         <span class="line-mask"><span class="line-inner" style="--i:0">IL</span></span>
         <span class="line-mask"><span class="line-inner" style="--i:1">PREVENTIVO.</span></span>
       </h2>
-      <span class="pop"><button type="submit" form="quoteForm" class="circle-cta" aria-label="Richiedi il preventivo">
-        <svg class="circle-cta__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-          <defs><path id="cta-ring-b" d="M 100,100 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0"/></defs>
-          <text><textPath href="#cta-ring-b" textLength="496" lengthAdjust="spacingAndGlyphs">RICHIEDI IL PREVENTIVO &#183; RICHIEDI IL PREVENTIVO &#183; </textPath></text>
-        </svg>
-        <span class="circle-cta__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 18 L18 6 M8 6 H18 V16" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </button></span>
     </div>
   </div>
   <div class="wrap">
-    <form class="closing-form fade-up" id="quoteForm" novalidate data-endpoint="https://rmp-site-form.gianluca-celante.workers.dev" data-verticale="pizzerie">
+    <form class="closing-form fade-up" id="quoteForm" novalidate data-endpoint="" data-verticale="pizzerie">
       <!-- honeypot anti-spam: invisibile, i bot lo compilano -->
       <div class="hp" aria-hidden="true"><label for="inpWebsite">Sito web</label><input type="text" id="inpWebsite" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="field" id="fieldNome">
@@ -558,9 +501,9 @@
         <span class="footer-sep">&middot;</span>
         <a href="#tagli">Prezzo</a>
         <span class="footer-sep">&middot;</span>
-        <a href="#chi-siamo">Chi siamo</a>
-        <span class="footer-sep">&middot;</span>
         <a href="#domande">Domande</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="../sagre/">Per la tua sagra</a>
         <span class="footer-sep">&middot;</span>
         <a href="../privacy/">Privacy e cookie</a>
         <span class="footer-sep">&middot;</span>
@@ -608,7 +551,9 @@
 </main>
 
 <script src="../assets/js/lenis.min.js"></script>
-<script src="js/pizzerie.js"></script>
+<script src="../pizzerie/js/pizzerie.js"></script>
+<script src="../assets/js/menu.js"></script>
+<script src="../assets/js/pc.js"></script>
 <script src="../assets/js/consent.js" data-ga-id="G-4ZMKC3B4FJ" data-policy-url="../privacy/#cookie"></script>
 </body>
 </html>

@@ -1,0 +1,182 @@
+/* ==========================================================================
+   cèlan - elementi comuni a tutte le pagine (caricato DOPO il CSS di pagina)
+   1. scorrimento continuo delle parole a contorno (hero e menu)
+   2. menu a pagina piena su telefono (<=760px)
+   3. PC all-in-one con lo schermo vivo (.pc), vedi in fondo
+   0. scala tipografica unica (qui sotto): ogni pagina usa questi token,
+      niente taglie scritte a mano nei CSS di pagina
+   ========================================================================== */
+
+/* ---------- 0. Scala tipografica ----------
+   Anton (titoli, maiuscolo) + Archivo (testo). Un gradino per ruolo, uguale in tutte le pagine:
+   --fs-display    titoloni neri H1/H2 (54-88 telefono, 64-108 tablet, 72-148 desktop)
+   --fs-statement  frase grande in Archivo (intro di sezione, statement)       24 -> 40
+   --fs-h3         titoli in Anton di righe e card (servizi, gestionale)       26 -> 44
+   --fs-title      titoli in Archivo bold di blocchi e card                    22 -> 28
+   --fs-lead       sottotitoli, testo d'apertura, titoli di riga/FAQ/voci      18 -> 20
+   --fs-body       testo corrente                                              16
+   --fs-small      note, moduli, piede pagina, menu in alto, testo nei prezzi  14
+   --fs-label      etichette maiuscole spaziate                                12
+   --fs-button     testo dei bottoni                                           18
+   Eccezioni dichiarate (fuori scala, volute): .offer__amount (cifra del prezzo),
+   .closing-title sagre e #titoloSiti home su telefono (si adattano alla larghezza),
+   h1 della privacy, .vband__display di pizzerie ("LA COMANDA / NASCE AL TAVOLO": con --fs-display
+   la seconda riga va a capo da 768px in giu' e a 1440 tocca il cerchio), scritte a contorno che
+   scorrono, testo nel cerchio "Richiedi il preventivo". */
+:root{
+  --fs-display:   clamp(54px, 19vw, 88px);
+  --fs-statement: clamp(24px, 3vw, 40px);
+  --fs-h3:        clamp(26px, 3.2vw, 44px);
+  --fs-title:     clamp(22px, 2vw, 28px);
+  --fs-lead:      clamp(18px, 1.4vw, 20px);
+  --fs-body:      16px;
+  --fs-small:     14px;
+  --fs-label:     12px;
+  --fs-button:    18px;
+
+  --lh-h3:    1.02;   /* Anton */
+  --lh-title: 1.25;   /* titoli Archivo e statement */
+  --lh-item:  1.3;    /* titoli di riga, FAQ, voci */
+  --lh-lead:  1.5;
+  --lh-body:  1.55;
+  --lh-small: 1.45;
+  --ls-label: .08em;
+}
+@media (min-width:601px){ :root{ --fs-display:clamp(64px, 12vw, 108px); } }
+@media (min-width:901px){ :root{ --fs-display:clamp(72px, 9.5vw, 148px); } }
+/* titoli in Archivo/Anton senza parola sola in fondo; le righe dei titoloni (.line-inner) restano come sono */
+h1,h2,h3,h4,summary{ text-wrap:balance; }
+
+/* il track e' largo quanto il suo testo: cosi' translateX(-50%) = esattamente una copia e il giro e' continuo.
+   Durata per riga in --d (stesso passo in em/secondo per tutte). */
+.hero-marquee__track{ width:max-content; animation-duration:var(--d,24s); }
+
+/* ---- Menu telefono (<=760px): pulsante + pannello a tutta larghezza ---- */
+.nav-menu-btn{ display:none; }
+.nav-panel{ display:none; }
+@media (max-width:760px){
+  .nav-hide-mobile{ display:none; }
+  .nav-links{ display:none; }              /* vuoto su telefono: non deve spingere il pulsante */
+  .nav-menu-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    min-height:44px; padding:0 18px;
+    background:transparent; color:var(--ink);
+    border:1.5px solid var(--ink); border-radius:0;
+    font:600 var(--fs-small)/1 'Archivo',sans-serif; cursor:pointer;
+    transition:background-color .3s var(--ease), color .3s var(--ease);
+  }
+  .nav.nav-on-dark .nav-menu-btn{ color:var(--card); border-color:var(--card); }
+  .nav-menu-btn__ic{ position:relative; width:16px; height:10px; flex:0 0 auto; }
+  .nav-menu-btn__ic i{
+    position:absolute; left:0; right:0; height:2px; border-radius:2px; background:currentColor;
+    transition:transform .45s var(--ease), top .45s var(--ease);
+  }
+  .nav-menu-btn__ic i:nth-child(1){ top:1px; }
+  .nav-menu-btn__ic i:nth-child(2){ top:7px; }
+  .nav.menu-open .nav-menu-btn__ic i:nth-child(1){ top:4px; transform:rotate(45deg); }
+  .nav.menu-open .nav-menu-btn__ic i:nth-child(2){ top:4px; transform:rotate(-45deg); }
+
+  /* aperto: pagina piena, nera, titoloni in Anton come il resto del sito */
+  .nav-inner{ position:relative; z-index:2; }
+  .nav.menu-open{ background:var(--dark); backdrop-filter:none; -webkit-backdrop-filter:none; }
+  .nav.menu-open .nav-brand,
+  .nav.menu-open .nav-menu-btn{ color:var(--card); border-color:var(--card); }
+  .nav.menu-open .nav-brand__word .lt{ filter:brightness(0) invert(1); }
+
+  .nav-panel{
+    display:flex; flex-direction:column;
+    position:fixed; inset:0; z-index:1; height:100dvh;
+    background:var(--dark); color:var(--card);
+    padding:calc(var(--nav-h) + clamp(16px,5vh,40px)) var(--wrap-pad) max(28px, env(safe-area-inset-bottom));
+    overflow:hidden;
+    visibility:hidden; opacity:0;
+    transition:opacity .35s var(--ease), visibility 0s linear .35s;
+  }
+  .nav.menu-open .nav-panel{
+    visibility:visible; opacity:1;
+    transition:opacity .35s var(--ease), visibility 0s;
+  }
+  .nav-panel__list{ position:relative; z-index:1; border-top:1px solid var(--line-inv); }
+  .nav-panel__list li{ border-bottom:1px solid var(--line-inv); }
+  .nav-panel__list a{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:clamp(14px,2.6vh,22px) 0;
+    font-family:'Anton',sans-serif; text-transform:uppercase; font-weight:400;
+    font-size:clamp(40px,12vw,56px); line-height:1.02;   /* stessa taglia su tutte le pagine (in pizzerie le voci sono 5) */ letter-spacing:-.005em;
+    color:var(--card); text-decoration:none;
+    transition:color .25s var(--ease);
+  }
+  .nav-panel__list a::after{                 /* freccia diagonale rossa, come nei bottoni */
+    content:""; flex:0 0 auto; width:26px; height:26px; background:var(--accent);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='square'%3E%3Cpath d='M6 18 L18 6 M8 6 H18 V16'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='square'%3E%3Cpath d='M6 18 L18 6 M8 6 H18 V16'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  .nav-panel__list .nw{ white-space:nowrap; }
+  .nav-panel__list a:active,
+  .nav-panel__list a:focus-visible{ color:var(--accent); }
+
+  /* le voci entrano una dopo l'altra */
+  .nav-panel__list li{ opacity:0; transform:translateY(22px); transition:opacity .5s var(--ease), transform .6s var(--ease); }
+  .nav.menu-open .nav-panel__list li{ opacity:1; transform:none; }
+  .nav.menu-open .nav-panel__list li:nth-child(1){ transition-delay:.08s; }
+  .nav.menu-open .nav-panel__list li:nth-child(2){ transition-delay:.14s; }
+  .nav.menu-open .nav-panel__list li:nth-child(3){ transition-delay:.20s; }
+  .nav.menu-open .nav-panel__list li:nth-child(4){ transition-delay:.26s; }
+
+  /* due parole a contorno che scorrono, come nell'hero (una per verso) */
+  .nav-panel__marquee{
+    position:absolute; left:0; right:0; bottom:calc(max(28px, env(safe-area-inset-bottom)) + 88px);
+    display:flex; flex-direction:column; gap:6px; pointer-events:none; user-select:none; z-index:0;
+  }
+  @media (max-height:740px){ .nav-panel__marquee{ display:none; } }   /* schermi bassi: non c'è spazio senza coprire le voci */
+  .nav-panel__marquee .hero-marquee__track{ animation-play-state:paused; }
+  .nav.menu-open .nav-panel__marquee .hero-marquee__track{ animation-play-state:running; }
+  .nav-panel__marquee .hero-marquee__track span{
+    font-size:min(20vw,92px);
+    -webkit-text-stroke:1px rgba(252,251,250,.22);
+  }
+  .nav-panel__foot{
+    position:relative; z-index:1; margin-top:auto; padding-top:24px;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .nav-panel__tag{ font:600 var(--fs-title)/1.1 'Archivo',sans-serif; color:var(--accent); }
+  .nav-panel__foot a{ font:500 var(--fs-body)/1.4 'Archivo',sans-serif; color:rgba(252,251,250,.78); text-decoration:underline; text-underline-offset:3px; padding-block:8px; }
+
+  html.menu-lock, html.menu-lock body{ overflow:hidden; }
+  html.menu-lock .consent{ visibility:hidden; }   /* il banner cookie non copre il piede del menu aperto */
+}
+@media (prefers-reduced-motion:reduce){
+  .nav-menu-btn__ic i, .nav-panel, .nav.menu-open .nav-panel, .nav-panel__list li{ transition:none; }
+  .nav-panel__marquee .hero-marquee__track{ animation:none; }
+}
+
+/* ---------- PC all-in-one: foto con lo schermo forato, lo schermo vivo sta sotto ----------
+   Il blocco .pc ha dimensione di progetto fissa (934x888, quella della foto) e viene
+   scalato da JS con --k (assets/js/pc.js). Lo schermo vivo (.pc__screen) e' un riquadro
+   1600x900 deformato in prospettiva con matrix3d sul buco della foto.
+   Versione normale:  matrix3d(0.41713959,-0.03874159,0,-0.00012603483,-0.042902184,0.5427993,0,-1.0109579e-05,0,0,1,0,59.073151,91.620422,0,1)
+                      foto: assets/img/aio/pc-vuoto.webp
+   Versione specchio: matrix3d(0.66995678,0.048527425,0,0.00015787029,0.041911562,0.67990635,0,-1.2663132e-05,0,0,1,0,23.995972,37.119171,0,1)
+                      foto: assets/img/aio/pc-vuoto-specchio.webp */
+.pc{ position:relative; width:934px; height:888px; transform-origin:0 0; scale:var(--k,1); }
+.pc__screen{ position:absolute; left:0; top:0; width:1600px; height:900px; transform-origin:0 0; overflow:hidden; background:#000; }
+.pc--normale .pc__screen{ transform:matrix3d(0.41713959,-0.03874159,0,-0.00012603483,-0.042902184,0.5427993,0,-1.0109579e-05,0,0,1,0,59.073151,91.620422,0,1); }
+.pc--specchio .pc__screen{ transform:matrix3d(0.66995678,0.048527425,0,0.00015787029,0.041911562,0.67990635,0,-1.2663132e-05,0,0,1,0,23.995972,37.119171,0,1); }
+.pc__photo{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.pc-wrap{ position:relative; width:100%; aspect-ratio:934/888; }   /* il contenitore con la dimensione reale; .pc dentro viene scalato */
+
+/* menu aperto: stella cèlan a contorno che gira piano in basso a destra */
+.nav-panel__star{ display:none; }
+@media (max-width:900px){
+  .nav-panel__star{
+    display:block; position:absolute; z-index:0; pointer-events:none;
+    right:clamp(8px,3vw,20px); bottom:calc(max(20px, env(safe-area-inset-bottom)) + 4px);
+    width:clamp(120px,36vw,170px); aspect-ratio:1;
+    background:url("../brand/stella-menu.svg") center/contain no-repeat;
+    animation:menuStella 70s linear infinite; animation-play-state:paused;
+  }
+  .nav.menu-open .nav-panel__star{ animation-play-state:running; }
+}
+@keyframes menuStella{ to{ transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce){ .nav-panel__star{ animation:none; } }
+

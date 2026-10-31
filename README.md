@@ -5,30 +5,35 @@ Sito vetrina del gestionale per la ristorazione. Sito statico: HTML, CSS e JS pu
 ## Struttura
 
 ```
-index.html            home: sceglie fra locale e sagra
+index.html            home: gestionale, siti, su misura, chi siamo
 css/home.css          stile della home
 js/home.js            reveal e nav della home
-img/                  foto della home (spaghetti, le due card di scelta)
+js/gestionale.js      i due PC della home alternano le schermate
+img/                  foto dei PC del gestionale (pizzerie e sagre)
 sagre/                landing "sagre e feste di paese" (marchio cèlan)
   index.html
   css/sagre.css       stile della landing
   js/sagre.js         motion layer, carosello tablet, form
-  img/                patatine dell'hero (un file per pezzo), 6 slide cassa, totem
+  img/                6 slide cassa, totem, foto del PC
 pizzerie/             landing "pizzerie, ristoranti e locali" (marchio cèlan)
   index.html
   css/pizzerie.css
   js/pizzerie.js
-  img/                fetta, pomodoro, palmare, 6 schermate del gestionale
+  img/                palmare, foto del PC, 8 schermate del gestionale
 privacy/              informativa privacy e cookie (linkata da checkbox e footer)
   index.html
   css/privacy.css
 assets/               risorse condivise tra le sezioni
   brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg)
   css/fonts.css       @font-face dei webfont auto-hostati
+  css/common.css      nav, menu a pagina piena, footer (comuni a tutte le pagine)
+  css/bottoni.css     bottoni coordinati
   css/consent.css     stile del banner cookie
   js/consent.js       banner cookie + Google Analytics 4 (caricato solo dopo il consenso)
   fonts/              Anton 400 e Archivo 400-700 (woff2, licenza OFL)
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
+  js/menu.js          menu a pagina piena su telefono
+  js/pc.js            scala il PC all-in-one nel suo contenitore
 worker/               Cloudflare Worker che inoltra il form con Brevo (vedi worker/README.md)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages

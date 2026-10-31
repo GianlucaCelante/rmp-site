@@ -26,13 +26,25 @@
       var targetEl = document.querySelector(href);
       if (!targetEl) return;
       e.preventDefault();
-      smoothScrollTo(targetEl);
+      /* dal menu telefono: il menu si chiude (menu.js) e Lenis riparte, poi si scorre */
+      if (a.closest('#navPanel')) setTimeout(function(){ smoothScrollTo(targetEl); }, 80);
+      else smoothScrollTo(targetEl);
       if (history.pushState) history.pushState(null, '', href);
     });
   });
 
   /* ---------------- Nav: blur solo dopo lo scroll ---------------- */
   var navEl = document.getElementById('siteNav');
+
+  /* Menu telefono aperto: Lenis si ferma (la rotella non deve far scorrere la pagina
+     sotto il pannello) e la nav resta visibile. Riparte alla chiusura. */
+  if (navEl && 'MutationObserver' in window) {
+    new MutationObserver(function(){
+      var aperto = navEl.classList.contains('menu-open');
+      if (aperto && navEl.classList.contains('nav--hidden')) navEl.classList.remove('nav--hidden');   /* solo se serve: remove() a vuoto riscrive l'attributo e farebbe ripartire l'observer all'infinito */
+      if (lenis) { if (aperto) lenis.stop(); else lenis.start(); }
+    }).observe(navEl, { attributes: true, attributeFilter: ['class'] });
+  }
   var topSentinel = document.getElementById('top');
   if (navEl && topSentinel && 'IntersectionObserver' in window) {
     var navObserver = new IntersectionObserver(function(entries){
@@ -43,20 +55,28 @@
     navObserver.observe(topSentinel);
   }
 
-  /* Nav invertita mentre la sua fascia attraversa una superficie scura
-     (sezione prezzi E banda video: un Set tiene il conto, cosi' uscire da
-     una non spegne l'inversione se l'altra e' ancora sotto la nav) */
-  var darkSurfaces = document.querySelectorAll('.section-dark, .vband');
-  if (navEl && darkSurfaces.length && 'IntersectionObserver' in window) {
-    var sottoNav = new Set();
-    var darkObserver = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (entry.isIntersecting) sottoNav.add(entry.target);
-        else sottoNav.delete(entry.target);
-      });
-      navEl.classList.toggle('nav-on-dark', sottoNav.size > 0);
-    }, { rootMargin: '0px 0px -' + (window.innerHeight - 80) + 'px 0px', threshold: 0 });
-    darkSurfaces.forEach(function(el){ darkObserver.observe(el); });
+  /* Nav invertita quando sotto la sua fascia c'e' davvero una superficie scura.
+     Si guarda l'elemento visibile sotto il centro della nav (non la geometria
+     delle sezioni): con i fogli che salgono una sezione scura puo' restare
+     "sotto" una chiara senza vedersi. */
+  var scuriSel = '.section-dark, .vband';
+  if (navEl && document.elementsFromPoint) {
+    var navAttesa = false;
+    var aggiornaNav = function(){
+      navAttesa = false;
+      var els = document.elementsFromPoint(Math.round(window.innerWidth / 2), Math.round(navEl.offsetHeight / 2));
+      var scuro = false;
+      for (var k = 0; k < els.length; k++) {
+        if (navEl.contains(els[k])) continue;
+        scuro = !!els[k].closest(scuriSel);
+        break;
+      }
+      navEl.classList.toggle('nav-on-dark', scuro);
+    };
+    var chiediNav = function(){ if (!navAttesa) { navAttesa = true; requestAnimationFrame(aggiornaNav); } };
+    window.addEventListener('scroll', chiediNav, { passive: true });
+    window.addEventListener('resize', chiediNav);
+    aggiornaNav();
   }
 
   /* La banda video si accende: arriva chiara come la pagina e vira al nero
@@ -161,7 +181,7 @@
     if (!root || !('IntersectionObserver' in window) || reduce) return;
     root.classList.add('js-ready');
 
-    var tablet = root.querySelector('.tablet');
+    var tablet = root.querySelector('.pcdemo');   /* il PC all-in-one: porta l'etichetta della schermata in scena */
     var labels = [
       'Schermata comande: presa ordini al banco e al telefono.',
       'Schermata forno: fasce orarie con il tetto di ordini per ogni slot.',
@@ -728,3 +748,4 @@
     }
   })();
 })();
+

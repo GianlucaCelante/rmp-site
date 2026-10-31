@@ -2,8 +2,8 @@
  *
  * Uso, in fondo al <body> di ogni pagina:
  *   <script src="../assets/js/consent.js"
- *           data-ga-id="G-XXXXXXXXXX"
- *           data-policy-url="../privacy/#cookie"></script>
+ *          
+ *           data-policy-url="../privacy/#cookie"><\/script>
  *
  * Regole seguite (Garante privacy, linee guida cookie 10/6/2021 + GDPR):
  *  - gtag.js NON viene scaricato finche' l'utente non accetta: prima del
@@ -157,3 +157,4 @@
 
   window.rmpConsent = { open: show, choice: readChoice };
 })();
+

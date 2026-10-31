@@ -14,7 +14,7 @@ body{
   background:var(--bg);
   color:var(--ink);
   font-family:'Archivo',sans-serif;
-  font-size:16px;
+  font-size:var(--fs-body);
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
   overflow-x:clip;
@@ -33,7 +33,7 @@ input,button{font-size:inherit;}
   --surface-fallback: #cfcdc8;
   --ink:       #111110;
   --muted:     #6F6D68;
-  --muted-tx:  #676560;
+  --muted-tx:  #5a5853;
   --accent:    #F0563C;
   --accent-strong: #CC3D20;
   --on-accent-strong: #ffffff;
@@ -54,9 +54,9 @@ input,button{font-size:inherit;}
   --tablet-radius: clamp(16px, 2.4vw, 28px);
   --wrap-pad: clamp(20px, 4vw, 56px);
 
-  --fs-display:    clamp(56px, 9.5vw, 148px);
-  --fs-display-sm: clamp(40px, 6vw, 80px);
-  --fs-statement:  clamp(24px, 3vw, 40px);
+  /* scala tipografica: token in assets/css/comune.css (caricato dopo questo file) */
+
+
 
   --section-pad: clamp(72px, 10vw, 136px);
   --nav-h: 72px;
@@ -69,13 +69,17 @@ input,button{font-size:inherit;}
   padding-inline:clamp(20px, 4vw, 56px);
 }
 .display-wrap{
-  max-width:1472px;
+  max-width:1440px;
   margin-inline:auto;
-  padding-inline:16px;
+  padding-inline:clamp(20px, 4vw, 56px);   /* come .wrap: titoli e testo sulla stessa linea */
 }
 section{ position:relative; }
 .section-pad{ padding-block:var(--section-pad); }
+.section-pad--compact{ padding-block:clamp(48px, 6.5vw, 88px); }
 .section-dark{ background:var(--dark); color:var(--card); }
+
+
+
 
 /* ---------- Display type (identico a pizzerie.css) ---------- */
 .display{
@@ -134,7 +138,7 @@ html.js .fade-up.is-visible{
   gap:14px;
   background:var(--accent-strong);
   color:#fff;
-  font:600 18px/1.2 'Archivo',sans-serif;
+  font:600 var(--fs-button)/1.2 'Archivo',sans-serif;
   padding:10px 10px 10px 28px;
   border-radius:var(--radius-pill);
   border:none;
@@ -146,10 +150,6 @@ html.js .fade-up.is-visible{
 .pill:hover{ opacity:.88; transform:translateY(-2px); }
 .pill:focus-visible{ outline:3px solid var(--ink); outline-offset:3px; }
 .pill--block{ width:100%; white-space:normal; }
-/* Le due pill "Per il tuo locale" / "Per la tua sagra" (hero e card) hanno
-   la stessa larghezza: testo a sinistra, freccia sul bordo destro. */
-.hero-ctas > .pill,
-.scelta-card__cta{ min-width:224px; justify-content:space-between; }
 
 /* pill outline: nuova variante, bordo scuro, sfondo trasparente */
 /* pill gialla per la sagra: il giallo delle schermate della demo, testo nero (12:1) */
@@ -168,12 +168,14 @@ html.js .fade-up.is-visible{
   width:32px;
   height:32px;
   border-radius:50%;
-  background:rgba(255,255,255,.16);
+  background:none;                /* solo la freccia, niente quadratino */
   transition:transform .4s var(--ease);
 }
 .pill-ic svg{ width:15px; height:15px; display:block; }
 .pill:hover .pill-ic{ transform:translate(2px,-2px); }
-.pill--sagra .pill-ic{ background:rgba(17,17,16,.12); }  /* stessa logica della pill arancione: cerchio traslucido, freccia del colore del testo */
+/* pill scura (terza categoria in hero): stesso disegno, fondo inchiostro */
+.pill--ink{ background:var(--ink); color:#fff; }
+.hero-ctas .pill:hover .pill-ic{ transform:translateY(2px); } /* freccia in giu': scende, non va in diagonale */
 
 /* ---------- Nav (identica a pizzerie.css) ---------- */
 .nav{
@@ -248,25 +250,30 @@ html.js .fade-up.is-visible{
   gap:clamp(20px,2.6vw,36px);
 }
 .nav-link{
-  font:500 15px/1 'Archivo',sans-serif;
+  font:500 var(--fs-small)/1 'Archivo',sans-serif;
   color:var(--ink);
   text-decoration:none;
-  padding-block:4px;
-  border-bottom:1px solid transparent;
-  transition:border-color .3s var(--ease), color .3s var(--ease);
+  /* area di tocco >= 40px con padding invisibile, compensato dal margine */
+  padding:13px 6px;
+  margin:-13px -6px;
+  text-decoration:underline;
+  text-decoration-color:transparent;
+  text-decoration-thickness:1px;
+  text-underline-offset:6px;
+  transition:text-decoration-color .3s var(--ease), color .3s var(--ease);
 }
-.nav-link:hover{ border-color:var(--ink); }
+.nav-link:hover{ text-decoration-color:var(--ink); }
+.nav.nav-on-dark .nav-link:hover{ text-decoration-color:var(--card); }
 .nav-cta{
-  font:600 15px/1 'Archivo',sans-serif;
+  font:600 var(--fs-small)/1 'Archivo',sans-serif;
   color:var(--accent-text);
   text-decoration:underline;
   text-underline-offset:3px;
   white-space:nowrap;
 }
 .nav-hide-mobile{ display:inline-flex; }
-@media (max-width:760px){
-  .nav-hide-mobile{ display:none; }
-}
+
+/* ---- Menu telefono (<=760px): sta in assets/css/comune.css, caricato dopo questo file ---- */
 
 #top{ height:1px; }
 main{ overflow-x:clip; }
@@ -286,7 +293,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
    ========================================================================== */
 .hero{
   position:relative;
-  min-height:100dvh;
+  min-height:min(88dvh, 760px);
   display:flex;
   align-items:center;
   padding-top:calc(var(--nav-h) + 20px);
@@ -330,6 +337,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 @supports not (-webkit-text-stroke:1px black){
   .hero-marquee__track span{ color:rgba(17,17,16,.05); }
 }
+/* il track e' largo quanto il suo testo: cosi' translateX(-50%) = esattamente una copia e il giro e' continuo.
+   Durata per riga in --d (stesso passo in em/secondo per tutte). */
+.hero-marquee__track{ width:max-content; animation-duration:var(--d,24s); }
 @keyframes heroMarquee{
   from{ transform:translateX(0); }
   to{ transform:translateX(-50%); }
@@ -341,43 +351,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .hero-marquee__track{ animation:none; }
 }
 
-/* ---- Spaghetti sulla forchetta: attaccati al bordo sinistro (l'immagine e'
-   tagliata su quel lato), si muovono solo su e giu'. Su mobile stanno in fondo
-   al hero, sotto i bottoni. ---- */
 .hero-ctas{ position:relative; }
-.hero-pasta{
-  position:absolute;
-  right:calc(-1 * var(--wrap-pad));   /* a filo del bordo destro dello schermo */
-  top:60px;                            /* il nido di spaghetti scende sotto il bottone giallo, senza coprirlo */
-  width:min(46vw, 190px);
-  pointer-events:none;
-  user-select:none;
-}
-@media (max-width:900px){
-  /* gli spaghetti scendono sotto i bottoni: spazio in fondo al hero */
-  .hero{ padding-bottom:clamp(150px, 42vw, 210px); }
-}
-.hero-pasta img{
-  display:block;
-  width:100%;
-  height:auto;
-  filter:drop-shadow(0 26px 40px rgba(17,17,16,.22));
-}
-@media (prefers-reduced-motion: no-preference){
-  .hero-pasta img{ animation:pastaFloat 6.5s ease-in-out infinite alternate; }
-}
-@keyframes pastaFloat{
-  from{ transform:translateY(-12px); }
-  to{ transform:translateY(12px); }
-}
 .hero-kicker{
-  font:500 18px/1.5 'Archivo',sans-serif;
+  font:500 var(--fs-lead)/var(--lh-lead) 'Archivo',sans-serif;
   color:var(--ink);
   margin-bottom:clamp(16px,2.6vw,26px);
   max-width:34ch;
 }
 .hero-title-wrap{ margin:0 0 clamp(20px,2.6vw,28px); max-width:none; padding-inline:0; }
-.hero-h1{ font-size:clamp(44px, 14vw, 56px); line-height:.95; letter-spacing:-0.02em; }  /* mobile: stessa taglia del titolo di pizzerie (56px a 390) */
+.hero-h1{ font-size:var(--fs-display); line-height:.94; letter-spacing:-0.02em; }  /* telefono: 4 righe, titolo grande */  /* mobile: stessa taglia del titolo di pizzerie (56px a 390) */
 
 .hero-row{
   display:grid;
@@ -387,7 +369,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .hero-copy{ min-width:0; }
 .hero-sub{
-  font:500 19px/1.5 'Archivo',sans-serif;
+  font:500 var(--fs-lead)/var(--lh-lead) 'Archivo',sans-serif;
   color:var(--ink);
   max-width:none;
   margin-bottom:clamp(24px,3.4vw,32px);
@@ -401,30 +383,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* ---- Desktop (>900px): titolo a tutta larghezza, riga sottotitolo+pill /
    composizione tablet in griglia 2 colonne. Sotto i 901px resta la colonna
    singola definita sopra (gia' approvata in review). ---- */
+@media (min-width:601px){ .br-m{ display:none; }  }
 @media (min-width:901px){
   .hero{
     padding-top:calc(var(--nav-h) + 56px);
     padding-bottom:40px;
   }
-  .hero-inner{
-    display:grid;
-    grid-template-columns:1fr clamp(280px, 30vw, 440px);
-    column-gap:clamp(24px, 3vw, 48px);
-    align-items:center;
-  }
   .hero-kicker, .hero-title-wrap, .hero-row{ grid-column:1; }
   .hero-ctas{ position:static; }
-  .hero-pasta{
-    right:0;                     /* .hero-inner e' il .wrap: il suo bordo e' gia' il bordo dello schermo */
-    top:50%;
-    transform:translateY(-50%);
-    width:calc(clamp(280px, 30vw, 440px) + var(--wrap-pad));
-  }
   .hero-kicker{ margin-bottom:clamp(16px,1.8vw,22px); }
   .hero-title-wrap{ margin:0 0 clamp(28px,3.2vw,40px); }
   .hero-h1{
-    font-size:clamp(48px, 6.2vw, 96px);
-    line-height:0.96;
+    line-height:1;
     letter-spacing:-0.01em;
   }
   .hero-row{
@@ -441,34 +411,23 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .scelta-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  grid-auto-rows:1fr;   /* righe tutte alte come la card piu' lunga, anche impilate su mobile */
   gap:clamp(20px,3vw,32px);
   margin-top:clamp(36px,5vw,56px);
 }
-/* Le due card hanno la stessa altezza anche se i testi no: guscio, nucleo e
-   corpo si allungano fino in fondo e la pill sta sempre sul bordo basso,
-   allineata con quella accanto. */
 .scelta-card{
-  display:flex;
-  flex-direction:column;
+  display:block;
   text-decoration:none;
   color:inherit;
   transition:transform .3s var(--ease);
 }
 .scelta-card:active{ transform:scale(.98); }
 .scelta-card__shell{
-  flex:1;
-  display:flex;
-  flex-direction:column;
   border:1px solid var(--line);
   border-radius:28px;
   padding:8px;
   background:rgba(17,17,16,.03);
 }
 .scelta-card__core{
-  flex:1;
-  display:flex;
-  flex-direction:column;
   background:var(--card);
   border-radius:20px;
   overflow:hidden;
@@ -486,31 +445,26 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .scelta-card:hover .scelta-card__img img{ transform:scale(1.03); }
 .scelta-card:hover .pill-ic{ transform:translate(2px,-2px); }
 .scelta-card__body{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
   padding:clamp(24px,3vw,34px);
 }
-.scelta-card__cta{ margin-top:auto; }
 .scelta-card__title{
   font-family:'Anton',sans-serif;
   text-transform:uppercase;
   font-weight:400;
   letter-spacing:-0.01em;
-  font-size:clamp(24px,2.4vw,32px);
-  line-height:1.05;
+  font-size:var(--fs-h3);
+  line-height:var(--lh-h3);
   color:var(--ink);
   margin-bottom:14px;
 }
 .scelta-card__txt{
-  font:400 16px/1.55 'Archivo',sans-serif;
+  font:400 var(--fs-body)/var(--lh-body) 'Archivo',sans-serif;
   color:var(--muted-tx);
   margin-bottom:18px;
   max-width:44ch;
 }
 .scelta-card__price{
-  font:600 16px/1.4 'Archivo',sans-serif;
+  font:600 var(--fs-body)/1.4 'Archivo',sans-serif;
   color:var(--ink);
   margin-bottom:20px;
 }
@@ -520,9 +474,187 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .scelta-card__img{ height:220px; }
 }
 
+/* Card nello stile dell'immagine coordinata: angoli netti, corpo nero,
+   filetto rosso del marchio. */
+.scelta-card__shell{
+  border:0;
+  border-radius:0;
+  padding:0;
+  background:none;
+}
+.scelta-card__core{
+  background:var(--dark);
+  border-radius:0;
+  transition:transform .4s var(--ease);
+}
+.scelta-card:hover .scelta-card__core{ transform:translateY(-4px); }
+.scelta-card__img{ position:relative; background:var(--bg-hero); }
+.scelta-card__img img{ object-position:top left; }   /* schermate: si vede l'alto dell'interfaccia */
+.scelta-card__img::after{               /* filetto rosso come base della foto */
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:6px;
+  background:var(--accent-strong);
+}
+.scelta-card__title{ color:#fff; letter-spacing:.005em; }
+.scelta-card__txt{ color:rgba(252,251,250,.72); }
+.scelta-card .pill,
+.scelta-card .pill--sagra{ background:var(--accent-strong); color:#fff; padding-left:24px; }
+.scelta-card .pill--sagra .pill-ic svg path{ stroke:#fff; }
+
+/* ==========================================================================
+   GESTIONALE: due PC all-in-one liberi sulla pagina, davanti a due righe
+   di parole a contorno che scorrono (stile hero). Gli schermi alternano le
+   schermate (assets/js/gestionale.js), senza didascalie.
+   ========================================================================== */
+#gestionale{ overflow:hidden; }
+.gest__grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,5vw,88px);
+  margin-top:clamp(40px,5vw,72px);
+}
+.gest__link{ display:block; text-decoration:none; color:inherit; }
+.gest__title, .gest__txt, .gest__link .pill{ position:relative; z-index:1; }   /* il testo sta sempre davanti alla stella */
+.gest__stage{ position:relative; padding:clamp(40px,4vw,64px) 0 34px; }
+.gest__marquee{
+  position:absolute; left:0; right:0; top:0; bottom:0;
+  display:flex; flex-direction:column; justify-content:center; gap:clamp(6px,1vw,14px); padding-bottom:30%;   /* stesso spaziatura e stessa taglia delle righe dell'hero, un po' sopra il centro */
+  overflow-x:clip; overflow-y:visible; pointer-events:none; user-select:none;
+}
+.gest__marquee .hero-marquee__track span{
+  font-size:clamp(90px,11vw,175px); line-height:1;
+  -webkit-text-stroke:.6px var(--stk);
+}
+.gest__marquee--rosso{ --stk:rgba(20,19,18,.16); }
+.gest__marquee--giallo{ --stk:rgba(20,19,18,.16); }
+.aio-scene{ position:relative; perspective:1400px; }
+.aio{
+  --ry:0deg;
+  width:min(86%, 560px); margin-inline:auto; position:relative;
+  transform:perspective(1400px) rotateY(var(--ry)) rotateX(var(--rx,0deg));
+  transition:transform .35s var(--ease); will-change:transform;
+}
+.aio__float{ position:relative; }   /* PC fermi: niente galleggiamento (richiesta utente) */
+/* foto del PC con le schermate del gestionale gia' composte nello schermo (assets/img/aio) */
+.aio__photo{ position:relative; aspect-ratio:934/888; }
+.aio__photo img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
+  opacity:0; transition:opacity .7s var(--ease);
+}
+.aio__photo img.prev{ opacity:1; transition:none; z-index:1; }
+.aio__photo img.on{ opacity:1; z-index:2; }
+.aio__floor{
+  position:absolute; left:14%; right:14%; bottom:1%; height:5%; border-radius:50%; z-index:-1;
+  background:radial-gradient(closest-side, rgba(17,17,16,.30), transparent); filter:blur(5px);
+}
+.gest__title{
+  font-family:'Anton',sans-serif; text-transform:uppercase; font-weight:400;
+  font-size:var(--fs-h3); line-height:var(--lh-h3); letter-spacing:-0.01em; color:var(--ink); margin:22px 0 14px;
+}
+.gest__txt{ font:400 var(--fs-lead)/var(--lh-lead) 'Archivo',sans-serif; color:var(--muted-tx); max-width:42ch; margin-bottom:24px; }
+.gest__link:hover .pill-ic{ transform:translate(2px,-2px); }
+
+@media (max-width:760px){
+  .gest__grid{ grid-template-columns:1fr; gap:72px; }
+  .gest__marquee .hero-marquee__track span{ font-size:clamp(88px,28vw,140px); }
+}
+@media (prefers-reduced-motion:reduce){ .aio__float{ animation:none; } .gest__marquee .hero-marquee__track{ animation:none; } .aio__photo img{ transition:none; } }
+
+/* ==========================================================================
+   CATEGORIE (#gestionale, #siti, #su-misura)
+   Righe editoriali della stessa famiglia delle .rows di pizzerie/sagre:
+   filetti sottili, titolo in Anton, testo in Archivio. Desktop: titolo |
+   testo sulla stessa riga. Mobile: testo sotto il titolo.
+   ========================================================================== */
+.categoria{ background:var(--bg); }
+.categoria--tinta{ background:var(--bg-hero); }
+/* dal menu: il padding della sezione (>= 72px) basta a tenere il titolo
+   sotto la nav fissa, niente scroll-margin */
+.categoria-intro{
+  font:500 var(--fs-statement)/var(--lh-title) 'Archivo',sans-serif;
+  color:var(--ink);
+  max-width:34ch;
+  margin-top:clamp(20px,3vw,36px);
+}
+#gestionale .scelta-grid{ margin-top:clamp(28px,4vw,44px); }
+.servizi-list{
+  margin:clamp(36px,5vw,64px) 0 0;
+  border-top:1px solid var(--line);
+}
+.servizi-list--hw{ margin-top:clamp(40px,5vw,64px); }
+.servizio{
+  padding-block:26px 28px;
+  border-bottom:1px solid var(--line);
+}
+.servizio__body{ min-width:0; transition:transform .5s var(--ease); }
+.servizio__title{
+  font-family:'Anton',sans-serif;
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:-0.01em;
+  font-size:var(--fs-h3);
+  line-height:var(--lh-h3);
+  color:var(--ink);
+}
+.servizio__desc{
+  font:400 var(--fs-lead)/var(--lh-lead) 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  max-width:58ch;
+  margin-top:12px;
+}
+@media (min-width:901px){
+  .servizio{ padding-block:34px 36px; }
+  .servizio__body{
+    display:grid;
+    grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+    column-gap:clamp(24px,4vw,64px);
+    align-items:baseline;
+  }
+  .servizio__desc{ margin-top:0; }
+}
+@media (hover:hover) and (pointer:fine){
+  .servizio:hover .servizio__body{ transform:translateX(6px); }
+}
+@media (prefers-reduced-motion:reduce){
+  .servizio__body{ transition:none; }
+  .servizio:hover .servizio__body{ transform:none; }
+}
+.nowrap{ white-space:nowrap; }
+
+/* Su misura: un'affermazione grande (come lo statement) e una riga di
+   dettaglio, senza elenco: e' un servizio solo, non un catalogo. */
+.misura{ margin-top:clamp(20px,3vw,36px); max-width:900px; }
+.misura__lead{
+  font:500 var(--fs-statement)/var(--lh-title) 'Archivo',sans-serif;
+  color:var(--ink);
+}
+.misura__txt{
+  font:400 var(--fs-body)/var(--lh-body) 'Archivo',sans-serif;
+  color:var(--muted-tx);
+  max-width:58ch;
+  margin-top:clamp(16px,2vw,24px);
+}
+
+.servizi-cta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-start;
+  gap:20px 40px;
+  margin-top:clamp(36px,5vw,56px);
+}
+.servizi-cta p{
+  font:400 var(--fs-body)/var(--lh-body) 'Archivo',sans-serif;
+  color:var(--ink);
+  max-width:52ch;
+  flex:0 1 auto;
+}
+.mail-link{ color:var(--ink); font-weight:600; text-underline-offset:3px; overflow-wrap:anywhere; }
+.mail-link:hover{ color:var(--accent-text); }
+
 /* ---------- Statement (identico a pizzerie.css) + variante scura ---------- */
 .statement p{
-  font:500 var(--fs-statement)/1.25 'Archivo',sans-serif;
+  font:500 var(--fs-statement)/var(--lh-title) 'Archivo',sans-serif;
   color:var(--ink);
   max-width:900px;
 }
@@ -542,8 +674,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .cliente-uno:hover{ border-color:var(--accent); transform:translateY(-2px); }
 .cliente-uno img{ width:56px; height:56px; border-radius:50%; display:block; }
-.cliente-uno strong{ display:block; font:700 16px/1.3 'Archivo',sans-serif; }
-.cliente-uno small{ display:block; font:400 13px/1.4 'Archivo',sans-serif; color:var(--muted-tx); margin-top:2px; }
+.cliente-uno strong{ display:block; font:700 var(--fs-body)/1.3 'Archivo',sans-serif; }
+.cliente-uno small{ display:block; font:400 var(--fs-small)/1.4 'Archivo',sans-serif; color:var(--muted-tx); margin-top:2px; }
 
 .cliente-uno--dark{
   background:rgba(255,255,255,.06);
@@ -569,10 +701,21 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 }
 .footer-logo{ height:30px; width:auto; display:block; align-self:flex-start; }
 .footer-brand{ display:flex; flex-direction:column; gap:4px; }
-.footer-brand strong{ font:700 16px/1 'Archivo',sans-serif; color:var(--ink); }
-.footer-brand span{ font:400 15px/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
-.footer-links{ display:flex; flex-wrap:wrap; gap:6px; font:600 14px/1 'Archivo',sans-serif; }
-.footer-links a{ text-decoration:none; color:var(--ink); }
+.footer-brand strong{ font:700 var(--fs-body)/1 'Archivo',sans-serif; color:var(--ink); }
+.footer-brand span{ font:400 var(--fs-small)/1.4 'Archivo',sans-serif; color:var(--muted-tx); }
+.footer-links{ display:flex; flex-wrap:wrap; gap:6px; font:600 var(--fs-small)/1 'Archivo',sans-serif; }
+.footer-links a{ text-decoration:none; color:var(--ink); position:relative; }
+/* Area di tocco a 44px senza cambiare l'aspetto: su desktop i link stanno su
+   una riga, l'area cresce con un ::after invisibile; sotto i 760px vanno a
+   capo, quindi l'altezza diventa vera (min-height) per non sovrapporre le
+   aree di due righe vicine. Stessa cosa per .nav-link (sopra). */
+.footer-links a{ padding:13px 2px; margin:-13px -2px; }   /* >= 40px di area cliccabile, invisibile */
+@media (max-width:760px){
+  /* niente separatori "·" a fine riga: i link stanno distanziati da soli */
+  .footer-links{ gap:0 22px; align-items:center; }
+  .footer-links a{ display:inline-flex; align-items:center; min-height:44px; padding:0; margin:0; }
+  .footer-sep{ display:none; }
+}
 .footer-links a:hover{ color:var(--accent); }
 .footer-sep{ color:var(--muted-tx); }
 
@@ -583,4 +726,143 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 @media (max-width:600px){
   .footer{ justify-content:flex-start; }
 }
+
+/* Telefono con poco schermo visibile (Safari con barre): hero piu' raccolta,
+   cosi' i tre bottoni restano sopra il banner cookie. */
+@media (max-width:600px) and (max-height:720px){
+  .hero{ padding-top:calc(var(--nav-h) + 4px); }
+  .hero-kicker{ margin-bottom:10px; font-size:16px; line-height:1.4; }
+  .hero-title-wrap{ margin-bottom:16px; }
+  .hero-ctas{ gap:10px; }
+}
+
+/* Link di testo sotto il bottone principale dell'hero */
+.hero-links{
+  flex-basis:100%;
+  margin:6px 0 0;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:2px 18px;
+  font:500 var(--fs-body)/1.4 'Archivo',sans-serif;
+  color:var(--ink);
+}
+.hero-links span{ color:var(--muted-tx, #5f5d58); }
+.hero-links a{
+  color:var(--ink);
+  font-weight:600;
+  text-decoration:underline;
+  text-decoration-thickness:1.5px;
+  text-underline-offset:4px;
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+}
+.hero-links a::after{ content:"\2192"; margin-left:6px; font-weight:600; }
+.hero-links a:hover{ color:var(--accent-text, #7A5400); }
+
+/* "E-COMMERCE." deve stare su una riga (senza spezzarsi al trattino): su telefono la taglia si adatta alla larghezza */
+@media (max-width:600px){
+  #titoloSiti{ font-size:min(var(--fs-display), calc((100vw - 40px) / 5.05)); }
+  #titoloSiti .line-inner{ white-space:nowrap; }
+}
+
+/* senza il bottone, la frase chiude l'hero: niente spazio sotto */
+.hero-sub{ margin-bottom:0; }
+.hero-row{ gap:0; }
+
+/* menu aperto: stella cèlan a contorno che gira piano in basso a destra */
+.nav-panel__star{ display:none; }
+@media (max-width:900px){
+  .nav-panel__star{
+    display:block; position:absolute; z-index:0; pointer-events:none;
+    right:clamp(8px,3vw,20px); bottom:calc(max(20px, env(safe-area-inset-bottom)) + 4px);
+    width:clamp(120px,36vw,170px); aspect-ratio:1;
+    background:url("../assets/brand/stella-menu.svg") center/contain no-repeat;
+    animation:menuStella 70s linear infinite; animation-play-state:paused;
+  }
+  .nav.menu-open .nav-panel__star{ animation-play-state:running; }
+}
+@keyframes menuStella{ to{ transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce){ .nav-panel__star{ animation:none; } }
+
+/* ==========================================================================
+   HERO scuro (30/10/2026, versione senza parola gigante; la precedente e'
+   salvata in _materiale/salvataggi/hero-parola-grande-2026-10-30): titolo e
+   sottotitolo centrati, linee a raggiera che entrano dal centro e girano
+   piano, linee verticali di sfondo.
+   La nav si inverte da sola: #hero e' .section-dark (vedi home.js).
+   ========================================================================== */
+#hero{
+  --gl:rgba(252,251,250,.06);
+  position:relative; overflow:hidden; align-items:center;
+  min-height:100svh; padding:calc(var(--nav-h) + 10px) 0 28px;
+  background-color:var(--dark);
+  background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/6 - 1px),var(--gl) calc(100%/6 - 1px),var(--gl) calc(100%/6));
+}
+#hero .hero-inner{ z-index:3; display:flex; flex-direction:column; align-items:center; text-align:center; width:100%; }
+#hero .hero-title-wrap{ margin:0; padding-inline:0; }
+#hero .hero-h1{ text-align:center; line-height:.94; letter-spacing:-.005em; }
+#hero .hero-h1 .line-mask{ display:block; }
+#hero .hero-h1 .line-inner{ color:var(--card); font-size:min(19.8vw,96px); }
+#hero .hero-row{ display:block; width:100%; margin-top:22px; }
+#hero .hero-copy{ width:100%; }
+#hero .hero-sub{ margin:0 auto; max-width:24ch; font-size:clamp(18px,5vw,22px); line-height:1.3; font-weight:600; color:var(--card); text-align:center; }
+.hero-art{
+  position:absolute; z-index:0; left:50%; top:44%; max-width:none;
+  width:128vw; aspect-ratio:1; margin:-64vw 0 0 -64vw; pointer-events:none;
+}
+.hero-art g{ transform-box:view-box; transform-origin:50% 50%; }
+.hero-art line, .hero-art circle[fill="none"]{ vector-effect:non-scaling-stroke; stroke-width:1px; }
+/* entrata: dal centro, girando, cresce fino al suo posto (1,6 s); --k sfasa i gruppi */
+.hero-art .h-in{ animation:heroArtIn 1.6s cubic-bezier(.16,1,.3,1) calc(.15s + var(--k,0) * .11s) both; }
+@keyframes heroArtIn{
+  from{ transform:scale(.04) rotate(-150deg); opacity:0; }
+  25%{ opacity:1; }
+  to{ transform:none; opacity:1; }
+}
+@keyframes heroSpin{ to{ transform:rotate(360deg); } }
+@keyframes heroSpinBack{ to{ transform:rotate(-360deg); } }
+.r-star{ opacity:.9; animation:heroSpin 160s linear infinite; }
+@media (min-width:701px){
+  #hero{ min-height:min(94dvh,820px); }
+  #hero .hero-h1 .br-m{ display:none; }
+  #hero .hero-h1 .line-inner{ font-size:clamp(40px,5vw,80px); white-space:nowrap; }
+  #hero .hero-sub{ font-size:22px; max-width:36ch; }
+}
+@media (min-width:701px){
+  .hero-art{ width:min(64vw,104vh); margin:calc(min(64vw,104vh) / -2) 0 0 calc(min(64vw,104vh) / -2); }
+}
+@media (prefers-reduced-motion:reduce){ .hero-art, .hero-art g{ animation:none !important; } }
+
+/* ==========================================================================
+   FOGLI CHE SALGONO (30/10/2026): stesso meccanismo di pizzerie/sagre
+   (.sheet / .sheet--pin / .sheet--under, indice --sheet-i), applicato a
+   #gestionale -> #siti -> #su-misura -> #chi-siamo. Bordi dritti come il
+   resto della home. Differenza dalle landing: una sezione piu' alta dello
+   schermo si ferma quando il suo FONDO arriva in basso (top negativo
+   misurato da home.js), cosi' si legge tutta prima che la successiva le
+   salga sopra. #chi-siamo e' l'ultima: non si ferma.
+   ========================================================================== */
+.sheet{
+  position:relative;
+  z-index:calc(9 + var(--sheet-i, 0));
+  box-shadow:0 -14px 36px rgba(17,17,16,.08);
+  margin-top:-28px;
+  transition:transform .5s var(--ease), filter .5s var(--ease);
+}
+#gestionale.sheet{ margin-top:0; }   /* primo foglio: parte sotto l'hero, non lo copre */
+.sheet--pin{ position:sticky; top:var(--pin-top, 0px); }
+.sheet--pin.sheet--under{
+  transform:scale(0.97) translateY(-10px);
+  filter:brightness(.94);
+}
+@media (prefers-reduced-motion:reduce){
+  .sheet{ transition:none; }
+  .sheet--pin{ position:relative; }
+  .sheet--pin.sheet--under{ transform:none; filter:none; }
+}
+
+/* cliente: riga squadrata come i bottoni (prima pillola arrotondata); il logo resta tondo */
+.cliente-uno{ border-radius:0; }
 

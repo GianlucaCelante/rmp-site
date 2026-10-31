@@ -30,7 +30,9 @@
 .consent__txt p{ margin:0; font-size:14px; line-height:1.5; color:rgba(252,251,250,.82); }
 .consent__link{
   display:inline-block;
-  margin-top:6px;
+  position:relative;
+  padding-block:14px;       /* area di tocco >= 44px, compensata dal margine: il banner non cresce */
+  margin:-8px 0 -14px;
   font-size:14px;
   color:inherit;
   text-decoration:underline;
@@ -38,6 +40,8 @@
 }
 .consent__btns{ display:flex; gap:10px; flex:0 0 auto; margin-left:auto; }
 .consent__btn{
+  position:relative; /* sopra l'area di tocco allargata del link */
+  min-height:44px;
   border:2px solid var(--accent-strong, #cd3c20);
   border-radius:var(--radius-pill, 999px);
   padding:11px 22px;
@@ -56,9 +60,19 @@
 .consent__btn--no{ background:transparent; border-color:transparent; color:#ffffff; }
 .consent__btn--no:hover{ background:rgba(252,251,250,.08); }
 @media (max-width:600px){
+  /* Telefono: banner compatto (sotto il 22% dell'altezza a 390x844), stessi
+     testi e stessi tasti. Titolo e "Informativa cookie" sulla stessa riga,
+     testo piu' piccolo, tasti affiancati a 44px. */
+  .consent{ padding:6px; padding-bottom:max(6px, env(safe-area-inset-bottom)); }
+  .consent__box{ gap:6px; padding:8px 12px; }
+  .consent__txt{ flex-basis:100%; display:flex; flex-wrap:wrap; align-items:baseline; column-gap:12px; }
+  .consent__txt strong{ font-size:15px; margin-bottom:2px; flex:1 1 auto; }
+  .consent__link{ order:1; margin-block:-14px; font-size:13px; }
+  .consent__txt p{ order:2; flex-basis:100%; font-size:12.5px; line-height:1.35; }
   .consent__btns{ width:100%; margin-left:0; }
-  .consent__btn{ flex:1 1 0; text-align:center; }
+  .consent__btn{ flex:1 1 0; text-align:center; padding:0 16px; }
 }
 @media (prefers-reduced-motion:reduce){
   .consent{ transition:none; }
 }
+
