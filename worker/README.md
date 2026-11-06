@@ -36,7 +36,7 @@ npx wrangler secret put BREVO_API_KEY
 npx wrangler deploy
 ```
 
-Wrangler stampa l'URL del Worker, tipo `https://rmp-site-form.<account>.workers.dev`.
+Il Worker gira sull'account Cloudflare di `celan.rmp@gmail.com` e risponde su `https://form.celan.it` (`routes` in `wrangler.toml`). La lista e il mittente stanno sul Brevo dello stesso titolare.
 
 Dopo il primo deploy non serve piu' farlo a mano: ogni push su `master` che tocca `worker/` avvia `.github/workflows/worker.yml`, che fa girare i test e, se passano, pubblica il Worker. Si puo' lanciare anche a mano dal tab Actions ("Deploy del Worker su Cloudflare" → Run workflow). Il workflow entra in Cloudflare con un token nei secret del repository:
 
