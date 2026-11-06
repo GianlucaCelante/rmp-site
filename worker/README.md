@@ -77,7 +77,7 @@ Come funziona:
 
 **Regola per i clienti.** Chi diventa cliente va tolto dalla lista "Preventivi sito" oppure messo anche in un'altra lista prima della scadenza: altrimenti, passati 12 mesi dall'ultima richiesta, viene cancellato (o, se e' in un'altra lista, tolto da questa).
 
-**Email in Gmail.** Le email di avviso nelle caselle del titolare non passano da questo meccanismo. Le toglie `gmail/pulizia-preventivi.gs`, un Google Apps Script da installare una volta per ogni casella:
+**Email in Gmail.** Le email di avviso nella casella `celan.rmp@gmail.com` non passano da questo meccanismo. Le toglie `gmail/pulizia-preventivi.gs`, un Google Apps Script gia' installato su quell'account. Se l'avviso va anche a un'altra casella, va installato anche li':
 
 1. Con l'account della casella apri <https://script.google.com> → **Nuovo progetto**, incolla il file e salva.
 2. Scegli `pulisciPreventivi` e premi **Esegui**: Google chiede di autorizzare l'accesso a Gmail. Lo script parte in prova (`PROVA = true`) e nel log elenca cosa sposterebbe, senza toccare nulla.

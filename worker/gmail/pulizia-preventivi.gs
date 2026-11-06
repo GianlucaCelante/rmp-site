@@ -1,6 +1,6 @@
 /* Sposta nel cestino di Gmail le email di richiesta preventivo scadute.
- * Va installato su https://script.google.com con ciascuna casella che riceve
- * gli avvisi del form (vedi worker/README.md).
+ * Va installato su https://script.google.com con la casella che riceve gli
+ * avvisi del form (vedi worker/README.md).
  *
  * Il tempo si conta dall'ultimo messaggio della conversazione: 11 mesi qui,
  * piu' i 30 giorni dopo cui Gmail svuota da solo il cestino, stanno dentro i
