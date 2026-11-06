@@ -500,6 +500,14 @@
         })
         .then(function(res){
           if (!res.ok) throw new Error(res.error || 'send');
+          /* conteggio statistico dell'invio: solo col consenso alle statistiche,
+             nessun dato personale (solo il verticale). Non nell'invio simulato. */
+          try {
+            var c = window.rmpConsent && window.rmpConsent.choice();
+            if (c && c.analytics && typeof window.gtag === 'function') {
+              window.gtag('event', 'generate_lead', { verticale: form.getAttribute('data-verticale') || '' });
+            }
+          } catch (e) {}
           showSuccess();
         })
         .catch(function(){
