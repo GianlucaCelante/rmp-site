@@ -169,6 +169,143 @@ await t('limite di frequenza per IP', async () => {
   assert.equal(last.status, 429);
 });
 
+/* ---------------- Cancellazione automatica (scheduled) ---------------- */
+import { classify, cutoffDate, runRetention } from '../src/retention.js';
+
+const NOW = new Date('2026-11-06T03:00:00.000Z');
+const mk = (email, modifiedAt, listIds = [7]) => ({ email, modifiedAt, listIds });
+const VECCHIO = '2025-10-01T10:00:00.000Z';
+const FRESCO = '2026-09-01T10:00:00.000Z';
+const originalFetch = globalThis.fetch;
+/* finto Brevo: elenco contatti paginato + registro delle scritture */
+function fakeBrevo(contacts, { failDelete = [], failList = false } = {}) {
+  const log = [];
+  globalThis.fetch = async (url, init = {}) => {
+    const method = init.method || 'GET';
+    const path = url.replace('https://api.brevo.com/v3', '');
+    log.push({ method, path, body: init.body ? JSON.parse(init.body) : undefined });
+    if (method === 'GET') {
+      if (failList) return new Response('x', { status: 500 });
+      const u = new URL(url);
+      const off = Number(u.searchParams.get('offset')), lim = Number(u.searchParams.get('limit'));
+      return new Response(JSON.stringify({ count: contacts.length, contacts: contacts.slice(off, off + lim) }), { status: 200 });
+    }
+    if (method === 'DELETE') {
+      const email = decodeURIComponent(path.replace('/contacts/', ''));
+      return failDelete.includes(email) ? new Response('no', { status: 500 }) : new Response(null, { status: 204 });
+    }
+    return new Response('{"success":{}}', { status: 201 });
+  };
+  return log;
+}
+const writes = (log) => log.filter((c) => c.method !== 'GET');
+const renv = { ...env, RETENTION_DRY_RUN: 'false' };
+async function conLog(fn) {
+  const righe = [];
+  const o = { log: console.log, error: console.error };
+  console.log = console.error = (...a) => righe.push(a.join(' '));
+  try { return { r: await fn(), righe }; }
+  catch (e) { return { err: e, righe }; }
+  finally { console.log = o.log; console.error = o.error; }
+}
+
+await t('retention: soglia a 12 mesi di calendario', async () => {
+  assert.equal(cutoffDate(NOW).toISOString(), '2025-11-06T03:00:00.000Z');
+  assert.equal(cutoffDate(new Date('2028-02-29T00:00:00Z')).toISOString(), '2027-02-28T00:00:00.000Z');
+  const p = classify([
+    mk('a@x.it', '2025-11-07T03:00:00.000Z'),   /* 11 mesi e 29 giorni */
+    mk('b@x.it', '2025-11-05T03:00:00.000Z')    /* 12 mesi e 1 giorno */
+  ], NOW, 7);
+  assert.deepEqual(p.delete, ['b@x.it']);
+  assert.equal(p.expired, 1);
+});
+await t('retention: scaduto solo in lista -> DELETE', async () => {
+  const log = fakeBrevo([mk('vecchio@x.it', VECCHIO)]);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  assert.deepEqual(writes(log).map((c) => c.method + ' ' + c.path), ['DELETE /contacts/vecchio%40x.it']);
+  assert.equal(r.cancellati, 1);
+});
+await t('retention: scaduto anche in altra lista -> solo remove', async () => {
+  const log = fakeBrevo([mk('due@x.it', VECCHIO, [7, 9])]);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  const w = writes(log);
+  assert.equal(w.length, 1);
+  assert.equal(w[0].method, 'POST');
+  assert.equal(w[0].path, '/contacts/lists/7/contacts/remove');
+  assert.deepEqual(w[0].body, { emails: ['due@x.it'] });
+  assert.equal(r.tolti_dalla_lista, 1);
+  assert.equal(r.cancellati, 0);
+});
+await t('retention: non scaduto -> nessuna scrittura', async () => {
+  const log = fakeBrevo([mk('fresco@x.it', FRESCO)]);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  assert.equal(writes(log).length, 0);
+  assert.equal(r.scaduti, 0);
+});
+await t('retention: modifiedAt assente o illeggibile -> saltato', async () => {
+  const log = fakeBrevo([{ email: 'a@x.it', listIds: [7] }, mk('b@x.it', 'ieri'), mk('c@x.it', VECCHIO)]);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  assert.equal(r.saltati, 2);
+  assert.deepEqual(writes(log).map((c) => c.path), ['/contacts/c%40x.it']);
+});
+await t('retention: RETENTION_DRY_RUN conta e non scrive', async () => {
+  const log = fakeBrevo([mk('a@x.it', VECCHIO), mk('b@x.it', VECCHIO, [7, 9])]);
+  const { r } = await conLog(() => runRetention({ ...renv, RETENTION_DRY_RUN: 'true' }, NOW));
+  assert.equal(writes(log).length, 0);
+  assert.equal(r.scaduti, 2);
+});
+await t('retention: senza chiave o lista esce senza chiamate', async () => {
+  const log = fakeBrevo([mk('a@x.it', VECCHIO)]);
+  assert.equal((await conLog(() => runRetention({ ...renv, BREVO_API_KEY: '' }, NOW))).r, null);
+  assert.equal((await conLog(() => runRetention({ ...renv, BREVO_LIST_ID: '' }, NOW))).r, null);
+  assert.equal(log.length, 0);
+});
+await t('retention: un errore non blocca gli altri e il giro fallisce', async () => {
+  const log = fakeBrevo([mk('a@x.it', VECCHIO), mk('b@x.it', VECCHIO), mk('c@x.it', VECCHIO)], { failDelete: ['a@x.it'] });
+  const { err } = await conLog(() => runRetention(renv, NOW));
+  assert.ok(err && /1 errori/.test(err.message));
+  assert.equal(writes(log).length, 3);
+});
+await t('retention: lettura fallita -> giro fallito, nessuna scrittura', async () => {
+  const log = fakeBrevo([mk('a@x.it', VECCHIO)], { failList: true });
+  const { err } = await conLog(() => runRetention(renv, NOW));
+  assert.ok(err);
+  assert.equal(writes(log).length, 0);
+});
+await t('retention: budget di 40 sottorichieste rispettato', async () => {
+  const molti = Array.from({ length: 100 }, (_, i) => mk('u' + i + '@x.it', VECCHIO));
+  const log = fakeBrevo(molti);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  assert.equal(log.length, 40);
+  assert.equal(r.cancellati, 39);   /* 1 lettura + 39 cancellazioni */
+  assert.equal(r.rimandati, 61);
+});
+await t('retention: paginazione oltre 500 contatti', async () => {
+  const molti = Array.from({ length: 1200 }, (_, i) => mk('u' + i + '@x.it', FRESCO));
+  const log = fakeBrevo(molti);
+  const { r } = await conLog(() => runRetention(renv, NOW));
+  assert.deepEqual(log.map((c) => c.path.match(/offset=(\d+)/)[1]), ['0', '500', '1000']);
+  assert.equal(r.letti, 1200);
+});
+await t('retention: nei log nessuna email', async () => {
+  fakeBrevo([mk('segreta@x.it', VECCHIO), mk('altra@x.it', VECCHIO, [7, 9]), mk('rotta@x.it', VECCHIO)], { failDelete: ['rotta@x.it'] });
+  const { righe } = await conLog(() => runRetention(renv, NOW));
+  assert.ok(righe.length > 0);
+  assert.ok(!righe.join('\n').includes('@'));
+});
+await t('scheduled: esposto, usa la lista', async () => {
+  const log = fakeBrevo([mk('s@x.it', VECCHIO)]);
+  await conLog(() => worker.scheduled({}, renv, {}));
+  assert.equal(writes(log).length, 1);
+});
+await t('fetch invariato dopo la cancellazione automatica', async () => {
+  globalThis.fetch = originalFetch;
+  calls.length = 0;
+  const r = await worker.fetch(req('POST', lead, ORIGIN, '6.6.6.6'), env);
+  assert.equal(r.status, 200);
+  assert.deepEqual(calls.map((c) => c.url.replace('https://api.brevo.com/v3', '')).sort(), ['/contacts', '/smtp/email', '/smtp/email']);
+});
+
 async function fetchRaw(text) {
   return worker.fetch(new Request('https://form.example.workers.dev/', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: ORIGIN, 'CF-Connecting-IP': '2.2.2.2' }, body: text }), env);
 }

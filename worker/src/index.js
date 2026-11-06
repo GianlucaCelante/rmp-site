@@ -9,8 +9,13 @@
  * La chiave Brevo vive SOLO nel secret BREVO_API_KEY del Worker
  * (`wrangler secret put BREVO_API_KEY`), mai nel sito.
  * Variabili in wrangler.toml: ALLOWED_ORIGINS, NOTIFY_TO, SENDER_EMAIL,
- * SENDER_NAME, SITE_NAME, SEND_CONFIRMATION, BREVO_LIST_ID, DRY_RUN.
+ * SENDER_NAME, SITE_NAME, SEND_CONFIRMATION, BREVO_LIST_ID, DRY_RUN, RETENTION_DRY_RUN.
+ *
+ * Ogni giorno (cron in wrangler.toml) `scheduled` cancella i contatti della
+ * lista scaduti dopo 12 mesi: vedi retention.js.
  */
+
+import { runRetention } from './retention.js';
 
 const BREVO_API = 'https://api.brevo.com/v3';
 
@@ -327,5 +332,9 @@ export default {
     }
     results.slice(1).forEach((r) => { if (r.status === 'rejected') console.warn('passo secondario fallito:', r.reason && r.reason.message); });
     return json({ ok: true }, 200, cors);
+  },
+
+  async scheduled(event, env, ctx) {
+    await runRetention(env);
   }
 };

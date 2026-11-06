@@ -32,3 +32,9 @@ SEND_CONFIRMATION = "true"
 BREVO_LIST_ID = "3"
 # "true" = valida e risponde ok senza chiamare Brevo (per prove)
 DRY_RUN = "false"
+# "true" = la pulizia giornaliera dei contatti scaduti conta soltanto, non scrive
+RETENTION_DRY_RUN = "false"
+
+# Pulizia giornaliera (UTC) dei contatti della lista oltre i 12 mesi
+[triggers]
+crons = ["0 3 * * *"]
