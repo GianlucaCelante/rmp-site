@@ -686,6 +686,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 .cliente-uno--dark strong{ color:var(--card); }
 .cliente-uno--dark small{ color:rgba(252,251,250,.75); }
 
+/* Piu' clienti affiancati; senza logo e senza link la scheda non reagisce al passaggio. */
+.clienti{ display:flex; flex-wrap:wrap; gap:12px; margin-top:clamp(28px,4vw,44px); }
+.clienti .cliente-uno{ margin-top:0; }
+.cliente-uno--testo{ padding:12px 26px; min-height:82px; }
+.cliente-uno--testo:hover{ border-color:rgba(255,255,255,.16); transform:none; }
+
 /* ---------- Footer (identico a pizzerie.css) ---------- */
 .footer-wrap{ background:var(--bg); }
 .footer{
