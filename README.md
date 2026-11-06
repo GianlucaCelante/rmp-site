@@ -28,6 +28,7 @@ guide/                guide di approfondimento, in layout di lettura (stesso sch
   css/guide.css       stile condiviso da elenco e guide
   cassa-per-sagre/    una cartella per guida, con il suo index.html
   coda-forno-asporto/
+  food-cost-pizzeria/
 404.html              pagina "non trovata": GitHub Pages la serve per ogni percorso inesistente
 robots.txt            consente tutto e indica la sitemap (la sitemap.xml la genera il build)
 assets/               risorse condivise tra le sezioni

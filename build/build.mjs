@@ -16,7 +16,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 const SITE = 'https://celan.it';
 const PAGES = ['index.html', 'sagre/index.html', 'pizzerie/index.html', 'privacy/index.html',
-               'guide/index.html', 'guide/cassa-per-sagre/index.html', 'guide/coda-forno-asporto/index.html'];
+               'guide/index.html', 'guide/cassa-per-sagre/index.html', 'guide/coda-forno-asporto/index.html',
+               'guide/food-cost-pizzeria/index.html'];
 const ESCLUDI = new Set(['.git', '.github', 'build', 'worker', 'dist', 'node_modules', 'README.md', '.gitignore', '.idea', '.vscode',
                          '.claude', '.playwright-mcp', 'uc.js']);
 

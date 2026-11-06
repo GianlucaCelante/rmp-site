@@ -750,7 +750,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 
 /* ---------- Banda video: ordina al totem ----------
    Layout della reference: fondo scuro pieno, tipografia gigante bianca a
-   sinistra, il totem eliminacoda che entra dal bordo destro e il cerchio
+   sinistra, il totem eliminacode che entra dal bordo destro e il cerchio
    ambra che sbuca da dietro il bordo sinistro della scocca (il totem sta
    sopra, come il telefono copriva parte dell'anello nella reference). */
 .vband{
@@ -785,7 +785,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
 /* solo tipografia, come la reference: niente paragrafo, il testo riempie
    la banda su quattro righe */
 .vband__display{ font-size:var(--fs-display); max-width:66%; }
-/* Totem eliminacoda: scocca disegnata in CSS (stessa lingua materica del
+/* Totem eliminacode: scocca disegnata in CSS (stessa lingua materica del
    tablet, gradiente 150deg #403c37 -> #171512, feritoia in plastica scura
    #1b1916), schermo con la foto vera della schermata "Conferma e stampa". */
 .vband__totem{
@@ -1054,6 +1054,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   transition:transform .5s var(--ease);
 }
 .faq-item[open] summary::after{ transform:translateY(-50%) rotate(45deg); }
+.faq-answer a{ color:var(--accent-text); font-weight:600; }
 .faq-answer{
   max-width:66ch;
   margin-top:2px;
