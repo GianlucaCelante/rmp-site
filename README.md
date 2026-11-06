@@ -23,8 +23,15 @@ pizzerie/             landing "pizzerie, ristoranti e locali" (marchio cèlan)
 privacy/              informativa privacy e cookie (linkata da checkbox e footer)
   index.html
   css/privacy.css
+guide/                guide di approfondimento, in layout di lettura (stesso schema di privacy/)
+  index.html          elenco delle guide
+  css/guide.css       stile condiviso da elenco e guide
+  cassa-per-sagre/    una cartella per guida, con il suo index.html
+  coda-forno-asporto/
+404.html              pagina "non trovata": GitHub Pages la serve per ogni percorso inesistente
+robots.txt            consente tutto e indica la sitemap (la sitemap.xml la genera il build)
 assets/               risorse condivise tra le sezioni
-  brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg)
+  brand/              marchio cèlan: petali, lettere, logo, favicon (png + svg), anteprime social og-*.png (1200x630)
   css/fonts.css       @font-face dei webfont auto-hostati
   css/common.css      nav, menu a pagina piena, footer (comuni a tutte le pagine)
   css/bottoni.css     bottoni coordinati
@@ -34,16 +41,43 @@ assets/               risorse condivise tra le sezioni
   js/lenis.min.js     Lenis 1.3.17 (smooth scroll)
   js/menu.js          menu a pagina piena su telefono
   js/pc.js            scala il PC all-in-one nel suo contenitore
-build/                build per il deploy (esbuild): `cd build && npm ci && npm run build` produce `dist/`
+build/                build per il deploy (esbuild): `cd build && npm ci && npm run build` produce `dist/`; lighthouserc.json e' la config di Lighthouse CI
 worker/               Cloudflare Worker che inoltra il form con Brevo (vedi worker/README.md)
 .github/workflows/
   deploy.yml          deploy su GitHub Pages
+  lighthouse.yml      Lighthouse CI su dist/ (pull request e push su master), non blocca il deploy
   worker.yml          test e deploy del Worker su Cloudflare (solo se cambia worker/)
 ```
 
 Ogni verticale è autonomo: una cartella con `index.html`, `css/`, `js/`, `img/`. La home segue lo stesso schema, solo che la sua cartella è la radice. Le due landing condividono la stessa impalcatura (nav, hero, tablet, formule, FAQ, form) ma con stile e testi propri, per questo CSS e JS sono per cartella e non condivisi; in `assets/` sta solo ciò che è davvero comune. Le prossime sezioni seguono lo stesso schema.
 
 `index.html`, `sagre/`, `pizzerie/` e `privacy/` sono la trascrizione dei mockup finali (`celan-home.html`, `celan-sagre.html`, `celan-master.html` e `privacy.html`): markup, CSS e JS sono quelli del mockup, cambiano solo i percorsi, perché font e immagini stanno in file veri invece che in base64 dentro la pagina. Chi li modifica tenga allineato il mockup, o il prossimo giro di design ripartirà da una versione vecchia.
+
+## Controlli del build e SEO
+
+Il build non si limita a minificare: se una pagina indicizzabile non è a posto **esce con codice 1** e dice cosa manca. Controlla che
+
+- ci siano `<title>` e meta description, e un solo `<h1>`;
+- il `link rel="canonical"` sia uguale all'URL atteso (`index.html` → `https://celan.it/`, `sagre/index.html` → `https://celan.it/sagre/`);
+- `og:image` sia un URL assoluto e il file esista in `dist/`;
+- ogni `<script type="application/ld+json">` si legga come JSON;
+- ogni `<form>` abbia un `data-endpoint` che comincia per `https://` (in qualunque pagina, anche `privacy/`).
+
+Le pagine con `noindex` (oggi `privacy/`) restano fuori da questi controlli e dalla sitemap, ma non dal controllo sui form. Le anteprime senza build restano possibili: i controlli girano solo nel build.
+
+**Attenzione alla trascrizione dai mockup.** Trascrivendo un mockup l'head SEO (title, canonical, Open Graph, JSON-LD) e il `data-endpoint` del form non devono andare persi: il 31/10 l'endpoint era stato azzerato e l'invio era diventato simulato senza che nessuno se ne accorgesse. Dopo ogni trascrizione si fa `git diff` sull'head e sui `data-endpoint`, e si lancia il build: ora fallisce se mancano.
+
+La **sitemap** (`dist/sitemap.xml`) elenca le pagine indicizzabili. `lastmod` è la data dell'ultimo commit che ha toccato il sorgente html della pagina, non quella del build; per questo `deploy.yml` clona con `fetch-depth: 0`. In un clone shallow, o per un file senza commit, `lastmod` si omette.
+
+**Lighthouse CI** (`lighthouse.yml`) gira su ogni pull request e su ogni push in master, sul `dist/` appena costruito: home, sagre, pizzerie e una guida, 3 run ciascuna. SEO sotto 0.9 è un errore, performance e accessibilità sono avvisi. Il report va su `temporary-public-storage` di Google; la config sta in `build/lighthouserc.json` perché nella radice verrebbe pubblicata.
+
+### Aggiungere una guida
+
+1. Crea `guide/<nome>/index.html` partendo da una guida esistente (stesso head, nav e footer, `consent.js`, nessun form). Percorsi relativi con `../../`.
+2. Nell'head: `<title>` con `| cèlan`, description, `canonical` assoluto (`https://celan.it/guide/<nome>/`), Open Graph (`og:image` può essere `og-home.png`), JSON-LD `BreadcrumbList` (Home > Guide > titolo) e `Article` con data di pubblicazione e modifica.
+3. Aggiungila all'elenco in `guide/index.html`.
+4. Aggiungi `guide/<nome>/index.html` a `PAGES` in `build/build.mjs`: la sitemap e i controlli la prendono da lì.
+5. Solo fatti che sono già nelle landing o che il titolare ha confermato: niente numeri, clienti o esperienza inventati.
 
 ## Sviluppo in locale
 
@@ -73,6 +107,7 @@ Le visite si contano con Google Analytics 4 (ID `G-4ZMKC3B4FJ`), acceso da `asse
 - Svuotare `data-ga-id` spegne tutto: niente banner, niente cookie, niente Google.
 - I webfont restano auto-hostati: anche col consenso, il sito non chiede i caratteri a Google.
 - La sezione "Cookie" di `privacy/index.html` descrive questo comportamento: se cambia, va aggiornata.
+- Quando il form parte davvero (risposta positiva del Worker, non l'invio simulato) e c'è il consenso alle statistiche, `sagre.js` e `pizzerie.js` mandano a GA4 l'evento `generate_lead` con il solo parametro `verticale`: nessun dato personale. Senza consenso non parte nulla. La sezione "Statistiche di visita" della privacy dice che si conta anche l'invio.
 
 ## Note
 
