@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # storia completa: il build ricava lastmod della sitemap dai commit
 
       - name: Configura Pages
         uses: actions/configure-pages@v5
