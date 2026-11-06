@@ -1,0 +1,37 @@
+name: Lighthouse
+
+# Controllo di qualita' su dist/: non pubblica nulla e non e' un passaggio di deploy.yml,
+# quindi un punteggio basso non blocca la pubblicazione. La SEO sotto 0.9 fa fallire solo
+# questo controllo.
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: build/package-lock.json
+
+      - name: Build
+        working-directory: build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=build/lighthouserc.json
