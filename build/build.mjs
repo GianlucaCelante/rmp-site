@@ -148,11 +148,11 @@ const indicizzabili = [];
 for (const { page, html } of controlli) {
   const noindex = /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
 
-  /* ogni form deve avere un endpoint https non vuoto (bug del 31/10: i mockup lo avevano svuotato) */
+  /* ogni form deve avere un endpoint https non vuoto (bug del 31/10: era stato svuotato sostituendo il markup) */
   for (const m of html.matchAll(/<form\b[^>]*>/g)) {
     const ep = /\sdata-endpoint="([^"]*)"/.exec(m[0]);
     if (!ep || !/^https:\/\/\S+$/.test(ep[1].trim())) {
-      errori.push(`${page}: il <form> non ha un data-endpoint https:// valido (trovato: ${ep ? JSON.stringify(ep[1]) : 'attributo assente'}). Trascrivendo i mockup non va azzerato.`);
+      errori.push(`${page}: il <form> non ha un data-endpoint https:// valido (trovato: ${ep ? JSON.stringify(ep[1]) : 'attributo assente'}). Senza endpoint l'invio e' solo simulato.`);
     }
   }
 

@@ -51,7 +51,7 @@ worker/               Cloudflare Worker che inoltra il form con Brevo (vedi work
 
 Ogni verticale è autonomo: una cartella con `index.html`, `css/`, `js/`, `img/`. La home segue lo stesso schema, solo che la sua cartella è la radice. Le due landing condividono la stessa impalcatura (nav, hero, tablet, formule, FAQ, form) ma con stile e testi propri, per questo CSS e JS sono per cartella e non condivisi; in `assets/` sta solo ciò che è davvero comune. Le prossime sezioni seguono lo stesso schema.
 
-`index.html`, `sagre/`, `pizzerie/` e `privacy/` sono la trascrizione dei mockup finali (`celan-home.html`, `celan-sagre.html`, `celan-master.html` e `privacy.html`): markup, CSS e JS sono quelli del mockup, cambiano solo i percorsi, perché font e immagini stanno in file veri invece che in base64 dentro la pagina. Chi li modifica tenga allineato il mockup, o il prossimo giro di design ripartirà da una versione vecchia.
+Il repository è l'unica fonte delle pagine: i mockup da cui sono nate non servono più e non vanno riallineati. Le modifiche si fanno direttamente qui.
 
 ## Controlli del build e SEO
 
@@ -65,7 +65,7 @@ Il build non si limita a minificare: se una pagina indicizzabile non è a posto 
 
 Le pagine con `noindex` (oggi `privacy/`) restano fuori da questi controlli e dalla sitemap, ma non dal controllo sui form. Le anteprime senza build restano possibili: i controlli girano solo nel build.
 
-**Attenzione alla trascrizione dai mockup.** Trascrivendo un mockup l'head SEO (title, canonical, Open Graph, JSON-LD) e il `data-endpoint` del form non devono andare persi: il 31/10 l'endpoint era stato azzerato e l'invio era diventato simulato senza che nessuno se ne accorgesse. Dopo ogni trascrizione si fa `git diff` sull'head e sui `data-endpoint`, e si lancia il build: ora fallisce se mancano.
+**Head SEO ed endpoint del form.** Sostituendo il markup di una pagina, l'head SEO (title, canonical, Open Graph, JSON-LD) e il `data-endpoint` del form non devono andare persi: il 31/10 l'endpoint era stato azzerato e l'invio era diventato simulato senza che nessuno se ne accorgesse. Il build ora fallisce se mancano.
 
 La **sitemap** (`dist/sitemap.xml`) elenca le pagine indicizzabili. `lastmod` è la data dell'ultimo commit che ha toccato il sorgente html della pagina, non quella del build; per questo `deploy.yml` clona con `fetch-depth: 0`. In un clone shallow, o per un file senza commit, `lastmod` si omette.
 
