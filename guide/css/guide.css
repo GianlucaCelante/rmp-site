@@ -1,0 +1,43 @@
+/* Guide: layout di lettura semplice, stesso linguaggio di privacy/ (Anton + Archivo,
+   fondo grigio chiaro, accento arancio, angoli netti). Token tipografici da common.css. */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#111110;--muted:#5F5D58;--bg:#E9E9E9;--card:#FCFBFA;--accent:#F0563C;--accent-text:#B03621;--line:rgba(17,17,16,.14);--dark:#141312;--accent-strong:#CC3D20;--on-accent-strong:#ffffff}
+body{background:var(--bg);color:var(--ink);font:400 var(--fs-body,16px)/1.6 'Archivo',sans-serif}
+.g-wrap{max-width:760px;margin-inline:auto;padding-inline:20px}
+
+.g-top{background:var(--card);border-bottom:1px solid var(--line)}
+.g-top__in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
+.g-brand img{height:34px;width:auto;display:block}
+.g-nav{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:var(--fs-small,14px);font-weight:600}
+.g-nav a{color:var(--ink);text-decoration:none;padding:6px 0}
+.g-nav a:hover,.g-nav a:focus-visible{color:var(--accent-text);text-decoration:underline}
+
+.g-main{padding-block:28px 72px}
+.g-crumb{font-size:var(--fs-small,14px);color:var(--muted);margin-bottom:28px}
+.g-crumb a{color:var(--accent-text)}
+h1{font:400 clamp(34px,7vw,56px)/1.05 'Anton',sans-serif;text-transform:uppercase;margin-bottom:12px;overflow-wrap:anywhere}
+.g-date{color:var(--muted);font-size:var(--fs-small,14px);margin-bottom:28px}
+.g-lead{font-size:var(--fs-lead,18px);line-height:1.5;margin-bottom:8px;max-width:66ch}
+h2{font:700 var(--fs-title,24px)/1.25 'Archivo',sans-serif;margin:40px 0 10px}
+p,li{color:#3a3835;max-width:66ch}
+p{margin-bottom:14px}
+ul{padding-left:22px;margin:10px 0 14px}
+li{margin-bottom:8px}
+a{color:var(--accent-text)}
+a:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+
+.g-cta{margin-top:44px;padding:22px 22px 8px;background:var(--card);border-left:6px solid var(--accent)}
+
+/* elenco nell'indice delle guide */
+.g-list{list-style:none;padding:0;margin-top:28px;display:grid;gap:16px}
+.g-list li{margin:0;max-width:none}
+.g-card{display:block;padding:20px 22px;background:var(--card);border-left:6px solid var(--accent);text-decoration:none;color:var(--ink)}
+.g-card:hover,.g-card:focus-visible{background:#fff}
+.g-card__t{display:block;font:700 var(--fs-title,22px)/1.25 'Archivo',sans-serif;margin-bottom:6px;color:var(--accent-text)}
+.g-card__d{display:block;color:#3a3835;margin-bottom:8px;max-width:66ch}
+.g-card time{font-size:var(--fs-small,14px);color:var(--muted)}
+
+.g-foot{background:var(--dark);color:var(--card);padding-block:32px;font-size:var(--fs-small,14px)}
+.g-foot p{color:var(--card);max-width:none}
+.g-foot__brand{margin-bottom:14px}
+.g-foot a{color:var(--card)}
