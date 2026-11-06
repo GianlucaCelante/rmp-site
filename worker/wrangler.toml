@@ -5,6 +5,10 @@ compatibility_date = "2026-08-01"
 # GitHub Actions, che entra con un token e non con `wrangler login`.
 account_id = "aaee35c96ec036e2d57764767ae0efc2"
 
+# Indirizzo del Worker: sotto il dominio del sito, cosi' non dipende dall'account.
+workers_dev = false
+routes = [{ pattern = "form.celan.it", custom_domain = true }]
+
 # Variabili NON segrete. La chiave Brevo va messa come secret:
 #   npx wrangler secret put BREVO_API_KEY
 [vars]
