@@ -77,7 +77,13 @@ Come funziona:
 
 **Regola per i clienti.** Chi diventa cliente va tolto dalla lista "Preventivi sito" oppure messo anche in un'altra lista prima della scadenza: altrimenti, passati 12 mesi dall'ultima richiesta, viene cancellato (o, se e' in un'altra lista, tolto da questa).
 
-**Fuori copertura.** Le email di avviso arrivate nelle caselle Gmail del titolare non vengono cancellate da questo meccanismo: vanno eliminate a mano.
+**Email in Gmail.** Le email di avviso nelle caselle del titolare non passano da questo meccanismo. Le toglie `gmail/pulizia-preventivi.gs`, un Google Apps Script da installare una volta per ogni casella:
+
+1. Con l'account della casella apri <https://script.google.com> → **Nuovo progetto**, incolla il file e salva.
+2. Scegli `pulisciPreventivi` e premi **Esegui**: Google chiede di autorizzare l'accesso a Gmail. Lo script parte in prova (`PROVA = true`) e nel log elenca cosa sposterebbe, senza toccare nulla.
+3. Se l'elenco e' giusto metti `PROVA = false`, salva, scegli `installa` e premi **Esegui**: da allora gira ogni notte.
+
+Sposta nel cestino le conversazioni il cui ultimo messaggio ha piu' di 11 mesi: Gmail svuota il cestino dopo 30 giorni, quindi si resta dentro i 12 mesi. Chi diventa cliente: etichetta `cliente` sulla conversazione, e lo script la salta.
 
 Prova locale (senza `BREVO_API_KEY` esce senza chiamare Brevo; con la chiave usare `--var RETENTION_DRY_RUN:true`, che legge la lista ma non scrive):
 

@@ -3,6 +3,8 @@
    `npm test` dentro worker/. */
 import worker from '../src/index.js';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
 
 const calls = [];
 globalThis.fetch = async (url, init) => {
@@ -309,4 +311,55 @@ await t('fetch invariato dopo la cancellazione automatica', async () => {
 async function fetchRaw(text) {
   return worker.fetch(new Request('https://form.example.workers.dev/', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: ORIGIN, 'CF-Connecting-IP': '2.2.2.2' }, body: text }), env);
 }
+/* --- Script Gmail (worker/gmail): gira in un contesto finto, senza Google --- */
+function caricaGmail(conversazioni, prova) {
+  const log = [];
+  const ctx = { Logger: { log: (...a) => log.push(a.join(' ')) }, Date, Math,
+    GmailApp: { search: (q, inizio, n) => { ctx.ricerca = q; return conversazioni.slice(inizio, inizio + n); } } };
+  vm.createContext(ctx);
+  vm.runInContext(readFileSync(new URL('../gmail/pulizia-preventivi.gs', import.meta.url), 'utf8'), ctx);
+  ctx.PROVA = prova;
+  return { ctx, log };
+}
+function conversazione(data, etichette = []) {
+  return { cestino: false, getLastMessageDate: () => new Date(data), getFirstMessageSubject: () => 'oggetto',
+    getLabels: () => etichette.map((e) => ({ getName: () => e })), moveToTrash() { this.cestino = true; } };
+}
+const mesiFa = (m, g = 0) => { const d = new Date(); d.setMonth(d.getMonth() - m); d.setDate(d.getDate() - g); return d.toISOString(); };
+
+await t('gmail: cestina solo le scadute, tiene etichetta cliente e conversazioni recenti', async () => {
+  const scaduta = conversazione(mesiFa(12));
+  const cliente = conversazione(mesiFa(12), ['cliente']);
+  const recente = conversazione(mesiFa(10));
+  const { ctx } = caricaGmail([scaduta, cliente, recente], false);
+  ctx.pulisciPreventivi();
+  assert.deepEqual([scaduta.cestino, cliente.cestino, recente.cestino], [true, false, false]);
+  assert.match(ctx.ricerca, /from:noreply@celan\.it/);
+});
+await t('gmail: conta dall ultimo messaggio, non dalla ricerca', async () => {
+  const conRisposta = conversazione(mesiFa(1));
+  const { ctx } = caricaGmail([conRisposta], false);
+  ctx.pulisciPreventivi();
+  assert.equal(conRisposta.cestino, false);
+});
+await t('gmail: in prova non sposta nulla', async () => {
+  const scaduta = conversazione(mesiFa(12));
+  const { ctx, log } = caricaGmail([scaduta], true);
+  ctx.pulisciPreventivi();
+  assert.equal(scaduta.cestino, false);
+  assert.ok(log.some((l) => l.includes('Da cancellare')));
+});
+await t('gmail: il file scaricato parte in prova', async () => {
+  const { ctx } = caricaGmail([], undefined);
+  const src = readFileSync(new URL('../gmail/pulizia-preventivi.gs', import.meta.url), 'utf8');
+  assert.match(src, /var PROVA = true;/);
+  assert.ok(ctx.dataLimite);
+});
+await t('gmail: pagine lette per intero prima di spostare', async () => {
+  const tante = Array.from({ length: 150 }, () => conversazione(mesiFa(12)));
+  const { ctx } = caricaGmail(tante, false);
+  ctx.pulisciPreventivi();
+  assert.equal(tante.filter((c) => c.cestino).length, 150);
+});
+
 console.log(n + ' test passati');
