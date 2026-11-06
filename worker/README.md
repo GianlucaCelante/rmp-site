@@ -61,6 +61,32 @@ Avvia il Worker su `http://localhost:8787` in `DRY_RUN` (valida, risponde ok, no
 - Campo honeypot `website` nel form: se un bot lo compila, il Worker risponde ok senza fare nulla.
 - Limite di 5 invii per IP ogni 10 minuti, per isolate (best-effort). Per una protezione affidabile aggiungere nel pannello Cloudflare una regola **Rate limiting** sul Worker, e in caso di abusi il widget **Turnstile** (captcha invisibile, gratuito).
 
+## Cancellazione automatica dei contatti (12 mesi)
+
+L'informativa promette che i contatti della lista Brevo "Preventivi sito" (`BREVO_LIST_ID`) spariscono 12 mesi dopo l'ultima richiesta. Lo fa l'handler `scheduled` (`src/retention.js`), lanciato dal cron di `wrangler.toml` ogni giorno alle 03:00 UTC.
+
+Come funziona:
+
+1. Legge la lista a pagine da 500 (`GET /contacts/lists/{id}/contacts`, ordine di creazione) e solo dopo agisce, cosi' la paginazione non slitta quando si cancella.
+2. Scaduto = `modifiedAt` anteriore a 12 mesi di calendario (il contatto viene aggiornato a ogni nuova richiesta).
+3. Scaduto e solo in questa lista: `DELETE /contacts/{email}`. Scaduto e anche in altre liste: lo toglie solo da questa (`POST /contacts/lists/{id}/contacts/remove`, a gruppi di 50) e non lo cancella.
+4. Contatto senza `modifiedAt` leggibile (o senza `listIds`): non lo tocca, lo conta come saltato.
+5. Massimo 40 sottorichieste a esecuzione (il piano gratuito Cloudflare ne ammette 50); cio' che avanza va al giro dopo.
+6. Nei log solo conteggi (letti, scaduti, cancellati, tolti dalla lista, saltati, errori, rimandati): mai email. Un errore su un contatto non ferma gli altri; a fine giro, se ci sono errori, l'esecuzione fallisce e si vede nei log di Cloudflare.
+7. Senza `BREVO_LIST_ID` o `BREVO_API_KEY` esce senza fare nulla. Con `RETENTION_DRY_RUN = "true"` conta soltanto.
+
+**Regola per i clienti.** Chi diventa cliente va tolto dalla lista "Preventivi sito" oppure messo anche in un'altra lista prima della scadenza: altrimenti, passati 12 mesi dall'ultima richiesta, viene cancellato (o, se e' in un'altra lista, tolto da questa).
+
+**Fuori copertura.** Le email di avviso arrivate nelle caselle Gmail del titolare non vengono cancellate da questo meccanismo: vanno eliminate a mano.
+
+Prova locale (senza `BREVO_API_KEY` esce senza chiamare Brevo; con la chiave usare `--var RETENTION_DRY_RUN:true`, che legge la lista ma non scrive):
+
+```
+cd worker
+npx wrangler dev --test-scheduled
+curl "http://localhost:8787/__scheduled?cron=0+3+*+*+*"
+```
+
 ## Privacy
 
 Brevo (Sendinblue SAS, Parigi) e Cloudflare (Cloudflare Inc., USA) vanno citati nell'informativa in `privacy/index.html` come responsabili del trattamento.
