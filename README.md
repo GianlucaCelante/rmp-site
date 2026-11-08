@@ -74,7 +74,7 @@ La **sitemap** (`dist/sitemap.xml`) elenca le pagine indicizzabili. `lastmod` è
 
 ### Aggiungere una guida
 
-1. Crea `guide/<nome>/index.html` partendo da una guida esistente (stesso head, nav e footer, `consent.js`, nessun form). Percorsi relativi con `../../`.
+1. Crea `guide/<nome>/index.html` partendo da una guida esistente (stesso head, nav e footer, beacon Cloudflare e `consent.js`, nessun form). Percorsi relativi con `../../`.
 2. Nell'head: `<title>` con `| cèlan`, description, `canonical` assoluto (`https://celan.it/guide/<nome>/`), Open Graph (`og:image` può essere `og-home.png`), JSON-LD `BreadcrumbList` (Home > Guide > titolo) e `Article` con data di pubblicazione e modifica.
 3. Aggiungila all'elenco in `guide/index.html`.
 4. Aggiungi `guide/<nome>/index.html` a `PAGES` in `build/build.mjs`: la sitemap e i controlli la prendono da lì.
@@ -108,6 +108,7 @@ Le visite si contano con Google Analytics 4 (ID `G-4ZMKC3B4FJ`), acceso da `asse
 - Svuotare `data-ga-id` spegne tutto: niente banner, niente cookie, niente Google.
 - I webfont restano auto-hostati: anche col consenso, il sito non chiede i caratteri a Google.
 - La sezione "Cookie" di `privacy/index.html` descrive questo comportamento: se cambia, va aggiornata.
+- **Conteggio visite senza cookie.** Le stesse pagine caricano, prima di `consent.js`, il beacon di Cloudflare Web Analytics (`static.cloudflareinsights.com/beacon.min.js`, token pubblico nel `data-cf-beacon`), sull'account Cloudflare di `celan.rmp`. Non usa cookie né `localStorage`, quindi parte anche senza consenso e conta tutte le visite, mentre GA4 vede solo chi accetta. I numeri si leggono in Cloudflare → Web analytics → celan.it. Il sito è impostato su "JS snippet installato a mano", perché celan.it non passa dal proxy Cloudflare: una pagina nuova deve copiare la riga dalle altre. La privacy lo descrive al punto 2 (conteggio anonimo) e al punto 3: se cambia, va aggiornata.
 - Quando il form parte davvero (risposta positiva del Worker, non l'invio simulato) e c'è il consenso alle statistiche, `sagre.js` e `pizzerie.js` mandano a GA4 l'evento `generate_lead` con il solo parametro `verticale`: nessun dato personale. Senza consenso non parte nulla. La sezione "Statistiche di visita" della privacy dice che si conta anche l'invio.
 
 ## Note
