@@ -29,6 +29,12 @@ guide/                guide di approfondimento, in layout di lettura (stesso sch
   cassa-per-sagre/    una cartella per guida, con il suo index.html
   coda-forno-asporto/
   food-cost-pizzeria/
+demo/                 demo per i clienti (non linkata, noindex): hub con QR e una cartella per cliente
+  index.html          hub: elenco dei locali, "Mostra QR" a tutto schermo
+  css/demo.css, js/demo.js
+  js/elenco.js        elenco delle demo (una riga per cliente)
+  js/qrcode.js        qrcode-generator 2.0.4 (MIT), generazione del QR nel browser
+  <slug>/index.html   la demo di un cliente (una cartella per locale)
 404.html              pagina "non trovata": GitHub Pages la serve per ogni percorso inesistente
 robots.txt            consente tutto e indica la sitemap (la sitemap.xml la genera il build)
 assets/               risorse condivise tra le sezioni
@@ -64,7 +70,7 @@ Il build non si limita a minificare: se una pagina indicizzabile non è a posto 
 - ogni `<script type="application/ld+json">` si legga come JSON;
 - ogni `<form>` abbia un `data-endpoint` che comincia per `https://` (in qualunque pagina, anche `privacy/`).
 
-Le pagine con `noindex` (oggi `privacy/`) restano fuori da questi controlli e dalla sitemap, ma non dal controllo sui form. Le anteprime senza build restano possibili: i controlli girano solo nel build.
+Le pagine con `noindex` (`privacy/` e `demo/`) restano fuori da questi controlli e dalla sitemap, ma non dal controllo sui form. Le anteprime senza build restano possibili: i controlli girano solo nel build.
 
 **Head SEO ed endpoint del form.** Sostituendo il markup di una pagina, l'head SEO (title, canonical, Open Graph, JSON-LD) e il `data-endpoint` del form non devono andare persi: il 31/10 l'endpoint era stato azzerato e l'invio era diventato simulato senza che nessuno se ne accorgesse. Il build ora fallisce se mancano.
 
@@ -79,6 +85,16 @@ La **sitemap** (`dist/sitemap.xml`) elenca le pagine indicizzabili. `lastmod` è
 3. Aggiungila all'elenco in `guide/index.html`.
 4. Aggiungi `guide/<nome>/index.html` a `PAGES` in `build/build.mjs`: la sitemap e i controlli la prendono da lì.
 5. Solo fatti che sono già nelle landing o che il titolare ha confermato: niente numeri, clienti o esperienza inventati.
+
+### Aggiungere una demo per un cliente
+
+Le demo sono siti personalizzati sul locale del prospect (nome, logo, colori, qualche piatto vero): niente modelli generici. Pubbliche ma senza link da nessuna parte e con `noindex`.
+
+1. Crea `demo/<slug>/index.html`, con `slug` difficile da indovinare (`pizzeria-roma-x7k2`): la demo mostra il locale di un prospect. Nell'head: `<meta name="robots" content="noindex, nofollow">`, niente canonical, niente Open Graph, niente banner cookie né analytics. Pensala per il telefono. Percorsi relativi con `../../`, i webfont da `assets/fonts` (mai Google Fonts).
+2. Aggiungi la riga in `demo/js/elenco.js` (`slug`, `nome`, `tipo`, `luogo`, `stato`).
+3. Push su `master`: la demo compare su `celan.it/demo/` e il QR punta a `celan.it/demo/<slug>/`.
+
+L'hub elenca tutti i locali, quindi chi trova `/demo/` li vede tutti: non metterci nomi di cui non ci si fida. Quando un prospect esce dal giro, togli la cartella e la riga.
 
 ## Sviluppo in locale
 

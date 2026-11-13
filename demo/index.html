@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Demo per i clienti | cèlan</title>
+<link rel="icon" type="image/png" href="../assets/brand/favicon-celan.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon-celan.svg">
+<link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png">
+<link rel="preload" href="../assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+<header class="top">
+  <img class="top__logo" src="../assets/brand/logo-celan.webp" alt="cèlan" width="120" height="40">
+  <p class="top__tag">Demo per i clienti</p>
+</header>
+
+<main class="wrap">
+  <h1>Scegli il locale e mostra il QR</h1>
+  <p class="lead">Il cliente inquadra il codice col telefono e la demo si apre direttamente sul suo schermo.</p>
+
+  <label class="cerca" id="cercaBox" hidden>
+    <span class="vh">Cerca un locale</span>
+    <input id="cerca" type="search" placeholder="Cerca un locale" autocomplete="off">
+  </label>
+
+  <ul class="lista" id="lista"></ul>
+  <p class="vuoto" id="vuoto" hidden>Nessuna demo da mostrare.</p>
+</main>
+
+<dialog class="qr" id="qr" aria-labelledby="qrNome">
+  <div class="qr__box">
+    <p class="qr__tipo" id="qrTipo"></p>
+    <h2 id="qrNome"></h2>
+    <div class="qr__code" id="qrCode" role="img" aria-label="Codice QR della demo"></div>
+    <p class="qr__hint">Inquadra con la fotocamera del telefono</p>
+    <p class="qr__url" id="qrUrl"></p>
+    <button class="btn btn--ghost" type="button" id="qrChiudi">Chiudi</button>
+  </div>
+</dialog>
+
+<script src="js/qrcode.js"></script>
+<script src="js/elenco.js"></script>
+<script src="js/demo.js"></script>
+</body>
+</html>
