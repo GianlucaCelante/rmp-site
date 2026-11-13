@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pizza Club Villorba · pizza d'asporto e a domicilio</title>
+<meta name="description" content="Pizza Club, Via Chiesa 7 a Villorba (TV). Pizzeria d'asporto, consegna a domicilio. Chiama lo 0422 444655. Martedì chiuso.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#DD2A2C">
+<script>
+/* apertura animata a ogni caricamento, saltata con #ancora o movimento ridotto */
+try{ if(!matchMedia('(prefers-reduced-motion:reduce)').matches && !location.hash){ document.documentElement.classList.add('intro'); } }catch(e){}
+</script>
+<link rel="icon" href="img/fetta.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fraunces-soft-black-italic.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bricolage";src:url(fonts/bricolage.woff2) format("woff2");font-weight:200 800;font-stretch:75% 100%;font-display:swap}
+/* accento d'identita: Fraunces 900 corsivo, SOFT 100, WONK 0, opsz 72 (Google Fonts, OFL), istanza fissa latin.
+   Riferimento: la scritta "Pizza" del cartone classico bianco. Solo per h1 e titoli di sezione (h2). */
+@font-face{font-family:"Fraunces Cartone";src:url(fonts/fraunces-soft-black-italic.woff2) format("woff2");font-weight:900;font-style:italic;font-display:swap}
+
+:root{
+  --latte:#F8F8F8;      /* fondo, come il bianco del logo */
+  --nero:#1C1C1B;       /* nero del logo: testo */
+  --pomodoro:#DD2A2C;   /* unico accento forte: testata, Chiama */
+  --sugo:#9E1B1D;       /* rosso scuro per testo piccolo (7,5:1 sul latte) */
+  --basilico:#2F8F46;   /* solo il pallino "aperto" */
+  --grigio:#5C5955;     /* testo secondario */
+  --rule:rgba(28,28,27,.12);
+  --f:"Bricolage","Arial Narrow",system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.45,.5,1);
+  --gutter:16px;
+  --dock:72px;
+  --top:64px;
+  --sheet:30px;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--latte);color:var(--nero);font-family:var(--f);font-size:17px;line-height:1.55;font-weight:400;font-variation-settings:"opsz" 16;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock) + env(safe-area-inset-bottom));overflow-x:clip}
+img,svg,video{display:block;max-width:100%}
+img{height:auto}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--nero);outline-offset:3px;border-radius:999px}
+:where(main){display:block;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--gutter)}
+:target{scroll-margin-top:calc(var(--top) + 16px)}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.d{font-family:"Fraunces Cartone","Arial Black",system-ui,sans-serif;font-weight:900;font-style:italic;letter-spacing:0}
+.ic{width:20px;height:20px;flex:none;fill:currentColor}
+
+/* ---------- bottoni ----------
+   Pillola piena. A sinistra un cerchio con l'icona (Phosphor, MIT), il testo, e a destra una freccia solo dove porta altrove. */
+.btn{--h:56px;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:var(--h);padding:0 22px 0 8px;border-radius:999px;font-weight:600;font-size:17px;line-height:1;text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transition:transform .45s var(--spring),background-color .3s var(--ease),color .3s var(--ease)}
+.btn .bub{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;flex:none;transition:transform .5s var(--spring)}
+.btn .bub .ic{width:21px;height:21px}
+.btn .tail{width:16px;height:16px;margin-left:2px;transition:transform .45s var(--spring)}
+.btn:active{transform:scale(.965)}
+.btn-main{background:#fff;color:var(--nero)}
+.btn-main .bub{background:var(--pomodoro);color:#fff}
+.btn-line{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.85)}
+.btn-line .bub{background:rgba(255,255,255,.16)}
+.btn-red{background:var(--pomodoro);color:#fff}
+.btn-red .bub{background:rgba(255,255,255,.18)}
+.btn-ink{background:var(--nero);color:#fff}
+.btn-ink .bub{background:rgba(255,255,255,.12)}
+.btn-plain{padding:0 22px}
+@media (hover:hover){
+  .btn-main:hover{background:#FFF1EE}
+  .btn-line:hover{background:rgba(255,255,255,.12)}
+  .btn-red:hover{background:#C42326}
+  .btn-ink:hover{background:#000}
+  .btn:hover .bub{transform:scale(1.06)}
+  .btn:hover .tail{transform:translate(2px,-2px)}
+}
+
+/* ---------- testata con video ---------- */
+.hero{position:relative;height:calc(100svh - var(--dock) - env(safe-area-inset-bottom));min-height:560px;max-height:980px;background:#B77F4F;overflow:hidden;isolation:isolate}
+.media{position:absolute;inset:0}
+.media picture,.media video{position:absolute;inset:0;width:100%;height:100%}
+.media img,.media video{width:100%;height:100%;object-fit:cover;object-position:68% 18%}
+.media video{opacity:0;transition:opacity .9s var(--ease)}
+.media video.on{opacity:1}
+.media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,10,6,.74) 0px,rgba(28,10,6,.5) 70px,rgba(28,10,6,0) 170px),linear-gradient(0deg,rgba(24,9,5,.86) 0%,rgba(24,9,5,.62) 24%,rgba(24,9,5,.22) 44%,rgba(24,9,5,0) 60%);pointer-events:none}
+.bar{position:fixed;z-index:20;left:0;right:0;top:0;height:var(--top);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 var(--gutter);color:#fff;transition:background-color .45s var(--ease),color .45s var(--ease),box-shadow .45s var(--ease)}
+.sent{position:absolute;left:0;top:calc(100% - var(--sheet) - var(--top));width:1px;height:1px;pointer-events:none}
+.bar.light{background:var(--latte);color:var(--nero);box-shadow:0 1px 0 var(--rule)}
+.bar .logo{display:flex;align-items:center;width:96px;min-height:44px}
+.bar .logo img,.bar .logo picture{display:block;width:100%}
+.bar .logo .dark,.bar.light .logo .white{display:none}
+.bar.light .logo .dark{display:block}
+.bar-r{display:flex;align-items:center;gap:14px;min-width:0}
+.call{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 16px 0 14px;border-radius:999px;background:var(--pomodoro);color:#fff;font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap;transition:background-color .3s var(--ease),transform .45s var(--spring)}
+.call .ic{width:18px;height:18px}
+.call:active{transform:scale(.965)}
+@media (hover:hover){.call:hover{background:#C42326}}
+.bar:not(.light) :focus-visible{outline-color:#fff}
+/* il titolo sta sul video, in basso a sinistra, sopra un velo scuro; sotto sale il rosso del menu */
+.hero-testo{position:absolute;z-index:2;left:0;right:0;bottom:0;color:#fff;padding:0 var(--gutter) calc(var(--sheet) + 30px)}
+.hero h1{margin:0;font-size:clamp(54px,19.5vw,86px);line-height:.98;text-shadow:0 2px 28px rgba(20,8,4,.35)}
+.hero h1 .ln{display:block;overflow:hidden;padding:0 .12em .16em 0;margin-bottom:-.16em}
+.hero h1 .ln>span{display:block}
+.hero .sub{margin:12px 0 0;font-size:17px;line-height:1.45;max-width:34ch}
+.hero .ctas{display:none;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}
+.js .hero h1 .ln>span{transform:translateY(105%);animation:up 1s .35s var(--ease) forwards}
+.js .hero h1 .ln:nth-child(2)>span{animation-delay:.46s}
+.js .hero .sub,.js .hero .ctas{opacity:0;animation:fade .8s .7s var(--ease) forwards}
+.js .hero .ctas{animation-delay:.82s}
+@keyframes up{to{transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- sezioni ---------- */
+.sheet{position:relative;border-radius:var(--sheet) var(--sheet) 0 0;margin-top:calc(-1 * var(--sheet))}
+.sec{padding-top:96px;padding-bottom:96px}
+.h2{font-size:clamp(44px,12vw,60px);line-height:1;margin:0;padding-bottom:.08em}
+.lead{margin:14px 0 0;color:var(--grigio);font-size:17px;max-width:46ch}
+
+/* ---------- menu ---------- */
+#menu{position:relative;z-index:1;padding-top:56px;padding-bottom:80px}
+/* il rosso della testata ora e il blocco iniziale del menu: sale sul video con gli angoli tondi,
+   finisce sotto le tab (altezza --testa calcolata dallo script del menu); le righe delle pizze restano sul latte */
+#menu::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:calc(-1 * var(--sheet));height:calc(var(--testa,560px) + var(--sheet));background:var(--pomodoro);border-radius:var(--sheet) var(--sheet) 0 0}
+.menu-side{color:#fff}
+.menu-side .lead,.menu-side .count{color:#fff}
+.menu-side :focus-visible{outline-color:#fff}
+.menu-side .tabs-wrap{background:var(--pomodoro);border-bottom:0}
+.menu-side .tabs-wrap::after{background:linear-gradient(90deg,rgba(221,42,44,0),var(--pomodoro) 80%)}
+.menu-side .tab{color:#fff}
+.menu-side .tab sup{color:#fff}
+.menu-side .tab[aria-selected="true"]{background:var(--latte);color:var(--nero)}
+.menu-side .tab[aria-selected="true"] sup{color:var(--grigio)}
+.count{margin:14px 0 0;color:var(--grigio);font-size:17px}
+/* filtri: un bottone sul rosso che apre un piccolo pannello bianco; un filtro alla volta */
+.menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.filtro{position:relative;flex:none}
+.f-btn{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 20px 0 16px;border:0;border-radius:999px;background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8);font-size:16px;font-weight:600;cursor:pointer;transition:background-color .25s var(--ease),transform .4s var(--spring)}
+.f-btn .ic{width:20px;height:20px;flex:none}
+/* filtro attivo: pallino latte sul bottone */
+.f-btn .dot{position:absolute;top:9px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--latte);transform:scale(0);transition:transform .35s var(--spring)}
+.f-btn.on .dot{transform:none}
+@media (hover:hover){.f-btn:hover{background:rgba(255,255,255,.14)}}
+.f-btn:active{transform:scale(.96)}
+.f-attivo{margin-top:16px}
+.f-attivo[hidden]{display:none}
+.f-chip{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px 0 18px;border:0;border-radius:999px;background:var(--latte);color:var(--nero);font-size:16px;font-weight:600;cursor:pointer;transition:transform .4s var(--spring)}
+.f-chip .ic{width:16px;height:16px;flex:none}
+.f-chip:active{transform:scale(.96)}
+.f-pan{position:absolute;right:0;top:calc(100% + 8px);z-index:7;width:min(320px,calc(100vw - 2 * var(--gutter)));padding:8px;border-radius:20px;background:#fff;color:var(--nero);box-shadow:0 20px 50px -12px rgba(90,14,16,.45),0 2px 8px rgba(28,28,27,.12);transform-origin:20px 0;animation:fpan .3s var(--ease)}
+.f-pan[hidden]{display:none}
+@keyframes fpan{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.f-opt{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;border:0;border-radius:12px;background:transparent;color:var(--nero);font-size:16px;font-weight:500;text-align:left;cursor:pointer;transition:background-color .2s var(--ease)}
+.f-opt .n{color:var(--grigio);font-size:15px;font-variant-numeric:tabular-nums}
+@media (hover:hover){.f-opt:hover{background:rgba(28,28,27,.06)}}
+.f-opt[aria-pressed="true"]{background:var(--nero);color:#fff}
+.f-opt[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.menu-side .f-pan :focus-visible{outline-color:var(--nero)}
+
+.tabs-wrap{position:sticky;top:var(--top);z-index:5;background:var(--latte);margin:28px calc(-1 * var(--gutter)) 0;padding:10px 0;border-bottom:1px solid var(--rule);display:flex;align-items:center}
+.tabs-wrap::after{content:"";position:absolute;right:0;top:0;bottom:1px;width:36px;background:linear-gradient(90deg,rgba(248,248,248,0),var(--latte) 80%);pointer-events:none;transition:opacity .25s var(--ease)}
+.tabs-wrap.at-end::after{opacity:0}
+.tabs{position:relative;flex:1;min-width:0;display:flex;gap:2px;padding:0 var(--gutter) 0 4px;overflow-x:auto;scrollbar-width:none;scroll-padding:0 var(--gutter)}
+.tabs::-webkit-scrollbar{display:none}
+.tab-ind{display:none}
+.tab[hidden]{display:none}
+.tab{position:relative;flex:none;min-height:44px;border:0;border-radius:999px;background:transparent;cursor:pointer;font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;padding:0 15px;transition:color .3s var(--ease),background-color .3s var(--ease)}
+.tab sup{font-size:13px;font-weight:500;color:var(--grigio);transform:translateY(-3px);transition:color .3s var(--ease)}
+.tab[aria-selected="true"]{background:var(--nero);color:#fff}
+.tab[aria-selected="true"] sup{color:rgba(255,255,255,.78)}
+@media (hover:hover){.tab:hover:not([aria-selected="true"]){background:rgba(28,28,27,.05)}}
+
+.result-note{font-size:16px;font-weight:500;color:var(--grigio);margin:20px 0 0}
+.result-note:empty{margin:0}
+.cat{padding-top:36px;scroll-margin-top:calc(var(--top) + 84px)}
+.cat[hidden]{display:none}
+.cat-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:12px;border-bottom:1px solid var(--nero)}
+.cat-head h3{font-size:30px;line-height:1.1;font-weight:700;letter-spacing:-.02em;margin:0;font-variation-settings:"opsz" 48}
+.cat-head p{margin:0;font-size:15px;color:var(--grigio)}
+.cat-note{margin:14px 0 4px;color:var(--grigio);font-size:15px;line-height:1.5;max-width:60ch}
+.cat-note a{color:var(--nero);font-weight:500;text-underline-offset:3px;text-decoration-color:rgba(28,28,27,.35);display:inline-block;padding:11px 0;margin:-11px 0}
+.list{list-style:none;margin:0;padding:0}
+/* riga del menu: nome a sinistra, prezzo allineato a destra, ingredienti in grigio, allergeni piccoli */
+.item,.fm{padding:18px 0 17px;border-bottom:1px solid var(--rule)}
+.item[hidden]{display:none}
+.l1{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.item h4,.fm h3{margin:0;font-size:19px;line-height:1.25;font-weight:600;letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.price{flex:none;font-weight:600;font-size:17px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.item .ing,.fm p{margin:5px 0 0;color:var(--grigio);font-size:16px;line-height:1.45;max-width:44ch}
+.item .alg{font-size:15px;color:var(--grigio);white-space:nowrap;font-variant-numeric:tabular-nums}
+.js .item.enter{animation:itemin .5s var(--ease) both;animation-delay:calc(var(--i,0) * 22ms)}
+@keyframes itemin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.extras{margin-top:72px;display:grid;gap:48px}
+.extras h3,details.extra summary{font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em;margin:0}
+.extra{padding-top:14px;border-top:1px solid var(--nero)}
+/* Varianti: scheda rossa come il blocco del menu, testi e prezzi bianchi (4,7:1), filetti chiari */
+#varianti{background:var(--pomodoro);color:#fff;border-top:0;border-radius:var(--sheet);padding:26px 22px 14px}
+#varianti .vars li{border-bottom-color:rgba(255,255,255,.3)}
+.vars{list-style:none;margin:10px 0 0;padding:0}
+.vars li{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:16px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.vars li:last-child{border-bottom:0}
+.vars .p{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+details.extra summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+details.extra summary::-webkit-details-marker{display:none}
+details.extra summary::after{content:"+";font-size:26px;font-weight:400;line-height:1}
+details.extra[open] summary::after{content:"\2212"}
+.alg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0 14px;padding:0;list-style:none;font-size:16px}
+.alg-grid b{display:inline-block;min-width:2.2ch;font-weight:600;font-variant-numeric:tabular-nums}
+.small{font-size:15px;color:var(--grigio);margin:0;max-width:60ch}
+
+/* ---------- informazioni pratiche (dopo il menu) ---------- */
+.facts{padding-top:72px;padding-bottom:150px}
+.facts h2{margin:0 0 18px;font-size:clamp(36px,10vw,48px);line-height:1.05;padding-bottom:.06em}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--nero)}
+.facts li{border-bottom:1px solid var(--rule)}
+.facts .row{display:grid;grid-template-columns:100px 1fr;gap:12px;align-items:baseline;padding:16px 0}
+.facts span a{color:inherit;font-weight:500;text-underline-offset:3px;display:inline-block;padding:12px 0;margin:-12px 0}
+.facts b{font-size:16px;font-weight:600}
+.facts span{font-size:16px;line-height:1.45;color:var(--grigio)}
+
+/* ---------- fuori menu: l'unico foglio colorato prima della chiusura ---------- */
+.board-sec{background:var(--nero);color:var(--latte);z-index:1}
+.board-sec .lead{color:#C9C5BF}
+.board{list-style:none;margin:36px 0 0;padding:0;border-top:1px solid var(--latte)}
+.board .fm{border-bottom-color:rgba(248,248,248,.16)}
+.board .fm p{color:#B9B4AE}
+.board-sec :focus-visible{outline-color:var(--latte)}
+/* Fuori menu ora sta subito dopo la testata, prima del rosso del menu: foglio latte che sale sul video */
+.fuori{background:var(--latte);color:var(--nero);z-index:1}
+.fuori .lead{color:var(--grigio)}
+.fuori .board{border-top-color:var(--nero)}
+.fuori .board .fm{border-bottom-color:var(--rule)}
+.fuori .board .fm p{color:var(--grigio)}
+.fuori :focus-visible{outline-color:var(--nero)}
+/* Informazioni su nero, dopo il menu: testi latte, secondari #C9C5BF (9,9:1) */
+.info-sec{background:var(--nero);color:var(--latte);z-index:1}
+.info-sec .facts{padding-top:96px;padding-bottom:120px}
+.info-sec .facts ul{border-top-color:var(--latte)}
+.info-sec .facts li{border-bottom-color:rgba(248,248,248,.16)}
+.info-sec .facts span{color:#C9C5BF}
+.info-sec .facts span a{color:var(--latte)}
+.info-sec :focus-visible{outline-color:var(--latte)}
+
+/* ---------- come ordinare ---------- */
+.order{background:var(--latte);z-index:2}
+.order-grid{display:grid;gap:44px;margin-top:40px}
+.photo{margin:0;border-radius:20px;overflow:hidden;background:#E9E6E3;aspect-ratio:1/1}
+.photo img{width:100%;height:100%;object-fit:cover}
+.ways{list-style:none;margin:0;padding:0;border-top:1px solid var(--nero)}
+.way{padding:26px 0 28px;border-bottom:1px solid var(--rule)}
+.way:last-child{border-bottom:0}
+.way h3,.place h3{margin:0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.way p{margin:6px 0 18px;max-width:42ch;color:var(--grigio)}
+.way .num{font-weight:600;font-size:19px;color:var(--nero);font-variant-numeric:tabular-nums}
+.way .note{display:block;font-size:15px;color:var(--grigio);margin-top:14px}
+.js .rv:not(.photo){opacity:0;transform:translateY(16px)}
+.js .rv.in:not(.photo){opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .photo.rv{opacity:0}
+.js .photo.rv.in{opacity:1;transition:opacity 1s var(--ease)}
+
+/* ---------- orari ---------- */
+.hours-grid{display:grid;gap:48px;margin-top:36px}
+.hours{width:100%;border-collapse:collapse;font-size:17px;border-top:1px solid var(--nero)}
+.hours th,.hours td{text-align:left;padding:13px 0;font-weight:400;border-bottom:1px solid var(--rule)}
+.hours td{text-align:right;font-variant-numeric:tabular-nums;color:var(--grigio)}
+.hours tr.closed td{font-weight:600;color:var(--sugo)}
+.hours tr.today th,.hours tr.today td{font-weight:700;color:var(--nero)}
+.hours tr.today th::after{content:" · oggi";font-weight:500;color:var(--sugo)}
+.place{padding-top:14px;border-top:1px solid var(--nero)}
+.place p{margin:6px 0 20px;font-size:17px;color:var(--grigio)}
+address{font-style:normal}
+
+/* ---------- chiusura ---------- */
+.end{background:var(--nero);color:#fff;padding:96px 0 28px;z-index:4}
+/* orari sul nero: testi latte, secondari #C9C5BF (9,9:1), chiuso e "oggi" in rosa pomodoro chiaro */
+.end .h2{color:var(--latte)}
+.end .hours{border-top-color:var(--latte)}
+.end .hours th{color:var(--latte)}
+.end .hours th,.end .hours td{border-bottom-color:rgba(248,248,248,.16)}
+.end .hours td{color:#C9C5BF}
+.end .hours tr.closed td{color:#F59B95}
+.end .hours tr.today th,.end .hours tr.today td{color:#fff}
+.end .hours tr.today th::after{color:#F59B95}
+.end .place{border-top-color:var(--latte)}
+.end .place p{color:#C9C5BF}
+.end :focus-visible{outline-color:var(--latte)}
+.foot{margin-top:64px;padding-top:26px;border-top:1px solid rgba(255,255,255,.18);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;font-size:15px;color:#E4E1DC}
+.foot img{width:104px}
+.foot a{display:inline-flex;align-items:center;min-height:44px}
+.foot .ig{justify-content:center;width:48px;height:48px;border-radius:50%;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);transition:background-color .25s var(--ease)}
+.foot .ig .ic{width:24px;height:24px}
+@media (hover:hover){.foot .ig:hover{background:rgba(255,255,255,.1)}}
+/* telefono: Instagram sulla riga del logo, a destra; l'indirizzo va sotto */
+@media (max-width:959px){.foot .ig{order:2;margin-left:auto}.foot address{order:3;flex-basis:100%}}
+
+/* ---------- barra fissa (telefono) ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;height:calc(var(--dock) + env(safe-area-inset-bottom));padding:8px var(--gutter) calc(8px + env(safe-area-inset-bottom));background:rgba(248,248,248,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--rule)}
+.dock .btn{--h:56px;min-width:0;gap:9px;padding:0 10px 0 8px;font-size:17px;overflow:hidden}
+.dock .btn .bub{width:38px;height:38px}
+.dock .lbl{display:flex;flex-direction:column;gap:3px;min-width:0;line-height:1.05}
+.dock .lbl small{font-size:15px;font-weight:400;white-space:nowrap}
+/* barra in basso rossa: Chiama bianco con testo rosso scuro, WhatsApp nero; filetto chiaro in alto per staccarla dal rosso del menu */
+.dock{background:var(--pomodoro);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 -6px 18px rgba(60,10,8,.18)}
+.dock .btn-red{background:#fff;color:var(--sugo)}
+.dock .btn-red .bub{background:var(--pomodoro);color:#fff}
+@media (hover:hover){.dock .btn-red:hover{background:#F3EEEC}}
+
+/* movimenti legati allo scroll (solo dove il browser li supporta, mai con movimento ridotto) */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .sheet{animation:sheetin linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+    .media img,.media video{animation:drift linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+  }
+}
+@keyframes sheetin{from{border-radius:calc(var(--sheet) * 2.4) calc(var(--sheet) * 2.4) 0 0}to{border-radius:var(--sheet) var(--sheet) 0 0}}
+/* testata: scorrendo, la pizza ruota un poco come sulla pala e si avvicina */
+@keyframes drift{to{transform:scale(1.16) rotate(-3deg) translateY(3%)}}
+
+@media (max-width:959px){ .menu-side{display:contents} }
+@media (min-width:700px){
+  .alg-grid{grid-template-columns:repeat(3,1fr)}
+  .hours-grid{grid-template-columns:1.1fr .9fr;align-items:start;gap:72px}
+  .board{display:grid;grid-template-columns:1fr 1fr;column-gap:56px}
+}
+@media (min-width:960px){
+  .end{padding-top:144px}
+  :root{--gutter:40px;--dock:0px;--sheet:44px;--top:76px}
+  body{padding-bottom:0}
+  .dock{display:none}
+  /* testata divisa: foglio rosso a sinistra, video a destra */
+  .hero{height:100svh;max-height:1000px;min-height:640px}
+  .media img,.media video{object-position:50% 42%}
+  /* al computer il titolo e a sinistra: il velo scuro scende anche da sinistra */
+  .media::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(24,9,5,.8) 0%,rgba(24,9,5,.6) 38%,rgba(24,9,5,.22) 58%,rgba(24,9,5,0) 72%);pointer-events:none}
+  #menu{padding-top:144px}
+  .hero-testo{padding:0 40px calc(var(--sheet) + 64px)}
+  .bar{padding:0 40px}
+  .bar .logo{width:124px}
+  .hero h1{font-size:clamp(110px,11vw,184px);line-height:.94}
+  .hero .sub{font-size:19px;margin-top:18px;max-width:38ch}
+  .hero .ctas{display:flex;margin-top:32px;gap:12px}
+  .sec{padding-top:144px;padding-bottom:144px}
+  .h2{font-size:80px}
+  #menu{padding-bottom:64px}
+  .menu-grid{display:grid;grid-template-columns:380px 1fr;gap:80px;align-items:start}
+  #menu::before{display:none}
+  /* al computer il blocco rosso e la colonna del menu: una scheda che sale sul video e poi resta attaccata */
+  .menu-side{position:sticky;top:calc(var(--top) + 24px);margin-top:-96px;background:var(--pomodoro);border-radius:var(--sheet);padding:44px 32px 36px}
+  .menu-side .h2{font-size:54px}
+  .menu-side .tabs-wrap{position:static;margin:28px 0 0;padding:0;border:0;background:none}
+  .menu-side .tabs{display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;overflow:visible;padding:0}
+  .menu-side .tab{justify-content:space-between;padding:0 14px;font-size:16px}
+  .menu-side{z-index:2}
+  .menu-side .f-pan{width:284px}
+  .menu-side .tab sup{transform:none;font-size:15px}
+  .menu-side .tabs-wrap::after{display:none}
+  .cat{padding-top:0;scroll-margin-top:calc(var(--top) + 32px)}
+  .cat-head h3{font-size:36px}
+  .info-sec .facts{padding-top:144px;padding-bottom:160px}
+  .info-sec .facts li{border-top-color:var(--latte)}
+  .facts h2{margin-bottom:24px}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:0 40px;border-top:0}
+  .facts li{border-bottom:0;border-top:1px solid var(--nero)}
+  .facts .row{grid-template-columns:1fr;align-items:start;gap:6px;padding:18px 0 6px}
+  .extras{grid-template-columns:1fr 1fr;align-items:start;gap:56px}
+  .order-grid{grid-template-columns:.85fr 1.15fr;gap:96px;align-items:start}
+}
+@media (min-width:1180px){
+  .list{columns:2;column-gap:56px}
+  .item{break-inside:avoid}
+}
+
+/* ---------- apertura animata ----------
+   Il logo vero diviso in parti: le lettere PIZZA salgono, la fetta si posa, i puntini spuntano, cola il sugo, CLUB si allarga.
+   Poi il foglio latte sale e scopre la testata. L'uscita e' in CSS: anche senza JS l'apertura finisce da sola. */
+.intro-ov{display:none}
+html.intro .intro-ov{display:grid;place-items:center;position:fixed;inset:0;z-index:100;background:var(--latte);cursor:pointer;animation:ovout .6s cubic-bezier(.76,0,.24,1) 1.65s forwards}
+html.intro-out .intro-ov{animation:ovout .45s cubic-bezier(.76,0,.24,1) forwards}
+.intro-ov svg{width:min(72vw,420px);height:auto;overflow:visible;animation:logoout .6s cubic-bezier(.76,0,.24,1) 1.65s forwards}
+.intro-ov path{transform-box:fill-box}
+.intro-ov .il{opacity:0;transform:translateY(46px);animation:lin .55s var(--ease) forwards;animation-delay:calc(.08s + var(--k) * 70ms)}
+.intro-ov .ir{opacity:0;transform-origin:30% 100%;transform:translateY(-120px) rotate(-18deg);animation:rin .7s var(--spring) .5s forwards}
+.intro-ov .ip{transform-origin:center;transform:scale(0);animation:pin .38s var(--spring) forwards;animation-delay:calc(.9s + var(--k) * 80ms)}
+.intro-ov .id{transform-origin:50% 0;transform:scaleY(0);animation:din .5s var(--ease) 1.05s forwards}
+.intro-ov .ic2{opacity:0;transform:translateX(var(--x));animation:cin .55s var(--ease) forwards;animation-delay:calc(.95s + var(--k) * 40ms)}
+@keyframes lin{to{opacity:1;transform:none}}
+@keyframes rin{0%{opacity:0}30%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes pin{to{transform:none}}
+@keyframes din{to{transform:none}}
+@keyframes cin{to{opacity:1;transform:none}}
+@keyframes ovout{to{transform:translateY(-100%);border-radius:0 0 50% 50% / 0 0 12% 12%;visibility:hidden}}
+@keyframes logoout{to{transform:translateY(-40px) scale(.92);opacity:0}}
+/* la testata entra mentre il foglio sale */
+html.intro.js .hero h1 .ln>span{animation-delay:1.95s}
+html.intro.js .hero h1 .ln:nth-child(2)>span{animation-delay:2.05s}
+html.intro.js .hero .sub{animation-delay:2.2s}
+html.intro.js .hero .ctas{animation-delay:2.3s}
+@media (prefers-reduced-motion:reduce){
+  .intro-ov{display:none!important}
+  html{scroll-behavior:auto}
+  .media video{display:none}
+  .call{transition:none}
+  .js .hero h1 .ln>span,.js .hero .sub,.js .hero .ctas{animation:none;transform:none;opacity:1}
+  .js .rv,.js .rv.in,.js .photo.rv{opacity:1!important;transform:none!important;transition:none!important}
+  .js .item.enter{animation:none}
+  .tab,.btn,.btn .bub,.btn .tail{transition:none}
+}
+
+/* ---------- movimento (v10): tutto solo transform/opacity/clip-path, niente spostamenti di layout ---------- */
+@media (prefers-reduced-motion:no-preference){
+  /* titoli di sezione: escono da una fessura, dal basso */
+  .js .tt{clip-path:inset(-20% -10% 100% -10%);transform:translateY(.45em)}
+  .js .tt.in{clip-path:inset(-20% -10% -30% -10%);transform:none;transition:clip-path 1s var(--ease),transform 1s var(--ease)}
+  /* testi d'accompagnamento: arrivano subito dopo, scaglionati */
+  .js .mv{opacity:0;transform:translateY(18px)}
+  .js .mv.in{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,120ms)}
+  /* tab e filtri: lo stato scelto "scatta" */
+  .tab[aria-selected="true"],.f-chip{animation:scatto .42s var(--spring)}
+  @keyframes scatto{from{transform:scale(.9)}to{transform:none}}
+  /* cambio scheda: anche il titolo della sezione entra */
+  .js .cat.enter-h .cat-head{animation:itemin .5s var(--ease) both}
+  /* icona del telefono: squilla al passaggio e alla pressione; nella barra in basso ogni tanto */
+  @keyframes squillo{0%,100%{rotate:0deg}12%{rotate:-16deg}24%{rotate:13deg}36%{rotate:-10deg}48%{rotate:6deg}60%{rotate:0deg}}
+  @keyframes squillo-lento{0%,8.6%,100%{rotate:0deg}1.4%{rotate:-16deg}2.8%{rotate:13deg}4.2%{rotate:-10deg}5.6%{rotate:6deg}7%{rotate:0deg}}
+  [data-ic="phone"] .bub .ic,.call .ic{transform-origin:50% 50%}
+  [data-ic="phone"]:active .bub .ic,.call:active .ic{animation:squillo .7s var(--ease)}
+  .dock [data-ic="phone"] .bub .ic{animation:squillo-lento 9s var(--ease) 4s infinite}
+  .btn .bub{transition:transform .5s var(--spring),background-color .3s var(--ease)}
+  .btn:active .bub{transform:scale(.88)}
+  @media (hover:hover){
+    [data-ic="phone"]:hover .bub .ic,.call:hover .ic{animation:squillo .8s var(--ease)}
+    .btn:not([data-ic]):hover .bub .ic{animation:spunta .5s var(--spring)}
+  }
+  @keyframes spunta{0%{transform:scale(1)}40%{transform:scale(.82)}100%{transform:scale(1)}}
+  @supports (animation-timeline:view()){
+    /* righe del menu e della lavagna: entrano mentre scorrono nello schermo */
+    .item>*,.fm>*{animation:riga linear both;animation-timeline:view();animation-range:entry 5% entry 85%}
+    .item>.ing,.fm>p{animation-range:entry 15% entry 95%}
+    /* filetti che si disegnano da sinistra */
+    .cat-head{border-bottom-color:transparent;position:relative}
+    .cat-head::after,.board::before,.ways::before{content:"";position:absolute;left:0;right:0;height:1px;background:var(--nero);transform-origin:0 50%;animation:filetto linear both;animation-timeline:view();animation-range:entry 10% cover 35%}
+    .cat-head::after{bottom:-1px}
+    .board,.ways{position:relative;border-top-color:transparent}
+    .board::before,.ways::before{top:-1px}
+    .board::before{background:var(--latte)}
+    .fuori .board::before{background:var(--nero)}
+  }
+}
+@keyframes riga{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes filetto{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+
+/* ---------- ingredienti veri (foto scontornate) ----------
+   Strato fisso grande quanto lo schermo, ritagliato dallo script tra la barra in alto (o le tab attaccate) e la barra
+   in basso. Le posizioni le calcola lo script in fondo alla pagina, fuori da testi, comandi, immagini e loghi. */
+.ingr-strato{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:4}
+.pz{position:absolute;left:0;top:0;display:block;will-change:transform}
+.pz[hidden]{display:none}
+.pz img{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));filter:drop-shadow(0 14px 16px rgba(40,22,10,.26)) drop-shadow(0 3px 4px rgba(40,22,10,.16))}
+.pz.fl img{scale:-1 1}
+.pz.sf img{filter:blur(var(--b,3px))}
+/* strato dietro l'elenco delle pizze: sotto testi, prezzi, filetti e bottoni (la colonna del menu sale sopra) */
+.menu-grid{position:relative;z-index:1}
+.ingr-fondo{z-index:0}
+.ingr-fondo .pz{opacity:1}
+.ingr-fondo .pz img{filter:drop-shadow(0 8px 10px rgba(40,22,10,.18)) drop-shadow(0 2px 3px rgba(40,22,10,.12))}
+@media (prefers-reduced-motion:no-preference){
+  /* galleggiano piano, ognuno col suo tempo; il parallasse allo scorrimento lo fa lo script */
+  /* su e giu di 4-10 px con +/-2-4 gradi, durate e fasi diverse per ognuno */
+  .pz img{animation:pz-galleggia var(--t,6s) cubic-bezier(.45,0,.55,1) var(--dl,0s) infinite alternate}
+  @keyframes pz-galleggia{from{transform:translate3d(0,var(--a,4px),0) rotate(calc(var(--r,0deg) - var(--g,3deg)))}to{transform:translate3d(0,calc(-1 * var(--a,4px)),0) rotate(calc(var(--r,0deg) + var(--g,3deg)))}}
+}
+</style>
+</head>
+<body>
+<div class="intro-ov" id="intro" aria-hidden="true"><svg viewBox="0 0 746 427" width="746" height="427" focusable="false"><path class="il" fill="#1C1C1B" fill-rule="evenodd" style="--k:0" d="M9.08 313.81C8.11 313.23 7.39 312.44 6.83 311.32L6.00 309.69L6.00 160.50C6.00 35.95 6.07 11.13 6.45 10.23C7.04 8.83 8.89 7.23 10.73 6.52C12.07 6.01 14.94 5.97 45.34 6.09C79.61 6.22 81.27 6.28 89.67 7.69C96.61 8.85 103.73 10.91 108.40 13.10C116.67 16.98 123.92 23.29 129.32 31.30C132.56 36.11 136.65 46.36 138.03 53.17C140.32 64.46 140.38 65.58 140.55 97.72C140.67 119.77 140.60 126.90 140.20 133.39C139.92 137.85 139.55 142.25 139.37 143.17C139.20 144.08 138.80 146.26 138.49 148.00C136.56 158.94 132.50 168.96 127.14 175.99C124.90 178.93 119.30 184.15 116.28 186.11C109.15 190.75 100.86 193.70 90.50 195.31C82.22 196.59 79.44 196.71 58.71 196.68C40.71 196.65 38.16 196.71 37.46 197.16L36.67 197.68L36.66 253.09C36.66 289.18 36.55 308.92 36.33 309.71C35.83 311.49 34.65 313.06 33.16 313.91C31.86 314.64 31.61 314.66 21.17 314.66L10.50 314.66L9.08 313.81Z M79.56 167.48C91.17 165.63 97.83 161.98 102.59 154.83C106.02 149.69 107.45 145.26 108.68 136.00C109.27 131.55 109.32 128.86 109.32 102.00C109.33 78.21 109.23 72.00 108.82 68.34C107.46 56.09 103.26 47.46 96.19 42.32C94.01 40.74 88.81 38.01 87.96 38.00C87.66 38.00 86.78 37.78 86.01 37.50C81.90 36.05 79.37 35.89 58.22 35.76C39.40 35.63 37.89 35.67 37.30 36.20C36.68 36.76 36.67 38.36 36.67 101.98C36.67 152.26 36.76 167.29 37.07 167.60C37.37 167.90 42.22 168.00 56.88 168.00C72.85 168.00 76.87 167.91 79.56 167.48Z"/><path class="il" fill="#1C1C1B" fill-rule="evenodd" style="--k:1" d="M165.50 317.21C163.58 316.31 162.90 315.63 162.18 313.92C161.72 312.82 161.67 301.10 161.67 204.45L161.67 96.21L162.37 94.75C162.80 93.87 163.62 92.93 164.43 92.39L165.78 91.50L174.97 91.40C180.81 91.33 184.61 91.42 185.37 91.65C187.10 92.15 188.24 93.16 189.18 95.02L190.00 96.64L189.99 204.57C189.99 308.91 189.96 312.54 189.37 313.83C189.03 314.57 188.32 315.57 187.79 316.07C185.86 317.88 185.11 318.00 175.76 318.00C167.44 317.99 167.11 317.97 165.50 317.21Z"/><path class="il" fill="#1C1C1B" fill-rule="evenodd" style="--k:2" d="M218.84 317.46C217.12 316.84 215.74 315.51 214.96 313.72C214.40 312.43 214.33 311.37 214.33 303.78C214.33 293.55 213.60 296.28 222.07 274.83C223.73 270.62 225.43 266.19 225.84 265.00C226.25 263.81 228.04 259.16 229.81 254.67C234.57 242.62 234.47 242.86 236.33 238.00C237.28 235.53 238.70 231.85 239.49 229.83C241.29 225.28 243.65 219.16 245.22 215.00C246.68 211.15 249.28 204.53 249.87 203.17C250.11 202.62 251.38 199.32 252.69 195.83C254.00 192.35 256.48 185.94 258.20 181.59C259.93 177.24 261.33 173.59 261.33 173.49C261.33 173.38 262.17 171.17 263.19 168.56C266.45 160.29 269.18 153.28 270.63 149.50C271.40 147.48 272.24 145.31 272.50 144.67C272.75 144.03 273.59 141.85 274.37 139.83C275.15 137.82 276.58 134.15 277.56 131.69C280.02 125.48 279.96 122.97 277.29 120.43C275.02 118.28 275.83 118.33 248.37 118.33C220.50 118.32 222.01 118.45 219.76 115.89C218.06 113.96 217.91 112.79 218.17 104.18C218.46 94.81 218.76 93.82 221.73 92.30C222.92 91.69 224.50 91.67 266.60 91.66C314.81 91.66 311.58 91.51 313.60 93.81C315.27 95.71 315.40 96.65 315.28 106.17C315.19 112.89 315.06 115.02 314.69 115.67C314.43 116.12 313.81 117.62 313.32 119.00C312.83 120.38 311.78 123.15 311.00 125.17C310.22 127.18 309.32 129.51 309.00 130.33C308.68 131.16 307.67 133.71 306.76 136.00C305.84 138.29 304.23 142.42 303.17 145.17C302.11 147.92 300.01 153.32 298.50 157.17C296.99 161.02 294.89 166.42 293.84 169.17C292.79 171.92 291.58 174.99 291.16 176.00C290.38 177.85 288.74 182.04 286.99 186.67C286.04 189.17 282.59 198.03 280.49 203.33C279.87 204.89 278.40 208.72 277.21 211.83C276.02 214.95 273.83 220.58 272.33 224.33C270.83 228.09 269.12 232.52 268.52 234.17C267.92 235.82 267.11 237.92 266.73 238.83C265.52 241.73 259.00 258.32 259.00 258.51C259.00 258.69 257.83 261.69 253.49 272.67C252.15 276.06 250.74 279.73 250.36 280.82C248.79 285.33 250.07 288.93 253.79 290.47C254.94 290.94 258.08 291.00 281.52 291.00C298.88 291.00 308.53 291.12 309.61 291.35C310.66 291.58 311.76 292.13 312.62 292.87C314.72 294.67 315.00 296.04 315.00 304.69C315.00 314.18 314.58 315.44 310.83 317.21L309.17 318.00L264.67 317.97C226.95 317.94 219.96 317.87 218.84 317.46Z"/><path class="il" fill="#1C1C1B" fill-rule="evenodd" style="--k:3" d="M333.52 317.63C331.57 317.17 330.03 315.82 329.13 313.78C328.36 312.05 328.33 311.69 328.34 303.91C328.34 294.98 328.29 295.28 330.82 288.80C331.67 286.62 332.82 283.63 333.37 282.17C333.92 280.70 334.58 278.97 334.83 278.33C335.09 277.69 336.14 274.99 337.17 272.33C338.21 269.68 339.71 265.85 340.50 263.83C342.96 257.55 344.24 254.20 344.50 253.33C344.64 252.88 345.58 250.47 346.59 248.00C347.59 245.53 348.76 242.60 349.17 241.50C352.69 232.22 355.39 225.23 356.00 223.83C356.40 222.92 356.91 221.64 357.14 221.00C358.03 218.50 361.54 209.40 365.17 200.17C368.54 191.57 370.75 185.85 371.67 183.33C372.16 181.98 376.98 169.64 377.68 167.95C378.04 167.09 378.71 165.29 379.18 163.95C379.65 162.60 380.47 160.45 381.00 159.17C382.46 155.59 385.46 147.91 386.98 143.83C387.74 141.82 388.56 139.64 388.82 139.00C390.35 135.21 392.99 128.31 393.34 127.21C394.32 124.09 392.84 120.85 389.69 119.25L387.88 118.33L362.73 118.35L337.58 118.36L336.04 117.60C335.11 117.13 334.11 116.27 333.50 115.39L332.50 113.94L332.40 105.39C332.31 97.03 332.32 96.80 333.07 95.35C333.49 94.54 334.41 93.41 335.11 92.85L336.40 91.83L380.11 91.73C409.82 91.67 424.22 91.75 425.04 91.98C426.81 92.50 427.98 93.57 428.87 95.47C429.63 97.11 429.66 97.45 429.66 105.34L429.67 113.51L427.87 118.17C426.88 120.73 425.85 123.36 425.57 124.00C425.01 125.31 424.69 126.12 422.50 131.83C419.71 139.14 418.94 141.12 416.49 147.33C414.08 153.45 412.86 156.59 410.27 163.33C409.53 165.26 408.50 167.88 407.98 169.17C407.46 170.45 406.44 173.08 405.70 175.00C404.96 176.92 403.37 181.05 402.16 184.17C400.96 187.28 399.77 190.36 399.52 191.00C399.27 191.64 398.61 193.29 398.06 194.67C397.50 196.04 396.50 198.59 395.83 200.33C395.16 202.08 394.24 204.47 393.77 205.67C393.31 206.86 392.73 208.36 392.49 209.00C390.93 213.12 390.14 215.14 389.16 217.50C388.55 218.97 387.58 221.44 386.99 223.00C384.80 228.87 382.43 234.97 380.98 238.50C380.01 240.86 378.67 244.31 374.83 254.33C373.67 257.36 372.32 260.81 371.83 262.00C371.34 263.19 370.73 264.69 370.49 265.33C369.70 267.40 367.13 274.05 365.46 278.33C364.17 281.64 363.84 282.88 363.87 284.33C363.91 286.71 364.88 288.59 366.70 289.85L368.11 290.83L396.16 291.00L424.22 291.17L425.83 292.17C426.89 292.82 427.71 293.67 428.22 294.64C428.98 296.06 429.00 296.36 429.00 304.45C429.00 312.18 428.95 312.89 428.32 314.20C427.30 316.30 425.72 317.35 423.06 317.69C420.04 318.08 335.20 318.02 333.52 317.63Z"/><path class="il" fill="#1C1C1B" fill-rule="evenodd" style="--k:4" d="M451.33 280.03C451.33 279.29 451.48 278.04 451.66 277.25C451.84 276.47 452.45 273.21 453.01 270.00C453.57 266.79 454.18 263.34 454.38 262.33C454.58 261.32 454.86 259.82 455.02 259.00C455.17 258.18 455.54 256.22 455.84 254.67C456.13 253.11 456.58 250.63 456.84 249.17C457.10 247.70 457.54 245.30 457.81 243.83C458.09 242.37 458.54 239.74 458.83 238.00C459.11 236.26 459.56 233.71 459.82 232.33C460.33 229.65 461.04 225.65 461.88 220.83C462.17 219.18 462.52 217.31 462.67 216.67C462.82 216.03 463.10 214.53 463.29 213.33C463.49 212.14 463.86 210.04 464.13 208.67C464.62 206.14 465.45 201.64 466.02 198.42C466.54 195.52 466.93 193.32 467.48 190.33C467.77 188.78 468.61 184.05 469.35 179.83C470.09 175.62 470.92 170.89 471.21 169.33C471.49 167.78 471.86 165.60 472.03 164.50C472.20 163.40 472.42 162.28 472.53 162.00C472.69 161.56 473.40 157.84 473.89 154.83C473.98 154.28 474.49 151.43 475.04 148.50C476.10 142.78 476.89 138.43 477.96 132.33C478.33 130.22 479.02 126.33 479.49 123.67C479.96 121.01 480.51 117.86 480.71 116.67C480.90 115.48 481.26 113.52 481.51 112.33C481.75 111.14 482.20 108.82 482.51 107.17C482.81 105.52 483.26 103.19 483.50 102.00C483.74 100.81 484.04 99.08 484.17 98.17C484.61 94.99 486.05 92.73 488.24 91.79C489.67 91.18 517.70 91.12 519.72 91.72C521.33 92.20 523.18 94.18 523.63 95.90C523.95 97.15 524.58 100.13 525.54 105.00C525.82 106.38 526.19 108.20 526.38 109.07C526.57 109.93 526.84 111.43 526.98 112.40C527.13 113.37 527.65 116.19 528.13 118.67C528.62 121.14 529.33 124.82 529.71 126.83C530.09 128.85 530.94 133.12 531.59 136.33C532.23 139.54 532.88 142.84 533.02 143.67C533.16 144.49 533.52 146.37 533.83 147.83C534.13 149.30 534.58 151.55 534.82 152.83C535.06 154.12 535.58 156.74 535.96 158.67C536.34 160.59 536.90 163.44 537.19 165.00C537.48 166.56 537.93 168.88 538.18 170.17C538.43 171.45 539.17 175.35 539.82 178.83C540.46 182.32 541.22 186.09 541.50 187.22C542.22 190.17 542.14 192.24 541.25 193.91C540.48 195.35 520.69 215.00 520.01 215.00C519.43 215.00 518.66 212.40 518.00 208.27C517.85 207.30 517.48 205.22 517.19 203.67C516.90 202.11 516.44 199.56 516.17 198.00C515.89 196.44 515.45 193.97 515.19 192.50C514.92 191.03 514.17 186.68 513.52 182.83C511.82 172.76 511.04 168.38 510.63 166.60C510.44 165.74 510.16 164.24 510.01 163.27C509.68 161.13 509.11 158.08 508.61 155.88C508.41 154.98 508.13 153.41 507.99 152.38C507.68 150.11 507.05 146.60 506.67 145.00C506.52 144.36 506.23 142.78 506.02 141.50C504.78 133.72 504.77 133.67 504.17 133.67C503.52 133.67 503.13 134.51 502.86 136.50C502.62 138.29 502.20 140.73 500.84 148.33C500.36 150.99 499.75 154.44 499.47 156.00C499.20 157.56 498.77 159.96 498.51 161.33C498.26 162.71 497.81 165.18 497.51 166.83C497.21 168.48 496.75 170.96 496.50 172.33C496.24 173.71 495.87 175.73 495.69 176.83C495.50 177.93 495.05 180.48 494.69 182.50C494.34 184.52 493.73 188.04 493.34 190.33C492.95 192.62 492.48 195.30 492.29 196.27C492.10 197.24 491.81 198.89 491.65 199.93C491.30 202.24 489.79 210.86 489.34 213.17C488.53 217.22 488.01 220.05 487.50 223.00C487.20 224.74 486.74 227.29 486.49 228.67C485.87 231.98 485.00 237.06 484.66 239.33C483.98 243.83 482.95 249.59 482.65 250.53C482.42 251.23 477.50 256.30 467.30 266.36C459.03 274.50 452.06 281.22 451.80 281.27C451.46 281.35 451.33 281.02 451.33 280.03Z"/><path class="ir" fill="#DD2A2C" fill-rule="evenodd" d="M453.67 318.30C447.58 317.37 445.44 315.49 444.65 310.39C444.36 308.50 444.38 307.74 444.78 306.40C445.75 303.15 445.93 302.92 453.88 294.83C454.78 293.92 462.93 285.89 471.99 277.00C481.04 268.11 491.69 257.60 495.64 253.64C502.23 247.06 508.07 241.42 511.01 238.81C511.65 238.24 514.06 235.84 516.37 233.47C518.68 231.11 525.43 224.37 531.37 218.50C537.31 212.63 550.73 199.36 561.18 189.00C596.24 154.27 616.58 134.17 617.71 133.14C618.33 132.58 624.98 125.93 632.50 118.37C651.31 99.46 654.72 96.28 657.20 95.34C659.86 94.34 663.08 94.51 665.60 95.79C667.58 96.81 671.19 100.27 676.18 105.96C678.00 108.05 680.26 110.60 681.19 111.63C683.56 114.25 686.64 118.14 688.24 120.51C688.99 121.62 689.86 122.75 690.19 123.01C690.51 123.28 691.42 124.48 692.22 125.67C693.01 126.86 694.19 128.51 694.84 129.33C695.49 130.16 696.26 131.28 696.56 131.83C696.86 132.38 697.66 133.51 698.35 134.33C699.60 135.84 700.99 138.08 706.26 147.00C710.91 154.88 719.62 171.94 720.81 175.52C721.12 176.42 721.86 178.29 722.47 179.67C723.08 181.04 723.76 182.69 723.98 183.33C724.21 183.97 724.84 185.70 725.39 187.17C725.94 188.63 726.72 190.96 727.13 192.33C727.54 193.71 728.06 195.16 728.27 195.56C728.49 195.96 728.82 197.08 729.02 198.06C729.22 199.03 729.67 200.73 730.03 201.83C730.79 204.14 732.17 209.01 732.83 211.67C733.08 212.67 733.53 214.40 733.83 215.50C734.13 216.60 734.52 218.52 734.70 219.76C734.87 221.00 735.38 223.14 735.82 224.50C736.27 225.87 736.88 228.89 737.18 231.22C737.48 233.55 737.86 236.21 738.03 237.14C738.58 240.25 739.32 247.47 739.33 249.85C739.33 251.14 739.56 253.99 739.85 256.18C740.81 263.64 740.31 289.75 738.97 302.50C738.78 304.33 738.26 307.23 737.81 308.94C737.09 311.72 736.82 312.25 735.25 314.01C732.82 316.74 731.00 317.47 727.08 317.27C723.68 317.10 722.65 316.65 720.10 314.24C718.94 313.15 718.23 312.16 718.03 311.37C717.40 308.87 717.33 304.52 717.84 300.67C719.50 288.24 720.17 267.20 719.22 257.33C718.93 254.31 718.60 250.41 718.49 248.67C718.38 246.92 718.01 243.92 717.68 242.00C717.34 240.08 716.96 237.53 716.84 236.33C716.72 235.14 716.35 233.04 716.01 231.67C715.68 230.29 715.30 228.42 715.19 227.50C714.85 224.88 712.67 215.89 711.66 213.00C711.50 212.54 711.20 211.28 710.98 210.20C710.77 209.12 710.23 207.25 709.78 206.05C709.33 204.86 708.75 203.12 708.50 202.19C708.25 201.26 707.72 199.67 707.32 198.67C706.92 197.66 705.95 195.03 705.17 192.83C704.39 190.63 703.34 187.86 702.84 186.67C702.34 185.47 701.67 183.83 701.34 183.00C701.02 182.17 700.30 180.53 699.74 179.33C699.19 178.14 697.88 175.29 696.83 173.00C695.79 170.71 694.21 167.56 693.34 166.00C692.46 164.44 690.93 161.72 689.94 159.95C688.94 158.18 687.73 156.21 687.25 155.58C686.77 154.95 685.82 153.40 685.14 152.13C684.45 150.87 683.56 149.46 683.15 149.00C682.74 148.54 681.90 147.27 681.28 146.17C680.67 145.07 678.94 142.52 677.45 140.50C675.96 138.48 674.08 135.90 673.28 134.77C671.83 132.70 665.44 124.65 663.41 122.32C661.99 120.69 660.43 119.93 659.52 120.40C659.14 120.60 654.33 125.27 648.83 130.80C643.33 136.32 636.95 142.63 634.65 144.83C632.34 147.03 627.97 151.38 624.92 154.50C621.87 157.62 611.46 167.97 601.78 177.50C592.11 187.03 581.10 197.91 577.32 201.67C573.55 205.42 563.20 215.65 554.31 224.40C545.43 233.14 530.78 247.62 521.76 256.56C512.74 265.51 498.34 279.73 489.77 288.17C481.20 296.60 472.46 305.24 470.34 307.37C462.89 314.88 460.88 316.64 458.97 317.37C456.30 318.39 455.33 318.56 453.67 318.30Z"/><path class="id" fill="#DD2A2C" fill-rule="evenodd" d="M642.33 420.69C639.98 420.36 634.58 418.64 632.29 417.48C628.30 415.47 623.26 410.00 620.76 404.99C618.27 399.98 618.28 400.21 618.35 357.18C618.38 336.64 618.30 319.58 618.18 319.28C617.67 318.05 616.45 317.94 604.20 318.05C592.56 318.16 592.34 318.18 591.63 318.89L590.90 319.62L590.93 337.22C590.95 346.91 590.84 356.11 590.69 357.67C590.36 361.06 589.21 364.36 586.88 368.63C584.52 372.94 580.61 376.52 575.42 379.11C570.66 381.50 567.71 382.17 562.43 382.08C553.70 381.94 547.54 379.22 542.21 373.14C539.21 369.72 537.23 366.24 536.71 363.50C536.51 362.40 536.07 360.68 535.75 359.67C535.21 357.98 535.17 355.76 535.20 331.50L535.24 305.17L536.12 303.03C536.60 301.85 537.24 300.62 537.54 300.29C537.83 299.96 539.28 299.29 540.76 298.80C543.89 297.76 546.43 297.82 549.91 299.01C552.19 299.79 553.14 300.69 554.60 303.46L555.50 305.17L555.72 328.83C555.84 341.85 556.07 353.55 556.23 354.83C556.79 359.29 558.87 361.33 562.83 361.33C565.97 361.33 567.80 360.05 569.39 356.72L570.40 354.61L570.37 330.55C570.34 307.13 570.36 306.45 571.02 304.67C571.90 302.31 573.25 300.35 574.51 299.62C575.05 299.30 576.93 298.70 578.67 298.29C581.76 297.56 582.38 297.54 606.09 297.42C633.31 297.27 632.14 297.18 635.34 299.70C636.25 300.42 637.27 301.57 637.61 302.25C639.01 305.05 639.12 306.30 638.97 318.00C638.82 330.16 638.84 337.83 639.07 371.17C639.23 394.00 639.36 396.16 640.65 397.98C642.31 400.30 646.92 400.67 649.76 398.71C651.81 397.31 652.24 396.61 652.88 393.63C653.35 391.43 653.39 386.75 653.24 350.35C653.14 324.74 653.19 308.66 653.40 307.18C653.86 303.82 654.73 302.08 657.14 299.70C659.18 297.67 659.30 297.61 661.54 297.32C662.80 297.16 667.73 297.02 672.50 297.01C681.74 297.00 683.51 296.77 683.98 295.56C684.14 295.16 684.55 292.43 684.88 289.50C685.39 285.15 685.49 281.80 685.47 271.33C685.45 263.24 685.28 257.21 685.02 255.00C683.91 245.80 682.81 238.82 681.76 234.33C681.48 233.14 681.13 231.34 680.98 230.33C680.83 229.33 680.32 227.09 679.86 225.37C679.39 223.65 678.92 221.48 678.80 220.54C678.69 219.60 678.29 218.31 677.91 217.67C677.54 217.03 676.97 215.53 676.65 214.33C676.32 213.14 675.58 210.89 675.00 209.33C674.42 207.78 673.64 205.53 673.26 204.33C672.46 201.77 671.63 199.68 670.15 196.50C669.55 195.22 668.96 193.79 668.82 193.33C668.32 191.60 662.99 181.13 659.73 175.50C655.94 168.93 655.33 167.51 655.33 165.15C655.33 162.66 656.33 160.48 658.52 158.20C660.45 156.19 661.62 155.71 665.28 155.45C667.97 155.26 668.39 155.31 669.84 156.04C672.55 157.38 674.61 159.51 675.85 162.23C676.46 163.56 677.33 165.14 677.78 165.74C678.23 166.34 679.25 168.11 680.04 169.66C680.83 171.21 681.97 173.22 682.57 174.11C683.17 175.00 683.67 175.97 683.67 176.26C683.67 176.54 684.25 177.84 684.95 179.14C685.66 180.44 686.43 182.07 686.65 182.77C686.88 183.47 687.86 185.72 688.83 187.77C689.80 189.82 690.83 192.26 691.10 193.20C691.37 194.13 691.93 195.54 692.34 196.34C693.19 198.00 694.13 200.58 695.02 203.67C695.73 206.15 696.73 209.28 697.73 212.17C698.11 213.27 698.78 215.74 699.21 217.67C699.64 219.59 700.52 223.12 701.16 225.50C701.80 227.88 702.62 231.93 702.99 234.50C703.70 239.51 704.24 242.57 704.47 242.96C704.56 243.09 704.96 247.09 705.37 251.85C706.84 269.03 706.01 296.57 703.72 306.17C703.37 307.63 702.91 309.67 702.70 310.69C702.38 312.23 702.00 312.88 700.56 314.40C697.82 317.27 697.16 317.41 685.59 317.52C675.23 317.61 674.57 317.72 674.17 319.42C674.07 319.83 673.95 337.64 673.90 359.00C673.80 402.14 673.95 399.28 671.53 404.39C670.90 405.73 670.19 407.34 669.96 407.97C669.41 409.45 664.95 414.27 663.13 415.33C662.35 415.79 660.91 416.64 659.94 417.23C658.96 417.81 656.52 418.84 654.50 419.51C651.44 420.54 650.29 420.76 647.50 420.84C645.67 420.90 643.34 420.83 642.33 420.69Z"/><path class="ip" fill="#DD2A2C" fill-rule="evenodd" style="--k:0" d="M580.50 272.20C578.30 271.51 574.64 269.27 573.02 267.62C570.43 264.98 569.72 263.86 568.76 260.97C567.96 258.55 567.84 257.67 567.87 254.50C567.89 251.32 568.01 250.58 568.75 248.94C569.73 246.78 571.89 243.51 573.05 242.44C574.60 241.00 578.48 238.67 579.65 238.48C580.30 238.37 581.27 238.14 581.80 237.97C583.13 237.55 587.93 237.59 590.03 238.04C592.86 238.64 596.40 240.78 598.65 243.22C599.74 244.42 600.81 245.94 601.03 246.61C601.25 247.28 601.78 248.45 602.22 249.21C603.20 250.91 603.77 255.18 603.35 257.74C603.19 258.71 602.59 260.70 602.03 262.16C601.14 264.46 600.65 265.17 598.42 267.41C595.71 270.14 594.18 270.96 589.51 272.16C587.15 272.76 582.36 272.79 580.50 272.20Z"/><path class="ip" fill="#DD2A2C" fill-rule="evenodd" style="--k:1" d="M622.38 212.98C621.03 212.65 619.09 211.95 618.07 211.44C614.80 209.79 611.47 205.85 609.76 201.61C608.98 199.69 608.94 199.25 609.08 195.36C609.23 191.40 609.30 191.03 610.43 188.66C612.89 183.47 615.88 180.87 621.22 179.28C625.88 177.90 629.34 178.10 634.24 180.04C637.51 181.33 640.85 184.41 642.33 187.50C644.24 191.50 644.77 193.56 644.56 196.14C643.78 205.80 638.39 211.90 629.50 213.20C625.78 213.75 625.41 213.74 622.38 212.98Z"/><path class="ip" fill="#DD2A2C" fill-rule="evenodd" style="--k:2" d="M648.17 272.62C645.50 272.00 640.91 269.47 638.81 267.45C636.21 264.95 635.84 264.35 635.05 261.33C634.07 257.58 633.91 255.73 634.33 252.64C634.90 248.36 635.80 246.35 638.46 243.46C640.95 240.75 642.89 239.57 647.28 238.10C649.34 237.41 650.16 237.29 651.81 237.46C655.68 237.86 658.65 238.70 660.44 239.91C661.39 240.55 662.71 241.35 663.38 241.69C664.96 242.50 666.38 244.32 667.88 247.49C669.02 249.88 669.11 250.31 669.25 253.94C669.39 257.61 669.34 258.00 668.39 260.76C667.83 262.38 666.95 264.18 666.42 264.78C665.90 265.38 665.27 266.34 665.03 266.92C664.53 268.14 661.38 270.32 658.38 271.53C655.21 272.81 650.94 273.27 648.17 272.62Z"/><path class="ic2" fill="#1C1C1B" fill-rule="evenodd" style="--x:72px;--k:0" d="M130.33 399.02C123.97 397.81 118.87 393.67 115.81 387.23C113.77 382.93 113.24 380.24 113.08 373.38C112.93 366.94 113.12 365.39 114.73 360.33C116.64 354.29 121.84 348.51 126.90 346.79C133.31 344.62 138.85 344.90 144.36 347.68C148.66 349.85 152.71 354.84 153.88 359.41C154.35 361.24 154.34 361.44 153.81 362.03C153.36 362.53 152.78 362.67 151.18 362.67C150.04 362.67 148.89 362.48 148.60 362.25C148.31 362.02 147.83 361.06 147.52 360.12C145.14 352.72 136.17 349.04 128.88 352.49C126.81 353.47 124.18 356.14 122.65 358.80C119.24 364.74 118.43 374.13 120.67 381.50C121.57 384.44 123.58 387.82 125.56 389.71C127.99 392.03 129.63 392.88 132.62 393.39C137.39 394.21 143.11 392.11 145.49 388.68C146.48 387.25 148.00 383.51 148.00 382.50C148.00 381.33 148.67 381.00 151.02 381.00C154.01 381.00 154.51 381.52 154.20 384.30C153.97 386.30 152.78 389.77 151.81 391.25C149.76 394.38 146.26 396.91 142.19 398.19C139.23 399.13 133.15 399.55 130.33 399.02Z"/><path class="ic2" fill="#1C1C1B" fill-rule="evenodd" style="--x:24px;--k:1" d="M211.83 398.74C211.28 398.67 210.65 398.45 210.42 398.26C209.82 397.77 209.81 347.33 210.40 346.73C210.64 346.50 211.77 346.33 213.17 346.33C214.56 346.33 215.70 346.50 215.93 346.73C216.24 347.04 216.33 352.59 216.33 369.67C216.33 386.75 216.43 392.30 216.73 392.60C217.03 392.90 220.52 393.00 230.36 393.00C240.54 393.00 243.66 393.10 243.92 393.42C244.39 394.01 244.73 397.41 244.37 397.96C244.21 398.21 243.27 398.55 242.29 398.71C240.60 398.99 213.98 399.01 211.83 398.74Z"/><path class="ic2" fill="#1C1C1B" fill-rule="evenodd" style="--x:-24px;--k:2" d="M314.50 399.11C308.38 398.41 301.94 394.10 299.58 389.12L298.50 386.83L298.41 367.05C298.34 352.47 298.41 347.14 298.70 346.80C299.22 346.17 303.77 346.15 304.28 346.77C304.53 347.07 304.67 353.15 304.74 366.35L304.83 385.50L305.72 387.19C308.10 391.70 314.71 394.42 320.75 393.39C325.60 392.56 329.16 390.19 330.72 386.76L331.67 384.68L331.67 365.91C331.67 351.75 331.77 347.03 332.07 346.73C332.30 346.50 333.44 346.33 334.83 346.33C336.23 346.33 337.36 346.50 337.60 346.73C337.90 347.04 338.00 351.95 338.00 366.83L338.00 386.52L336.87 388.84C334.49 393.75 330.67 396.74 324.50 398.52C322.76 399.03 316.80 399.38 314.50 399.11Z"/><path class="ic2" fill="#1C1C1B" fill-rule="evenodd" style="--x:-72px;--k:3" d="M398.34 398.77C397.52 398.69 396.66 398.46 396.42 398.27C395.82 397.77 395.80 347.33 396.40 346.73C396.70 346.44 399.86 346.33 408.57 346.33C419.33 346.33 420.55 346.39 422.75 347.00C431.00 349.29 435.68 357.23 433.33 364.95C432.70 367.00 432.26 367.74 430.60 369.52C429.51 370.69 428.66 371.87 428.72 372.15C428.78 372.42 429.73 373.37 430.83 374.25C432.42 375.52 433.11 376.40 434.17 378.47C435.45 380.99 435.50 381.21 435.50 384.30C435.50 387.25 435.41 387.69 434.42 389.70C433.13 392.32 430.73 394.71 427.65 396.43C423.98 398.48 422.22 398.72 410.33 398.83C404.56 398.88 399.16 398.85 398.34 398.77Z M422.56 392.32C426.54 390.97 429.11 387.65 429.11 383.83C429.11 380.31 426.71 377.21 422.81 375.72C421.07 375.05 420.34 375.00 412.20 375.00C405.85 375.00 403.36 375.11 403.07 375.40C402.78 375.69 402.67 378.07 402.67 384.00C402.67 389.93 402.78 392.31 403.07 392.60C403.36 392.89 405.81 393.00 412.00 393.00C419.73 393.00 420.73 392.94 422.56 392.32Z M422.89 367.89C429.08 364.75 428.77 356.23 422.36 353.08C420.51 352.17 420.45 352.17 412.39 352.06C405.42 351.97 404.17 352.03 403.47 352.49L402.67 353.02L402.67 360.63C402.67 366.56 402.77 368.33 403.11 368.62C403.61 369.03 416.30 369.30 419.34 368.96C420.35 368.85 421.95 368.37 422.89 367.89Z"/></svg></div>
+<!-- Icone: Phosphor Icons (regular), licenza MIT, https://phosphoricons.com -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 256 256"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 256 256"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></symbol>
+    <symbol id="i-pizza" viewBox="0 0 256 256"><path d="M239.54,63a15.91,15.91,0,0,0-7.25-9.9,201.49,201.49,0,0,0-208.58,0,16,16,0,0,0-5.37,22l96,157.27a16,16,0,0,0,27.36,0l96-157.27A15.82,15.82,0,0,0,239.54,63ZM63.59,118.5a24,24,0,1,1,24.47,40.09Zm87.92,66.95A24,24,0,0,1,176,145.37Zm32.93-53.93a40,40,0,0,0-41.38,67.77L128,224,96.5,172.43a40,40,0,1,0-41.35-67.76L48.8,94.26a152,152,0,0,1,158.39,0Zm31.1-50.93a168.12,168.12,0,0,0-175.08,0L32,66.77a185.6,185.6,0,0,1,192,0Z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 256 256"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"/></symbol>
+    <symbol id="i-out" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 256 256"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM196,72a12,12,0,1,1-12-12A12,12,0,0,1,196,72Z"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 256 256"><path d="M200,136a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H192A8,8,0,0,1,200,136Zm32-56H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-80,96H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Z"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar" id="bar">
+  <a class="logo" href="#" aria-label="Pizza Club, torna all'inizio"><picture class="white"><source media="(min-width:960px)" srcset="img/logo-pizzaclub-tuttobianco.svg"><img src="img/logo-pizzaclub-bianco.svg" alt="" width="746" height="427"></picture><img class="dark" src="img/logo-pizzaclub.svg" alt="" width="746" height="427"></a>
+  <div class="bar-r">
+    <a class="call" href="tel:+390422444655"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h1">
+    <div class="media" aria-hidden="true">
+      <picture>
+        <source media="(min-width:960px)" srcset="video/pizza-d.webp">
+        <img src="video/pizza-v.webp" alt="" width="720" height="1000" fetchpriority="high">
+      </picture>
+      <video id="vid" muted loop playsinline autoplay preload="auto" tabindex="-1">
+        <source src="video/pizza-d.mp4" type="video/mp4" media="(min-width:960px)">
+        <source src="video/pizza-v.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-testo"><span class="sent" id="sent" aria-hidden="true"></span>
+      <h1 class="d" id="h1"><span class="ln"><span>Pizzeria</span></span><span class="ln"><span>d'asporto</span></span></h1>
+      <div class="ctas">
+        <a class="btn btn-main wide" data-ic="phone" href="tel:+390422444655"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Chiama 0422 444655</a>
+        <a class="btn btn-line wide" href="https://wa.me/393925665498?text=Ciao%20Pizza%20Club%2C%20vorrei%20ordinare.%0ANome%20e%20cognome%3A%20%0AOrario%3A%20%0AIndirizzo%20(se%20consegna)%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span>WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="lavagna" class="board-sec fuori sheet" aria-labelledby="h-lav">
+    <div class="wrap sec">
+      <h2 class="h2 d" id="h-lav">Fuori menu</h2>
+      <p class="lead">Disponibilità al telefono. Anche asparagi freschi.</p>
+      <ul class="board">
+        <li class="fm"><div class="l1"><h3>Top</h3><span class="price">9,00 €</span></div><p>pomodoro, mozzarella, rucola, crudo, burrata, pomodori secchi</p></li>
+        <li class="fm"><div class="l1"><h3>Fresca</h3><span class="price">8,50 €</span></div><p>pomodoro, mozzarella, olive taggiasche, pomodorini, burrata</p></li>
+        <li class="fm"><div class="l1"><h3>Burrata, porro, pomodori secchi</h3><span class="price">8,00 €</span></div><p>pomodoro, mozzarella</p></li>
+        <li class="fm"><div class="l1"><h3>Salsiccia, porro, gorgonzola</h3><span class="price">7,50 €</span></div><p>pomodoro, mozzarella</p></li>
+        <li class="fm"><div class="l1"><h3>Feta greca, pomodorini, olive taggiasche</h3><span class="price">8,00 €</span></div><p>pomodoro, mozzarella</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="menu" class="wrap sec" aria-labelledby="h-menu">
+    <div class="menu-grid">
+      <div class="menu-side">
+        <div class="menu-top">
+        <h2 class="h2 d" id="h-menu">Il menu</h2>
+        <div class="filtro" id="filtro">
+          <button class="f-btn" type="button" id="f-btn" aria-expanded="false" aria-controls="f-pan"><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Filtri<span class="dot" aria-hidden="true"></span></button>
+          <div class="f-pan" id="f-pan" role="group" aria-label="Filtri" hidden>
+            <button class="f-opt" type="button" data-f="verd" aria-pressed="false">Vegetariana<span class="n"></span></button>
+            <button class="f-opt" type="button" data-f="veg" aria-pressed="false">Senza carne e pesce<span class="n"></span></button>
+            <button class="f-opt" type="button" data-f="pic" aria-pressed="false">Piccanti<span class="n"></span></button>
+          </div>
+        </div>
+        </div>
+        <div class="f-attivo" id="f-attivo" hidden><button class="f-chip" type="button" id="f-off"><span id="f-lab"></span><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+        <div class="tabs-wrap">
+          <div class="tabs" role="tablist" aria-label="Sezioni del menu" id="tabs"><span class="tab-ind" id="tab-ind" aria-hidden="true"></span></div>
+        </div>
+      </div>
+      <div class="menu-main">
+        <p class="result-note" id="note" aria-live="polite"></p>
+        <div id="cats"></div>
+        <div class="extras">
+          <div class="extra" id="varianti">
+            <h3>Varianti</h3>
+            <ul class="vars">
+              <li>Impasto integrale<span class="p">+1,00 €</span></li>
+              <li>Doppia pasta<span class="p">+1,00 €</span></li>
+              <li>Bufala o burrata<span class="p">+2,50 €</span></li>
+              <li>Altre aggiunte<span class="p">+1,00/2,50 €</span></li>
+              <li>Pizza maxi 40 cm<span class="p">+2,00 €</span></li>
+              <li>Pizza baby<span class="p">-0,50 €</span></li>
+              <li>Senza mozzarella<span class="p">-0,50 €</span></li>
+              <li>Salsa sui fritti<span class="p">+0,10 €</span></li>
+              <li>Abb. mozzarella<span class="p">+1,00 €</span></li>
+            </ul>
+          </div>
+          <details class="extra" id="allergeni">
+            <summary>Allergeni</summary>
+            <ul class="alg-grid">
+              <li><b>1</b> cereali</li><li><b>2</b> latte e derivati</li><li><b>3</b> frutta a guscio</li>
+              <li><b>4</b> uova</li><li><b>5</b> crostacei</li><li><b>6</b> glutine</li>
+              <li><b>7</b> soia</li><li><b>8</b> molluschi</li><li><b>9</b> pesce</li>
+              <li><b>10</b> solfiti</li><li><b>11</b> senape</li><li><b>12</b> sedano</li>
+            </ul>
+            <p class="small">I numeri tra parentesi sono gli allergeni; dove non ci sono, valgono 1, 2 e 6. L'asterisco * indica un prodotto surgelato. Per i fritti chiedi al telefono.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="info" class="info-sec sheet" aria-labelledby="h-info">
+    <div class="wrap facts">
+    <h2 class="d" id="h-info">Informazioni</h2>
+    <ul>
+      <li><div class="row"><b>Orari</b><span>Lun e mer-dom 18:30-22:00. Martedì chiuso.</span></div></li>
+      <li><div class="row"><b>Consegna</b><span>Dalle 18:45 alle 21:45, +2 € sul totale. Zona di consegna: chiama o scrivici su WhatsApp.</span></div></li>
+      <li><div class="row"><b>Ritiro</b><span>Via Chiesa 7, Villorba.</span></div></li>
+      <li><div class="row"><b>WhatsApp</b><span><a href="https://wa.me/393925665498">392 5665498</a>, ordini entro le 16.</span></div></li>
+    </ul>
+    </div>
+  </section>
+
+  <section id="ordina" class="order sheet" aria-labelledby="h-ord">
+    <div class="wrap sec">
+      <h2 class="h2 d" id="h-ord">Come ordinare</h2>
+      <div class="order-grid">
+        <figure class="photo rv"><img src="img/squadra.webp" alt="La squadra del Pizza Club davanti al forno Cuppone" width="900" height="900" loading="lazy" decoding="async"></figure>
+        <ul class="ways">
+          <li class="way rv">
+            <h3>Telefono</h3>
+            <p><span class="num">0422 444655</span><br>Ritiro in Via Chiesa 7.</p>
+            <a class="btn btn-red" data-ic="phone" href="tel:+390422444655"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Chiama</a>
+          </li>
+          <li class="way rv" id="whatsapp">
+            <h3>WhatsApp</h3>
+            <p><span class="num">392 5665498</span><br>Scrivi nome e cognome, orario e, per la consegna, l'indirizzo.</p>
+            <a class="btn btn-ink" href="https://wa.me/393925665498?text=Ciao%20Pizza%20Club%2C%20vorrei%20ordinare.%0ANome%20e%20cognome%3A%20%0AOrario%3A%20%0AIndirizzo%20(se%20consegna)%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span>WhatsApp</a>
+            <span class="note">Ordini WhatsApp entro le 16, con conferma della pizzeria.</span>
+          </li>
+          <li class="way rv" id="consegna">
+            <h3>Consegna</h3>
+            <p>Dalle 18:45 alle 21:45, +2 € sul totale. Zona di consegna: chiama o scrivici su WhatsApp.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="orari" class="end sheet" aria-labelledby="h-orari">
+    <div class="wrap">
+      <h2 class="h2 d" id="h-orari">Orari</h2>
+      <div class="hours-grid">
+        <table class="hours" id="hours">
+          <caption class="sr">Orari di apertura settimanali</caption>
+          <tbody>
+            <tr data-d="1"><th scope="row">Lunedì</th><td>18:30-22:00</td></tr>
+            <tr data-d="2" class="closed"><th scope="row">Martedì</th><td>chiuso</td></tr>
+            <tr data-d="3"><th scope="row">Mercoledì</th><td>18:30-22:00</td></tr>
+            <tr data-d="4"><th scope="row">Giovedì</th><td>18:30-22:00</td></tr>
+            <tr data-d="5"><th scope="row">Venerdì</th><td>18:30-22:00</td></tr>
+            <tr data-d="6"><th scope="row">Sabato</th><td>18:30-22:00</td></tr>
+            <tr data-d="0"><th scope="row">Domenica</th><td>18:30-22:00</td></tr>
+          </tbody>
+        </table>
+        <div class="place rv" id="ritiro">
+          <h3>Ritiro</h3>
+          <address><p>Via Chiesa 7<br>31020 Villorba (TV)</p></address>
+          <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&amp;query=Pizza%20Club%20Via%20Chiesa%207%20Villorba" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg></span>Apri in Maps<svg class="ic tail" aria-hidden="true"><use href="#i-out"/></svg></a>
+        </div>
+      </div>
+      <footer class="foot">
+        <img src="img/logo-pizzaclub-bianco.svg" alt="Pizza Club" width="746" height="427" loading="lazy">
+        <address>Pizza Club · Via Chiesa 7, 31020 Villorba (TV)<br><a href="tel:+390422444655">Tel 0422 444655</a></address>
+        <a class="ig" href="https://www.instagram.com/pizzaclub_villorba_/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ic" aria-hidden="true"><use href="#i-ig"/></svg></a>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<nav class="dock" aria-label="Ordina subito">
+  <a class="btn btn-red" data-ic="phone" href="tel:+390422444655"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="lbl">Chiama<small>0422 444655</small></span></a>
+  <a class="btn btn-ink" href="https://wa.me/393925665498?text=Ciao%20Pizza%20Club%2C%20vorrei%20ordinare.%0ANome%20e%20cognome%3A%20%0AOrario%3A%20%0AIndirizzo%20(se%20consegna)%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span><span class="lbl">WhatsApp<small>entro le 16</small></span></a>
+</nav>
+
+<script>
+document.documentElement.classList.add('js');
+const REDUCE = matchMedia('(prefers-reduced-motion:reduce)');
+const BAR = () => document.getElementById('bar').offsetHeight;
+/* la barra in alto diventa chiara PRIMA che il titolo o i bottoni dell'hero arrivino sotto di lei (anticipo 36 px per la dissolvenza) */
+(function(){
+  const bar = document.getElementById('bar'), blk = document.querySelector('.hero-testo');
+  let t=false;
+  function aggiorna(){ t=false; bar.classList.toggle('light', blk.getBoundingClientRect().top < bar.offsetHeight + 36); }
+  function rich(){ if(!t){ t=true; requestAnimationFrame(aggiorna); } }
+  addEventListener('scroll', rich, {passive:true}); addEventListener('resize', rich); aggiorna();
+})();
+
+/* apertura: tocco, clic o tasto la chiudono subito; poi il livello si toglie dal DOM */
+(function(){
+  const ov = document.getElementById('intro'), H = document.documentElement;
+  if(!ov) return;
+  if(!H.classList.contains('intro')){ ov.remove(); return; }
+  let done = false;
+  const end = ()=>{ if(done) return; done = true; H.classList.remove('intro-out'); ov.remove(); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, skip, true)); };
+  const t0 = performance.now();
+  /* saltata: la testata recupera il tempo, cosi' non resta ferma ad aspettare */
+  const skip = ()=>{ if(done) return; H.classList.add('intro-out');
+    const adv = Math.max(0, 1650 - (performance.now() - t0));
+    document.querySelectorAll('.hero, .hero *').forEach(el=>el.getAnimations && el.getAnimations().forEach(a=>{ if(a.animationName!=='drift') a.currentTime = (a.currentTime||0) + adv; }));
+    setTimeout(end, 470); };
+  ov.addEventListener('animationend', e=>{ if(e.target===ov && e.animationName==='ovout') end(); });
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, skip, true));
+  setTimeout(end, 2600);
+})();
+
+/* Video della testata: parte muto in loop; con movimento ridotto resta il fotogramma fermo */
+(function(){
+  const v = document.getElementById('vid');
+  if(REDUCE.matches){ v.removeAttribute('autoplay'); [...v.querySelectorAll('source')].forEach(s=>s.remove()); v.load(); return; }
+  const on = ()=>v.classList.add('on');
+  v.addEventListener('playing', on, {once:true});
+  const p = v.play(); if(p && p.catch) p.catch(()=>{});
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && v.paused) v.play().catch(()=>{}); });
+})();
+
+/* Menu dal volantino (Maps, 12/11/2026). Ingredienti oltre a pomodoro e mozzarella, salvo note. a = allergeni */
+const MENU = [
+ {id:'classiche', t:'Classiche', note:'Pomodoro e mozzarella, più gli ingredienti indicati. Allergeni 1, 2, 6 dove non indicato.', items:[
+  ['Marinara','4,50','pomodoro, aglio, origano. Senza mozzarella',[1,6],'raw'],
+  ['Margherita','5,00','pomodoro e mozzarella'],
+  ['Bufala','7,00','bufala DOP'],['Prosciutto','6,00','prosciutto cotto'],['Funghi','6,00','funghi'],['Carciofi','6,00','carciofi'],
+  ['Prosciutto e funghi','6,50','prosciutto, funghi'],['Capricciosa','7,00','prosciutto, funghi, carciofi'],
+  ['Misto funghi','7,50','champignon, porcini, chiodini',[1,2,6,10,12]],['4 Stagioni','7,00','prosciutto, carciofi, funghi, olive greche'],
+  ['4 Formaggi','7,50','brie, gorgonzola DOP, grana'],['Diavola','6,00','salamino piccante'],['Salsiccia','6,00','salsiccia'],
+  ['Viennese','6,00','würstel'],['Patate','6,00','patate*'],['Patatosa','7,00','würstel, patate*'],['Simpson','7,00','salsiccia, patate*'],
+  ['Robert','7,50','salsiccia, olive greche, patate*'],['Romana','6,00','acciughe',[1,2,6,9]],['Napoletana','6,50','acciughe, capperi',[1,2,6,9]],
+  ['Siciliana','7,00','acciughe, capperi, olive greche',[1,2,6,9]],['Melanzane','6,00','melanzane'],['Zucchine','6,00','zucchine'],
+  ['Peperoni','6,00','peperoni'],['Pugliese','6,00','cipolla rossa'],['Verdure','7,50','melanzane, zucchine, peperoni, pomodoro ramato'],
+  ['Parmigiana','6,50','melanzane, grana'],['Ricotta e spinaci','6,50','ricotta, spinaci*'],['Tonno','6,00','tonno',[1,2,6,9]],
+  ['Tonno e cipolla','7,00','tonno, cipolla rossa',[1,2,6,9]],['Gamberetti','7,00','gamberetti',[1,2,5,6]],['Speck','7,00','speck'],
+  ['Crudo','7,00','crudo di Parma'],['Bresaola','7,00','bresaola punta d\'anca'],['Pancetta','7,00','pancetta stufata'],
+  ['Porchetta','7,00','porchetta'],['Sopressa','7,00','sopressa']]},
+ {id:'bianche', t:'Bianche', note:'Senza pomodoro: mozzarella più gli ingredienti indicati. Allergeni 1, 2, 6 dove non indicato.', items:[
+  ['Arale','7,50','melanzane, gorgonzola DOP, salsiccia'],['Formaggiosa','8,00','brie, gorgonzola DOP, grana, philadelphia'],
+  ['Sfiziosa','7,50','porcini, noci, taleggio vecchio',[1,2,3,6]],['Biancaneve','6,00','pomodoro ramato, olio EVO'],
+  ['Flash','8,00','ricotta, gorgonzola DOP, speck'],['Sirenetta','8,00','brie, rucola, gamberetti',[1,2,5,6]],
+  ['Yes','8,00','stracchino, zucchine, speck'],['Sole','7,50','pomodori secchi, olive taggiasche, philadelphia',[1,2,6,9,11,12]],
+  ['Salsiccia e friarielli','7,50','salsiccia, friarielli']]},
+ {id:'speciali', t:'Speciali', note:'Pomodoro e mozzarella, più gli ingredienti indicati. Allergeni 1, 2, 6 dove non indicato.', items:[
+  ['Luca','9,00','peperoni, cipolla, salamino, salsiccia'],['Vale','9,00','pomodoro ramato, gorgonzola DOP, salsiccia, cipolla, porcini'],
+  ['Saporita','8,50','prosciutto, würstel, salsiccia, funghi'],['Club','9,00','prosciutto, carciofi, provola, porcini, pomodoro ramato, olive greche'],
+  ['Porka','7,50','prosciutto, würstel, salamino piccante'],['Obelix','8,50','4 formaggi, salamino, peperoni'],
+  ['Ucc','8,50','prosciutto, würstel, brie, peperoni'],['Van Gogh','8,50','salamino piccante, brie, funghi, pomodoro ramato'],
+  ['Futurama','8,50','salamino piccante, porcini, peperoni, olive greche'],['Focosa','8,50','würstel, cipolla, funghi, peperoni, olio piccante'],
+  ['Rambo','8,50','salamino piccante, acciughe, capperi, gorgonzola DOP, olio piccante',[1,2,6,9]],['Loris','8,50','melanzane, salsiccia, provola, porcini'],
+  ['Veneta','7,00','salsiccia, peperoni'],['Zenigata','7,50','porcini, salsiccia'],['Amazzone','7,50','salamino piccante, rucola, grana'],
+  ['Delirio','8,00','chiodini, salsiccia, taleggio vecchio',[1,2,6,10,12]],['Teo','8,00','chiodini, taleggio vecchio, spinaci*',[1,2,6,10,12]],
+  ['Contadina','8,50','sopressa, funghi, taleggio vecchio'],['Bomba H','8,50','misto funghi, 4 formaggi, speck',[1,2,6,10,12]],
+  ['Boscaiola','8,00','panna, funghi, speck'],['Valdostana','8,00','gorgonzola DOP, speck'],['Heidi','8,00','porcini, speck'],
+  ['Americana','8,00','pancetta, uova',[1,2,4,6]],['Anna','8,50','pancetta, bufala DOP, grana'],['Al Capone','8,00','pancetta, brie, porcini'],
+  ['Ghiottona','8,00','pancetta, gorgonzola DOP, chiodini',[1,2,6,10,12]],['Texana','8,50','pancetta, salamino piccante, cipolla, fagioli, olio piccante'],
+  ['Rustica','7,50','tonno, cipolla, olive, fagioli',[1,2,6,9]],['Principessa','8,50','philadelphia, pomodoro ciliegino, crudo'],
+  ['Delicata','8,00','brie, crudo'],['Ninfea','8,00','porcini, crudo'],['Inglesina','8,50','bresaola, rucola, grana'],
+  ['Fioi','8,50','melanzane, porchetta, pomodori secchi, pecorino',[1,2,6,9,11,12]],['Gioconda','7,00','ricotta, mais, pomodoro ramato'],
+  ['Nuvola','6,50','ricotta, grana'],['Del Pastore','7,50','zucchine, pomodoro ramato, philadelphia'],
+  ['Leggera','7,50','ricotta affumicata, rucola, pomodoro ciliegino'],['Campana','8,00','bufala DOP, pomodoro ciliegino'],
+  ['Estiva','8,50','bufala DOP dopo cottura, pomodoro ciliegino, rucola, glassa di aceto balsamico'],
+  ['S. Artemio','8,50','bufala DOP, sfilacci di cavallo, rucola, grana'],['Golosa','7,50','funghi, sfilacci di cavallo'],
+  ['Felix','8,00','bufala DOP, pomodori secchi',[1,2,6,9,11,12]],['Messicana','7,50','robiola, pomodori secchi',[1,2,6,9,11,12]],
+  ['Prima','8,00','salsiccia, taleggio vecchio, olive taggiasche'],['Seconda','8,50','rucola, pomodori secchi, ricotta affumicata, olive taggiasche',[1,2,6,9,11,12]],
+  ['Terza','9,00','salamino piccante, bufala DOP, pomodoro ciliegino, grana, olive taggiasche'],
+  ['Verdure 2','8,50','melanzane, zucchine, piselli, mais, spinaci*, grana'],['Elite','8,50','verdure miste, porcini, grana'],
+  ['A modo mio','8,00','asparagi, brie, prosciutto'],['Tentazione','8,00','carciofi, porcini, pomodoro ramato, pecorino'],
+  ['Ischia','8,50','tonno, acciughe, gamberetti, olive greche',[1,2,5,6,9]],['Mediterranea','8,00','zucchine, gamberetti, aglio',[1,2,5,6]],
+  ['Misto mare*','8,00','cozze, surimi, totani, polpo',[1,2,5,6,8]],['Deliziosa','8,50','zucchine, salmone, philadelphia',[1,2,6,9]]]},
+ {id:'calzoni', t:'Calzoni', note:'Base mozzarella. Allergeni 1, 2, 6.', items:[
+  ['Calzone classico','6,50','prosciutto, funghi'],['Calzone farcito','7,00','prosciutto, funghi, salamino'],['Calzone vegetariano','7,50','verdure miste']]},
+ {id:'fritti', t:'Fritti', note:'Salsa +0,10 €. Allergeni: chiedi al telefono.', items:[
+  ['Patate','2,50/4,00','',null],['Olive ascolane','3,50','',null],['Mozzarelline','3,50','',null],['Chele di granchio','3,50','',null],
+  ['Anelli di cipolla','3,50','',null],['Verdure pastellate','4,00','',null],['Nuggets di pollo','5,00','',null]]},
+ {id:'dolci', t:'Dolci', note:'', items:[['Piadina alla Nutella','4,00','',[1,2,3,6]]]}
+];
+
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const ALG = {1:'cereali',2:'latte',3:'frutta a guscio',4:'uova',5:'crostacei',6:'glutine',7:'soia',8:'molluschi',9:'pesce',10:'solfiti',11:'senape',12:'sedano'};
+/* senza carne e pesce: deducibile dagli ingredienti scritti sul volantino */
+/* vegetariana: senza carne e pesce e con almeno una verdura tra gli ingredienti scritti */
+const VERD = /melanzan|zucchin|peperon(?!cin)|spinac|carciof|fung|champignon|porcin|chiodin|rucola|radicch|pomodorin|pomodoro ramato|ciliegin|datterin|cipoll|porr|asparag|patat|mais|pisell|friariell|verdur/;
+const MEAT = /prosciutto|crudo|speck|salsicc|salamino|wurstel|pancetta|porchetta|sopressa|bresaola|cavallo|acciughe|tonno|gamberetti|salmone|cozze|surimi|totani|polpo/;
+function algText(a){
+  return a ? `(${a.join(', ')})` : '';
+}
+const esc = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cats = document.getElementById('cats'), tabs = document.getElementById('tabs'), ind = document.getElementById('tab-ind');
+const num = p => parseFloat(p.split('/')[0].replace(',','.'));
+
+MENU.forEach((c,ci)=>{
+  const n = c.items.length;
+  const tab = document.createElement('button');
+  tab.className='tab'; tab.type='button'; tab.setAttribute('role','tab'); tab.id='t-'+c.id;
+  tab.setAttribute('aria-controls','c-'+c.id); tab.setAttribute('aria-selected', ci===0?'true':'false');
+  tab.innerHTML = `${c.t}<sup>${n}</sup>`;
+  tab.setAttribute('aria-label', `${c.t}, ${n}`); tab.dataset.t = c.t;
+  tabs.appendChild(tab);
+  const sec = document.createElement('div');
+  sec.className='cat'; sec.id='c-'+c.id; sec.setAttribute('role','tabpanel'); sec.setAttribute('aria-labelledby','t-'+c.id);
+  if(ci) sec.hidden = true;
+  sec.innerHTML = `<div class="cat-head"><h3>${c.t}</h3></div><ul class="list"></ul>`;
+  const ul = sec.querySelector('.list');
+  c.items.forEach(it=>{
+    const [name,price,ing,alg] = it;
+    const a = (alg===undefined || (alg && alg.join()==='1,2,6' && it[4]!=='raw')) ? null : alg;
+    const li = document.createElement('li');
+    li.className='item'; li.dataset.cat=c.id;
+    li.dataset.kind = (c.id==='fritti'||c.id==='dolci')?'altro':'pizza';
+    const base = it[4]==='raw' ? '' : (c.id==='bianche'||c.id==='calzoni') ? ' mozzarella' : (c.id==='fritti'||c.id==='dolci') ? '' : ' pomodoro mozzarella';
+    if(li.dataset.kind==='pizza' && /piccant/.test(norm(name+' '+ing))) li.dataset.pic='1';
+    const al = alg===undefined ? [1,2,6] : (alg || null);
+    li.dataset.alg = al ? al.join(',') : '';
+    if(li.dataset.kind==='pizza' && !MEAT.test(norm(name+' '+ing)) && !(al||[]).some(x=>[5,8,9].includes(x))) { li.dataset.veg='1'; if(VERD.test(norm(ing))) li.dataset.verd='1'; }
+    const at = algText(a);
+    li.innerHTML = `<div class="l1"><h4>${esc(name)}</h4><span class="price">${price} €</span></div>`+
+      `<p class="ing"><span class="txt">${esc(ing)}</span>${at?` <span class="alg" aria-label="allergeni ${a.join(', ')}">${at}</span>`:''}</p>`;
+    if(!ing && !at) li.querySelector('.ing').remove();
+    ul.appendChild(li);
+  });
+  cats.appendChild(sec);
+});
+
+document.addEventListener('click',e=>{ const l=e.target.closest('a.leg'); if(l){ const d=document.getElementById('allergeni'); if(d) d.open=true; } });
+const note = document.getElementById('note');
+const tabList = () => [...tabs.querySelectorAll('.tab')];
+let active = 'classiche', filtro = null;
+/* filtri del menu, uno alla volta. Vegetariana: senza carne e pesce e con verdure. Senza carne e pesce: esclude anche gli allergeni 5, 8, 9 */
+const FILTRI = {verd:{t:'Vegetariana',p:'vegetariane'}, veg:{t:'Senza carne e pesce',p:'senza carne e pesce'}, pic:{t:'Piccanti',p:'piccanti'}};
+
+/* indicatore tab (non usato: la tab attiva è una pillola nera) */
+function moveInd(){
+  const t = document.getElementById('t-'+active);
+  if(!t || !t.offsetParent) return;
+  ind.style.width = t.offsetWidth+'px';
+  ind.style.transform = `translateX(${t.offsetLeft}px)`;
+}
+/* le righe entrano in cascata quando cambi sezione */
+function enter(sec){
+  if(REDUCE.matches) return;
+  sec.classList.remove('enter-h'); void sec.offsetWidth; sec.classList.add('enter-h');
+  [...sec.querySelectorAll('.item:not([hidden])')].forEach((li,i)=>{ li.classList.remove('enter'); void li.offsetWidth; li.style.setProperty('--i', Math.min(i,14)); li.classList.add('enter'); });
+}
+function showTab(id, scroll, animate){
+  const changed = id !== active;
+  active = id;
+  tabList().forEach(t=>t.setAttribute('aria-selected', t.id==='t-'+id ? 'true':'false'));
+  const at=document.getElementById('t-'+id);
+  if(tabs.scrollWidth>tabs.clientWidth) tabs.scrollTo({left:Math.max(0,at.offsetLeft-tabs.clientWidth/2+at.offsetWidth/2),behavior:REDUCE.matches?'auto':'smooth'});
+  document.querySelectorAll('.cat').forEach(s=>{ s.hidden = s.id !== 'c-'+id; });
+  moveInd();
+  if(animate && changed) enter(document.getElementById('c-'+id));
+  if(scroll){
+    const head = document.getElementById('c-'+id);
+    const top = head.getBoundingClientRect().top;
+    const offset = BAR() + (matchMedia('(min-width:960px)').matches ? 24 : (document.querySelector('.tabs-wrap').getBoundingClientRect().height + 8));
+    if(top < offset || top > window.innerHeight*.6) window.scrollBy({top: top - offset, behavior: REDUCE.matches?'auto':'smooth'});
+  }
+}
+const fBox = document.getElementById('filtro'), fBtn = document.getElementById('f-btn'), fLab = document.getElementById('f-lab'),
+      fRiga = document.getElementById('f-attivo'), fOff = document.getElementById('f-off'), fPan = document.getElementById('f-pan'), fOpts = [...fPan.querySelectorAll('.f-opt')];
+/* accanto a ogni opzione, quante pizze */
+fOpts.forEach(o=>{ o.querySelector('.n').textContent = document.querySelectorAll(`.item[data-${o.dataset.f}="1"]`).length; });
+/* le tab mostrano solo le pizze filtrate; le sezioni vuote spariscono */
+function render(){
+  let tot = 0, first = null;
+  document.querySelectorAll('.cat').forEach(s=>{
+    let n = 0;
+    s.querySelectorAll('.item').forEach(li=>{ const ok = !filtro || li.dataset[filtro]==='1'; li.hidden = !ok; if(ok) n++; });
+    const t = document.getElementById('t-'+s.id.slice(2));
+    t.hidden = n===0; t.querySelector('sup').textContent = n; t.setAttribute('aria-label', `${t.dataset.t}, ${n}`);
+    if(n && !first) first = s.id.slice(2); tot += n;
+  });
+  const on = !!filtro;
+  fBtn.classList.toggle('on', on);
+  if(on) fBtn.setAttribute('aria-label', `Filtri, attivo: ${FILTRI[filtro].t}`); else fBtn.removeAttribute('aria-label');
+  fLab.textContent = on ? FILTRI[filtro].t : '';
+  fOff.setAttribute('aria-label', on ? `Togli il filtro ${FILTRI[filtro].t}` : 'Togli il filtro');
+  fRiga.hidden = !on;
+  fOpts.forEach(o=>o.setAttribute('aria-pressed', String(o.dataset.f===filtro)));
+  note.textContent = on ? `${tot} pizze ${FILTRI[filtro].p}` : '';
+  showTab(document.getElementById('t-'+active).hidden ? first : active, false, false);
+  document.dispatchEvent(new Event('filtro'));
+}
+function apri(){
+  fPan.hidden = false; fBtn.setAttribute('aria-expanded','true');
+  (fOpts.find(o=>o.getAttribute('aria-pressed')==='true') || fOpts[0]).focus({preventScroll:true});
+}
+function chiudi(torna){
+  if(fPan.hidden) return;
+  fPan.hidden = true; fBtn.setAttribute('aria-expanded','false');
+  if(torna) fBtn.focus({preventScroll:true});
+}
+function scegli(f){
+  filtro = f; render();
+  if(f){ const m=document.querySelector('.menu-main'); const top=m.getBoundingClientRect().top; if(top>window.innerHeight*.7) window.scrollBy({top:top-(BAR()+document.querySelector('.tabs-wrap').getBoundingClientRect().height+12),behavior:REDUCE.matches?'auto':'smooth'}); }
+}
+fBtn.addEventListener('click', ()=>{ fPan.hidden ? apri() : chiudi(true); });
+fOpts.forEach(o=>o.addEventListener('click', ()=>{ chiudi(true); scegli(filtro===o.dataset.f ? null : o.dataset.f); }));
+fOff.addEventListener('click', ()=>{ chiudi(false); scegli(null); fBtn.focus({preventScroll:true}); });
+fPan.addEventListener('keydown', e=>{
+  const i = fOpts.indexOf(document.activeElement);
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); fOpts[(i+(e.key==='ArrowDown'?1:-1)+fOpts.length)%fOpts.length].focus(); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !fPan.hidden){ e.preventDefault(); chiudi(true); } });
+document.addEventListener('pointerdown', e=>{ if(!fPan.hidden && !fBox.contains(e.target)) chiudi(false); });
+fBox.addEventListener('focusout', e=>{ if(e.relatedTarget && !fBox.contains(e.relatedTarget)) chiudi(false); });
+tabs.addEventListener('click', e=>{
+  const t = e.target.closest('.tab'); if(!t) return;
+  showTab(t.id.slice(2), true, true);
+});
+tabs.addEventListener('keydown', e=>{
+  const list=tabList().filter(t=>!t.hidden), i=list.indexOf(document.activeElement);
+  if(i<0) return;
+  let j = e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;
+  if(j===null) return; e.preventDefault();
+  j=(j+list.length)%list.length; list[j].focus(); list[j].click();
+});
+(function(){
+  const wrap = document.querySelector('.tabs-wrap');
+  const f = ()=> wrap.classList.toggle('at-end', tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 4);
+  tabs.addEventListener('scroll', f, {passive:true}); addEventListener('resize', f); f();
+})();
+moveInd();
+addEventListener('resize', moveInd);
+if(document.fonts) document.fonts.ready.then(moveInd);
+
+/* Stato aperto/chiuso dagli orari veri: lun e mer-dom 18:30-22:00, martedì chiuso. ?ora=2026-11-12T19:05 per provarlo */
+(function(){
+  const param = new URLSearchParams(location.search).get('ora');
+  let now;
+  if(param && !isNaN(new Date(param))) now = new Date(param);
+  else now = new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Rome'}));
+  const d = now.getDay(), m = now.getHours()*60+now.getMinutes();
+  const OPEN=18*60+30, CLOSE=22*60;
+  const isOpenDay = x => x!==2;
+  const el = document.getElementById('status');
+  if(el){
+  let s, sh, open=false;
+  if(isOpenDay(d) && m>=OPEN && m<CLOSE){ open=true; s = 'Aperto fino alle 22'; sh = 'Aperto'; }
+  else if(isOpenDay(d) && m<OPEN){ s = 'Apre alle 18:30'; sh = 'Apre 18:30'; }
+  else if(d===2){ s = 'Martedì chiuso'; sh = 'Chiuso oggi'; }
+  else { const n=(d+1)%7; s = isOpenDay(n) ? 'Chiuso, domani dalle 18:30' : 'Chiuso, mercoledì dalle 18:30'; sh = 'Chiuso'; }
+  el.querySelector('.long').textContent = s; el.querySelector('.short').textContent = sh;
+  el.classList.toggle('open', open);
+  }
+  const row = document.querySelector(`#hours tr[data-d="${d}"]`); if(row) row.classList.add('today');
+})();
+
+/* Entrate allo scroll con IntersectionObserver, niente listener di scroll */
+(function(){
+  const els = document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window) || REDUCE.matches){ els.forEach(e=>e.classList.add('in')); return; }
+  const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.2});
+  els.forEach(e=>{ if(e.classList.contains('way')) e.style.transitionDelay = ([...e.parentNode.children].indexOf(e)*110)+'ms'; io.observe(e); });
+})();
+
+</script>
+<script>
+/* altezza del blocco rosso del menu sul telefono: dal bordo alto del menu al fondo delle tab */
+(function(){
+  const m=document.getElementById('menu'),c0=document.querySelector('.menu-top'),c1=document.getElementById('f-attivo'),t=document.querySelector('.tabs-wrap');
+  if(!m||!c0||!t) return;
+  const misura=()=>{ const c=c1&&!c1.hidden?c1:c0; m.style.setProperty('--testa',(c.offsetTop+c.offsetHeight+parseFloat(getComputedStyle(t).marginTop)+t.offsetHeight)+'px'); };
+  misura(); window.addEventListener('resize',misura); document.addEventListener('filtro',misura); window.addEventListener('load',misura);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(misura);
+})();
+</script>
+<script>
+/* Movimento allo scroll (v10): titoli che escono da una fessura, testi che seguono scaglionati,
+   conteggio delle pizze che sale nell'intestazione di ogni sezione del menu. Con movimento ridotto: fermo. */
+(function(){
+  if(REDUCE.matches || !('IntersectionObserver' in window)) return;
+  var tt=[].slice.call(document.querySelectorAll('main .h2, .facts h2'));
+  var mv=[];
+  function segna(sel,base,passo){[].forEach.call(document.querySelectorAll(sel),function(el,i){el.classList.add('mv');el.style.setProperty('--d',(base+i*passo)+'ms');mv.push(el)})}
+  segna('main .sec > .lead, #menu .lead',160,0);
+  segna('.facts li',120,90);
+  segna('.end .foot',120,0);
+  tt.forEach(function(el){el.classList.add('tt')});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){(e.target._tt||e.target).classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:0});
+  mv.forEach(function(el){io.observe(el)});
+  /* il titolo ritagliato per Chrome "non si vede": si osserva un segnaposto invisibile alla sua stessa altezza */
+  tt.forEach(function(el){var s=document.createElement('span');s.setAttribute('aria-hidden','true');s.style.cssText='position:absolute;width:1px;height:1px;pointer-events:none;opacity:0';
+    el.parentNode.insertBefore(s,el);s._tt=el;io.observe(s)});
+  /* "37 pizze, da 4,50 a 7,50 EUR": il numero conta da zero la prima volta che si vede.
+     Il testo finale resta identico; se un filtro riscrive la riga a meta, il conteggio si ferma. */
+  var io2=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io2.unobserve(e.target);
+    var el=e.target,orig=el.textContent,m=orig.match(/^(\d+)(.*)$/);if(!m)return;
+    var n=+m[1],resto=m[2],t0=0,scritto=orig;if(n<4)return;
+    function passo(t){if(el.textContent!==scritto)return;t0=t0||t;var f=Math.min(1,(t-t0)/700),k=1-Math.pow(1-f,3);
+      scritto=Math.round(n*k)+resto;el.textContent=scritto;if(f<1)requestAnimationFrame(passo)}
+    requestAnimationFrame(passo)})},{threshold:.6});
+  [].forEach.call(document.querySelectorAll('.cat-head p'),function(p){io2.observe(p)});
+})();
+</script>
+<script>
+/* Ingredienti veri (foto scontornate) che galleggiano.
+   Mai sopra la testata col video: la composizione sta subito sotto, nel passaggio verso il menu e attorno al blocco rosso.
+   Due strati fissi:
+   - davanti (sopra la pagina): composizione sotto la testata e singoli dopo il menu, lati alterni, in parte fuori dal bordo;
+     ritagliato tra la barra in alto (o le tab attaccate), il fondo della testata e la barra in basso.
+   - dietro (sotto i testi, dentro il menu): lungo l'elenco delle pizze, nei margini e tra le categorie,
+     a meta fuori dal bordo dello schermo su telefono, nei margini e nei corridoi tra le colonne al computer.
+   Niente posti fissi: dopo il caricamento la pagina misura ogni riga di testo, i comandi, le immagini e i loghi,
+   e mette ogni ingrediente solo dove non tocca niente, contando il margine del galleggiamento e del parallasse.
+   Si ridispongono quando la pagina cambia altezza (scheda, filtro, allergeni) o larghezza.
+   Con movimento ridotto: niente galleggiamento ne parallasse, scorrono con la pagina. */
+(function(){
+  var IMG={pomodorini:[460,360],basilico:[329,420],salame:[440,299],mezzo:[360,342],mozzarella:[440,350]};
+  var FILE={pomodorini:'pomodorini',basilico:'basilico',salame:'salame',mezzo:'pomodorino-mezzo',mozzarella:'mozzarella'};
+  var GIRO=['basilico','pomodorini','salame','mozzarella','mezzo','basilico','salame','pomodorini','mezzo','mozzarella'];
+  var GIRO2=['salame','basilico','mezzo','mozzarella','pomodorini','basilico','salame','mezzo','pomodorini','mozzarella'];
+  var fermo=REDUCE.matches;
+  var hero=document.querySelector('.hero'),bar=document.getElementById('bar'),dock=document.querySelector('.dock'),
+      tabs=document.querySelector('.tabs-wrap'),menu=document.getElementById('menu'),lista=document.querySelector('.menu-main');
+  function strato(cls,dove){var s=document.createElement('div');s.className=cls;s.setAttribute('aria-hidden','true');dove.insertBefore(s,dove.firstChild);return s}
+  var davanti=strato('ingr-strato',document.body),dietro=strato('ingr-strato ingr-fondo',menu);
+  var SEL='main #varianti,main a,main button,main input,main label,main summary,main .tab,main .btn,main figure,main img:not(.media img),main svg.ic,main h1';
+  var mobile=false,P=[],poolA=[],poolB=[],W=0,VH=0,barH=0,dockH=0,largo=false;
+  function seme(n){return function(){n=(n*1664525+1013904223)%4294967296;return n/4294967296}}
+  var G=[],N=[],PR=[];
+  function ostacoli(sy){
+    G=[];N=[];PR=[];var O=[],els=document.querySelectorAll(SEL),i,r,hb=hero.getBoundingClientRect().bottom+sy;
+    /* testi non ancora entrati (titoli dalla fessura, testi scaglionati, righe del menu): sono ancora spostati in basso,
+       quindi l'ostacolo vale anche per il posto finale, un po' piu su */
+    function su(el,r){var a=el.closest('.tt:not(.in),.mv:not(.in),.rv:not(.in),.item.enter');if(a)return 34;
+      /* righe del menu e della lavagna: entrano dal basso (16 px) quando arrivano nello schermo */
+      return el.closest('.item,.fm')?18:0}
+    for(i=0;i<els.length;i++){r=els[i].getBoundingClientRect();if(r.width>0&&r.height>0)O.push([r.left,r.top+sy-su(els[i],r),r.right,r.bottom+sy])}
+    /* il pannello dei filtri, anche chiuso: si misura aperto e invisibile, cosi gli ingredienti non lo toccano quando si apre */
+    var fp=document.getElementById('f-pan');if(fp){var ch0=fp.hidden;fp.style.visibility='hidden';fp.hidden=false;r=fp.getBoundingClientRect();fp.hidden=ch0;fp.style.visibility='';O.push([r.left-8,r.top+sy-8,r.right+8,r.bottom+sy+8])}
+    var tw=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT),n,rg=document.createRange();
+    while((n=tw.nextNode())){if(!n.textContent.trim())continue;var pe=n.parentElement;if(!pe||pe.closest('.sr,[hidden]'))continue;
+      var dst=pe.closest('.ing,.cat-note,.small')&&!pe.closest('a')?G:pe.closest('.item h4')?N:pe.closest('.item .price')?PR:O;
+      rg.selectNodeContents(n);var rs=rg.getClientRects();for(i=0;i<rs.length;i++){r=rs[i];if(r.width>0)dst.push([r.left,r.top+sy-su(pe,r),r.right,r.bottom+sy])}}
+    /* al computer la colonna del menu (titolo, filtri, tab) resta attaccata: vale per tutta l'altezza del menu */
+    if(largo&&menu){var ms=document.querySelector('.menu-side');if(ms){var rm=menu.getBoundingClientRect(),ra=ms.getBoundingClientRect();O.push([ra.left-10,rm.top+sy,ra.right+10,rm.bottom+sy])}}
+    /* filetti (bordi sopra e sotto di righe, categorie, tabelle): anche questi non si toccano */
+    var bs=document.querySelectorAll('main li,main .cat-head,main .board,main .ways,main .extra,main .facts ul,main .hours,main .hours tr,main .place,main .foot,main table');
+    for(i=0;i<bs.length;i++){var cs=getComputedStyle(bs[i]);r=bs[i].getBoundingClientRect();if(!r.width)continue;var up=bs[i].closest('.item,.fm')?18:0;
+      if(parseFloat(cs.borderBottomWidth)>0)O.push([r.left,r.bottom+sy-1-up,r.right,r.bottom+sy]);
+      if(parseFloat(cs.borderTopWidth)>0)O.push([r.left,r.top+sy-up,r.right,r.top+sy+1])}
+    for(i=0;i<O.length;i++)if(O[i][1]<hb&&O[i][3]>hb)O[i][3]=hb;
+    return O}
+  function sovrapposto(L,a){var t=0;for(var i=0;i<L.length;i++){var o=L[i],w=Math.min(a[2],o[2])-Math.max(a[0],o[0]),h=Math.min(a[3],o[3])-Math.max(a[1],o[1]);if(w>0&&h>0)t+=w*h}return t}
+  /* strato di fondo: solo dove non tocca nessun testo (nemmeno da dietro). Al computer anche negli spazi liberi
+     dell'elenco; su telefono piccoli e quasi del tutto fuori dal bordo, nelle fasce vuote tra una pizza e l'altra.
+     Se non c'e posto si salta. xs = posizioni da provare: [x, bordo?] */
+  function cercaFondo(O,tipo,w,xs,y0,raggio,rot,v,limiti){
+    var im=IMG[tipo],h=w*im[1]/im[0],rad=(Math.abs(rot)+6)*Math.PI/180,c=Math.cos(rad),s=Math.sin(rad);
+    var bw=w*c+h*s,bh=w*s+h*c,M=v+7;
+    for(var d=0;d<=raggio;d+=8){for(var sg=0;sg<2;sg++){if(!d&&sg)continue;var yy=y0+(sg?-d:d),cy=yy+h/2;
+      if(cy-bh*.45-v-2<limiti[0]||cy+bh*.45+v+2>limiti[1])continue;
+      for(var k=0;k<xs.length;k++){
+        var x=xs[k][0],cx=x+w/2,a=[Math.max(0,cx-bw*.45)-6,cy-bh*.45-M,Math.min(W,cx+bw*.45)+6,cy+bh*.45+M];
+        /* mai a contatto con testi, nemmeno dietro: nomi, prezzi, ingredienti, allergeni, titoli, comandi */
+        if(libero(O,a)&&libero(G,a)&&libero(N,a)&&libero(PR,a))return {x:x,y:yy,w:w,h:h,tipo:tipo,rot:rot,v:v}}}}
+    return null}
+  function libero(O,a){for(var i=0;i<O.length;i++){var o=O[i];if(a[0]<o[2]&&a[2]>o[0]&&a[1]<o[3]&&a[3]>o[1])return false}return true}
+  /* prova una posizione e le vicine; vis = quota visibile (il resto esce dal bordo); limiti = fascia verticale ammessa
+     per la parte piena dell'ingombro ruotato, compreso il parallasse (gli angoli vuoti delle foto possono uscire: il ritaglio li taglia) */
+  function cerca(O,tipo,w,cx0,y0,lato,vis,raggio,rot,v,limiti){
+    var im=IMG[tipo],h=w*im[1]/im[0],rad=(Math.abs(rot)+6)*Math.PI/180,c=Math.cos(rad),s=Math.sin(rad);
+    var bw=w*c+h*s,bh=w*s+h*c,M=v+12;
+    for(var d=0;d<=raggio;d+=8){for(var sg=0;sg<2;sg++){if(!d&&sg)continue;var yy=y0+(sg?-d:d),cy=yy+h/2;
+      if(cy-bh*.45-v-2<limiti[0]||cy+bh*.45+v+2>limiti[1])continue;
+      for(var k=0;k<vis.length;k++){
+        var x=cx0!=null?cx0-w/2:(lato>0?W-w*vis[k]:-w*(1-vis[k]));
+        if(cx0!=null&&k)break;
+        var cx=x+w/2;
+        var a=[Math.max(0,cx-bw*.45)-6,cy-bh*.45-M,Math.min(W,cx+bw*.45)+6,cy+bh*.45+M];
+        if(libero(O,a)&&libero(G,a)&&libero(N,a)&&libero(PR,a))return {x:x,y:yy,w:w,h:h,tipo:tipo,rot:rot,v:v}}}}
+    return null}
+  function disponi(){
+    var de=document.documentElement,sy=scrollY;W=de.clientWidth;VH=innerHeight;largo=matchMedia('(min-width:960px)').matches;
+    barH=bar?bar.offsetHeight:0;dockH=dock&&getComputedStyle(dock).display!=='none'?dock.offsetHeight:0;
+    var H=de.scrollHeight,O=ostacoli(sy),R=seme(11),mob=mobile=W<768,out=[],v=mob?22:34;
+    var hB=hero.getBoundingClientRect().bottom+sy,lim=[hB,H-40];
+    var rm=menu.getBoundingClientRect(),mT=rm.top+sy,mB=rm.bottom+sy;
+    var rl=lista.getBoundingClientRect(),lT=rl.top+sy,lB=rl.bottom+sy;
+    function metti(p,sf,z,fondo){if(p){p.sf=sf;p.z=z;p.fondo=!!fondo;out.push(p);O.push([p.x+p.w*.1,p.y+p.h*.1,p.x+p.w*.9,p.y+p.h*.9])}}
+    /* 1. composizione subito sotto la testata: passaggio verso il menu e attorno al blocco rosso */
+    var hm=document.getElementById('h-menu').getBoundingClientRect(),hmT=hm.top+sy;
+    var ch=document.getElementById('filtro').getBoundingClientRect(),chT=ch.top+sy;
+    /* prima la misura grande; se non c'e spazio libero, un po' piu piccolo */
+    function prova(t,w){var args=[].slice.call(arguments,2);for(var k=0;k<4;k++){var p=cerca.apply(null,[O,t,w*[1,.86,.74,.62][k]].concat(args));if(p)return p}return null}
+    if(largo){
+      var lim1=[hB,lT+260],vc=8;
+      metti(prova('mozzarella',170,W-62,hB+6,1,[1],60,-6,vc,lim1),false,.25);
+      metti(prova('salame',190,W-60,hB+160,1,[1],80,-12,vc,lim1),false,.2);
+    }else{
+      var lim2=[hB,lT],vc=6;
+      metti(prova('pomodorini',130,null,hB+14,1,[.55,.48,.42,.36],120,-10,vc,lim2),false,.3);
+      metti(prova('basilico',84,null,hB+30,-1,[.5,.42,.36],120,26,vc,lim2),false,.4);
+      metti(prova('mezzo',100,null,chT+40,-1,[.5,.42,.36],100,16,vc,lim2),false,.25);
+    }
+    /* 2. dietro l'elenco delle pizze: distribuzione regolare, lati alterni, varieta di ingredienti */
+    var vb=mob?2:14,limL=[lT+8,lB-8],passoL=mob?VH*.24:VH*.7,y=lT+40,lato=1,i=0;
+    var cols=[];if(largo){var ms=document.querySelector('.menu-side');
+      var r1=ms.getBoundingClientRect(),r2=lista.getBoundingClientRect();cols.push((r1.right+r2.left)/2);
+      var ls=lista.querySelector('.list:not([hidden])');if(ls&&getComputedStyle(ls).columnCount==='2'){var rr=ls.getBoundingClientRect();cols.push((rr.left+rr.right)/2)}}
+    var x0=rl.left,x1=rl.right;
+    while(y<lB-80&&i<80){
+      var tipo=GIRO2[i%GIRO2.length],rot=(R()-.5)*(mob?24:60),w=mob?60+R()*20:150+R()*60,f;
+      var p=null,sc=mob?[1.7,1.4,1.15,1,.85]:[1.15,1,.85,.7];
+      /* prova prima piu grande e piu dentro lo schermo, poi via via piu piccolo */
+      for(var z=0;z<sc.length&&!p;z++){var wz=w*sc[z],xz=[];
+        /* sempre tagliati ai lati: solo posizioni che escono dal bordo dello schermo */
+        if(false)for(f=0;f<=1.001;f+=.05){var fx2=lato>0?1-f:f,cx2=x0+wz*.4+(x1-x0-wz*.8)*fx2;xz.push([cx2-wz/2,0])}
+        (mob?[lato]:[lato,-lato]).forEach(function(l){(mob?[.48,.42,.36,.3]:[.5,.42,.36,.3]).forEach(function(vv){xz.push([l>0?W-wz*vv:-wz*(1-vv),1])})});
+        p=cercaFondo(O,tipo,wz,xz,y,passoL*.45,rot,vb,limL)}
+      if(false&&!p&&cols.length)for(f=0;f<cols.length&&!p;f++){var wc2=Math.min(w*.62,110);p=cercaFondo(O,tipo,wc2,[[cols[f]-wc2/2,0]],y,passoL*.4,rot*.5,vb,limL)}
+      if(p){metti(p,false,.35,true);lato=-lato;y=p.y+p.h+passoL*(.55+R()*.35)}else y+=passoL*.35;
+      i++}
+    /* 3. singoli davanti, dopo il menu, lati alterni. Su telefono la mozzarella apre la serie (accanto al titolo ora c'e Filtri) */
+    var passo=VH*(mob?.72:1.1);y=mB+VH*.15;lato=-1;i=0;
+    var mz=largo?null:prova('mozzarella',140,null,mB+VH*.1,1,[.5,.42,.36,.3],VH*.3,-8,v,lim);if(mz){metti(mz,false,.25);y=mz.y+mz.h+passo*.6}
+    while(y<H-100&&i<60){
+      var tipo2=GIRO[i%GIRO.length],sf=(i%4===3),w2=(mob?110+R()*40:160+R()*70)*(sf?.85:1),rot2=(R()-.5)*50;
+      var q=cerca(O,tipo2,w2,largo?(lato>0?W-w2*.3:w2*.3):null,y,lato,mob?[.5,.44,.38,.32]:[.6,.5,.4],VH*.3,rot2,v,lim);
+      if(!q&&mob)q=cerca(O,tipo2,w2*.75,null,y,lato,[.5,.4,.34],VH*.3,rot2,v,lim);
+      if(q){metti(q,sf,sf?1.2:.5+R()*.4);lato=-lato;y=q.y+q.h+passo*(.6+R()*.45)}else y+=passo*.3;
+      i++}
+    P=out;var na=0,nb=0;
+    for(var j=0;j<P.length;j++){var o=P[j],pool=o.fondo?poolB:poolA,k=o.fondo?nb++:na++,el=pool[k];
+      if(!el){el=document.createElement('span');el.className='pz';el.innerHTML='<img alt="" decoding="async">';(o.fondo?dietro:davanti).appendChild(el);pool.push(el)}
+      var img=el.firstChild,src='img/ingredienti/'+FILE[o.tipo]+'.webp';
+      if(img.getAttribute('src')!==src){img.src=src;img.width=IMG[o.tipo][0];img.height=IMG[o.tipo][1]}
+      el.classList.toggle('sf',o.sf);el.classList.toggle('fl',j%3===1);el.hidden=false;
+      el.style.width=o.w.toFixed(1)+'px';
+      el.style.cssText+=';--r:'+o.rot.toFixed(1)+'deg;--t:'+(4+(j*1.37)%4).toFixed(2)+'s;--dl:-'+((j*2.3)%8).toFixed(1)+'s;--a:'+(2+(j*1.9)%3).toFixed(1)+'px;--g:'+(2+(j*.7)%2).toFixed(1)+'deg;--b:'+(o.w<110?2:3.4)+'px';
+      o.el=el;o.fuori=false;el.style.visibility=''}
+    for(;na<poolA.length;na++)poolA[na].hidden=true;
+    for(;nb<poolB.length;nb++)poolB[nb].hidden=true;
+    aggiorna()}
+  /* a ogni scorrimento: posizione nello schermo + parallasse limitato a +/- v, e ritaglio */
+  var chiesto=false;
+  function aggiorna(){chiesto=false;var sy=scrollY,top=barH,hb=hero.getBoundingClientRect().bottom;
+    if(tabs&&!largo){var rt=tabs.getBoundingClientRect();if(rt.top<=barH+1&&rt.bottom>barH)top=rt.bottom}
+    davanti.style.clipPath='inset('+Math.max(top,hb,0).toFixed(1)+'px 0 '+dockH+'px 0)';
+    var rl=lista.getBoundingClientRect();
+    dietro.style.clipPath='inset('+Math.max(top,rl.top).toFixed(1)+'px 0 '+Math.max(dockH,VH-rl.bottom).toFixed(1)+'px 0)';
+    for(var j=0;j<P.length;j++){var q=P[j],yv=q.y-sy;
+      if(yv>VH+60||yv+q.h<-60){if(!q.fuori){q.el.style.visibility='hidden';q.fuori=true}continue}
+      if(q.fuori){q.el.style.visibility='';q.fuori=false}
+      var par=fermo?0:Math.max(-q.v,Math.min(q.v,(yv+q.h/2-VH/2)*.06*q.z));
+      q.el.style.transform='translate3d('+q.x.toFixed(1)+'px,'+(yv-par).toFixed(1)+'px,0)'}}
+  window.addEventListener('scroll',function(){if(!chiesto){chiesto=true;requestAnimationFrame(aggiorna)}},{passive:true});
+  var t;function poi(){clearTimeout(t);t=setTimeout(disponi,160)}
+  if(document.readyState==='complete')disponi();else window.addEventListener('load',disponi);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(poi);
+  /* i caratteri arrivano dopo (e cambiano la larghezza delle righe): si rimisura quando finiscono di caricare e dopo l'apertura */
+  if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',poi);
+  window.addEventListener('load',function(){setTimeout(poi,2600)});
+  window.addEventListener('resize',poi);
+  if('ResizeObserver' in window){var ultima=0;new ResizeObserver(function(){var h=document.querySelector('main').offsetHeight;if(h!==ultima){ultima=h;poi()}}).observe(document.querySelector('main'))}
+})();
+</script>
+</body>
+</html>

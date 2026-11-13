@@ -8,5 +8,6 @@
    { slug: 'pizzeria-roma-x7k2', nome: 'Pizzeria Roma', tipo: 'Pizzeria', luogo: 'Treviso', stato: 'pronta' }
 */
 window.DEMO_ELENCO = [
-  { slug: 'inferno-b34d', nome: 'Inferno, Pizza & Takeaway', tipo: 'Pizzeria', luogo: 'Spresiano', stato: 'pronta' }
+  { slug: 'inferno-b34d', nome: 'Inferno, Pizza & Takeaway', tipo: 'Pizzeria', luogo: 'Spresiano', stato: 'pronta' },
+  { slug: 'pizzaclub-8a87', nome: 'Pizza Club', tipo: 'Pizzeria', luogo: 'Villorba', stato: 'pronta' }
 ];
