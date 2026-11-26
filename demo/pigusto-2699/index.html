@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pizzeria PiGusto · Arcade (TV)</title>
+<meta name="description" content="Pizzeria PiGusto, Via Indipendenza 35 ad Arcade (TV). Pizza d'asporto, menu con prezzi e allergeni. Telefono e WhatsApp 375 630 9217. Lunedì chiuso.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#D30915">
+<script>
+/* apertura animata a ogni caricamento, saltata con #ancora o movimento ridotto */
+try{ if(!matchMedia('(prefers-reduced-motion:reduce)').matches && !location.hash){ document.documentElement.classList.add('intro'); } }catch(e){}
+</script>
+<link rel="icon" href="img/fetta.svg" type="image/svg+xml">
+<meta property="og:title" content="Pizzeria PiGusto · Arcade (TV)">
+<meta property="og:description" content="Pizza d'asporto in Via Indipendenza 35 ad Arcade. Menu, orari, telefono e WhatsApp.">
+<link rel="preload" href="fonts/albert-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lobster.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/yellowtail.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Testi: Albert Sans (Google Fonts, OFL), variabile 100-900, solo latin. Vicino all'Avenir del loro menu. */
+@font-face{font-family:"Albert Sans";src:url(fonts/albert-sans.woff2) format("woff2");font-weight:100 900;font-display:swap}
+/* Dal menu cartaceo (post IG DHhRIfKtH83, 23/3/2025): titoli rossi in corsivo da insegna, nomi delle pizze in corsivo nero pieno.
+   Titoli di sezione: Yellowtail. Titolo della testata e nomi delle pizze: Lobster. Entrambi Google Fonts (OFL), solo latin. */
+@font-face{font-family:"Yellowtail";src:url(fonts/yellowtail.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Lobster";src:url(fonts/lobster.woff2) format("woff2");font-weight:400;font-display:swap}
+
+/* Palette PiGusto dal menu cartaceo del post IG DHhRIfKtH83, campionata con PIL dai pixel:
+   copertina rosso vivo #E80E0D, cerchio del logo #D30915, titoli del menu #C12C25, carta bianca, inchiostro nero,
+   grigio delle illustrazioni #686868, basilico #68A038. I nomi delle variabili restano quelli della base. */
+:root{
+  --latte:#FFFFFF;      /* carta del menu: fondo */
+  --nero:#1A1414;       /* inchiostro del menu, appena scaldato: testi e sezioni scure */
+  --pomodoro:#D30915;   /* rosso del cerchio del logo: blocco del menu, Chiama, barra in basso (bianco sopra 5,5:1) */
+  --vivo:#E80E0D;       /* rosso della copertina: solo fondo dell'apertura */
+  --sugo:#C12C25;       /* rosso dei titoli del menu: titoli e testo rosso sul bianco (5,75:1) */
+  --basilico:#68A038;
+  --grigio:#686868;     /* grigio delle illustrazioni: testo secondario sul bianco (5,57:1) */
+  --rule:rgba(26,20,20,.14);
+  --f:"Albert Sans","Avenir Next",system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.45,.5,1);
+  --gutter:16px;
+  --dock:72px;
+  --top:64px;
+  --sheet:30px;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--latte);color:var(--nero);font-family:var(--f);font-size:17px;line-height:1.55;font-weight:400;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock) + env(safe-area-inset-bottom));overflow-x:clip}
+img,svg,video{display:block;max-width:100%}
+img{height:auto}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--nero);outline-offset:3px;border-radius:999px}
+:where(main){display:block;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--gutter)}
+:target{scroll-margin-top:calc(var(--top) + 16px)}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.d{font-family:"Yellowtail","Brush Script MT",cursive;font-weight:400;font-style:normal;letter-spacing:0}
+.h2.d,.facts h2.d{color:var(--sugo)}
+#menu .h2,.info-sec .facts h2,.end .h2{color:var(--latte)}
+.ic{width:20px;height:20px;flex:none;fill:currentColor}
+
+/* ---------- bottoni ----------
+   Pillola piena. A sinistra un cerchio con l'icona (Phosphor, MIT), il testo, e a destra una freccia solo dove porta altrove. */
+.btn{--h:56px;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:var(--h);padding:0 22px 0 8px;border-radius:999px;font-weight:600;font-size:17px;line-height:1;text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transition:transform .45s var(--spring),background-color .3s var(--ease),color .3s var(--ease)}
+.btn .bub{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;flex:none;transition:transform .5s var(--spring)}
+.btn .bub .ic{width:21px;height:21px}
+.btn .tail{width:16px;height:16px;margin-left:2px;transition:transform .45s var(--spring)}
+.btn:active{transform:scale(.965)}
+.btn-main{background:#fff;color:var(--nero)}
+.btn-main .bub{background:var(--pomodoro);color:var(--latte)}
+.btn-line{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.85)}
+.btn-line .bub{background:rgba(255,255,255,.16)}
+.btn-red{background:var(--pomodoro);color:var(--latte)}
+.btn-red .bub{background:rgba(255,255,255,.18)}
+.btn-ink{background:var(--nero);color:var(--latte)}
+.btn-ink .bub{background:rgba(255,255,255,.12)}
+.btn-plain{padding:0 22px}
+@media (hover:hover){
+  .btn-main:hover{background:#FFE3E0}
+  .btn-line:hover{background:rgba(255,255,255,.12)}
+  .btn-red:hover{background:#A8070F}
+  .btn-ink:hover{background:#000000}
+  .btn:hover .bub{transform:scale(1.06)}
+  .btn:hover .tail{transform:translate(2px,-2px)}
+}
+
+/* ---------- testata con video ---------- */
+.hero{position:relative;height:calc(100svh - var(--dock) - env(safe-area-inset-bottom));min-height:560px;max-height:980px;background:#B77F4F;overflow:hidden;isolation:isolate}
+.media{position:absolute;inset:0}
+.media picture,.media video{position:absolute;inset:0;width:100%;height:100%}
+.media img,.media video{width:100%;height:100%;object-fit:cover;object-position:68% 18%}
+.media video{opacity:0;transition:opacity .9s var(--ease)}
+.media video.on{opacity:1}
+.media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,10,6,.74) 0px,rgba(28,10,6,.5) 70px,rgba(28,10,6,0) 170px),linear-gradient(0deg,rgba(24,9,5,.88) 0%,rgba(24,9,5,.7) 26%,rgba(24,9,5,.3) 46%,rgba(24,9,5,0) 62%);pointer-events:none}
+.bar{position:fixed;z-index:20;left:0;right:0;top:0;height:var(--top);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 var(--gutter);color:#fff;transition:background-color .45s var(--ease),color .45s var(--ease),box-shadow .45s var(--ease)}
+.sent{position:absolute;left:0;top:calc(100% - var(--sheet) - var(--top));width:1px;height:1px;pointer-events:none}
+.bar.light{background:var(--latte);color:var(--nero);box-shadow:0 1px 0 var(--rule)}
+.bar .logo{display:flex;align-items:center;width:82px;min-height:44px}
+.bar .logo img,.bar .logo picture{display:block;width:100%}
+.bar .logo .dark,.bar.light .logo .white{display:none}
+.bar.light .logo .dark{display:block}
+.bar-r{display:flex;align-items:center;gap:14px;min-width:0}
+.call{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 16px 0 14px;border-radius:999px;background:var(--pomodoro);color:var(--latte);font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap;transition:background-color .3s var(--ease),transform .45s var(--spring)}
+.call .ic{width:18px;height:18px}
+.call:active{transform:scale(.965)}
+@media (hover:hover){.call:hover{background:#A8070F}}
+/* sopra il video la Chiama e crema con testo rosso: il rosso scuro sul video si perde */
+.bar:not(.light) .call{background:var(--latte);color:var(--pomodoro)}
+@media (hover:hover){.bar:not(.light) .call:hover{background:#FFE3E0}}
+.bar:not(.light) :focus-visible{outline-color:#fff}
+/* il titolo sta sul video, in basso a sinistra, sopra un velo scuro; sotto sale il rosso del menu */
+.hero-testo{position:absolute;z-index:2;left:0;right:0;bottom:0;color:#fff;padding:0 var(--gutter) calc(var(--sheet) + 30px)}
+.hero h1{margin:0;font-family:"Lobster","Brush Script MT",cursive;font-size:clamp(52px,16.5vw,80px);line-height:1.04;text-shadow:0 2px 28px rgba(20,8,4,.35)}
+.hero h1 .ln{display:block;overflow:hidden;padding:0 .08em .14em 0;margin-bottom:-.14em}
+.hero h1 .ln>span{display:block}
+.hero .sub{margin:12px 0 0;font-size:17px;line-height:1.45;max-width:34ch}
+.hero .ctas{display:none;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}
+.js .hero h1 .ln>span{transform:translateY(105%);animation:up 1s .35s var(--ease) forwards}
+.js .hero h1 .ln:nth-child(2)>span{animation-delay:.46s}
+.js .hero .sub,.js .hero .ctas{opacity:0;animation:fade .8s .7s var(--ease) forwards}
+.js .hero .ctas{animation-delay:.82s}
+@keyframes up{to{transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- sezioni ---------- */
+.sheet{position:relative;border-radius:var(--sheet) var(--sheet) 0 0;margin-top:calc(-1 * var(--sheet))}
+.sec{padding-top:96px;padding-bottom:96px}
+.h2{font-size:clamp(50px,14vw,68px);line-height:1.05;margin:0;padding-bottom:.12em}
+.lead{margin:14px 0 0;color:var(--grigio);font-size:17px;max-width:46ch}
+
+/* ---------- menu ---------- */
+#menu{position:relative;z-index:1;padding-top:56px;padding-bottom:80px}
+/* il rosso della testata ora e il blocco iniziale del menu: sale sul video con gli angoli tondi,
+   finisce sotto le tab (altezza --testa calcolata dallo script del menu); le righe delle pizze restano sul latte */
+#menu::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:calc(-1 * var(--sheet));height:calc(var(--testa,560px) + var(--sheet));background:var(--pomodoro);border-radius:var(--sheet) var(--sheet) 0 0}
+.menu-side{color:#fff}
+.menu-side .lead,.menu-side .count{color:#fff}
+.menu-side :focus-visible{outline-color:#fff}
+.menu-side .tabs-wrap{background:var(--pomodoro);border-bottom:0}
+.menu-side .tabs-wrap::after{background:linear-gradient(90deg,rgba(211,9,21,0),var(--pomodoro) 80%)}
+.menu-side{color:var(--latte)}
+.menu-side .lead,.menu-side .count{color:var(--latte)}
+.menu-side :focus-visible{outline-color:var(--latte)}
+.menu-side .tab{color:var(--latte)}
+.menu-side .tab sup{color:var(--latte)}
+.menu-side .tab[aria-selected="true"]{background:var(--latte);color:var(--nero)}
+.menu-side .tab[aria-selected="true"] sup{color:var(--grigio)}
+.count{margin:14px 0 0;color:var(--grigio);font-size:17px}
+/* filtri: un bottone sul rosso che apre un piccolo pannello bianco; un filtro alla volta */
+.menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.filtro{position:relative;flex:none}
+.f-btn{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 20px 0 16px;border:0;border-radius:999px;background:transparent;color:var(--latte);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8);font-size:16px;font-weight:600;cursor:pointer;transition:background-color .25s var(--ease),transform .4s var(--spring)}
+.f-btn .ic{width:20px;height:20px;flex:none}
+/* filtro attivo: pallino latte sul bottone */
+.f-btn .dot{position:absolute;top:9px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--latte);transform:scale(0);transition:transform .35s var(--spring)}
+.f-btn.on .dot{transform:none}
+@media (hover:hover){.f-btn:hover{background:rgba(255,255,255,.14)}}
+.f-btn:active{transform:scale(.96)}
+.f-attivo{margin-top:16px}
+.f-attivo[hidden]{display:none}
+.f-chip{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px 0 18px;border:0;border-radius:999px;background:var(--latte);color:var(--nero);font-size:16px;font-weight:600;cursor:pointer;transition:transform .4s var(--spring)}
+.f-chip .ic{width:16px;height:16px;flex:none}
+.f-chip:active{transform:scale(.96)}
+.f-pan{position:absolute;right:0;top:calc(100% + 8px);z-index:7;width:min(320px,calc(100vw - 2 * var(--gutter)));padding:8px;border-radius:20px;background:#FFFFFF;color:var(--nero);box-shadow:0 20px 50px -12px rgba(90,14,16,.45),0 2px 8px rgba(28,28,27,.12);transform-origin:20px 0;animation:fpan .3s var(--ease)}
+.f-pan[hidden]{display:none}
+@keyframes fpan{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.f-opt{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;border:0;border-radius:12px;background:transparent;color:var(--nero);font-size:16px;font-weight:500;text-align:left;cursor:pointer;transition:background-color .2s var(--ease)}
+.f-opt .n{color:var(--grigio);font-size:15px;font-variant-numeric:tabular-nums}
+@media (hover:hover){.f-opt:hover{background:rgba(28,28,27,.06)}}
+.f-opt[aria-pressed="true"]{background:var(--nero);color:var(--latte)}
+.f-opt[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.menu-side .f-pan :focus-visible{outline-color:var(--nero)}
+
+.tabs-wrap{position:sticky;top:var(--top);z-index:5;background:var(--latte);margin:28px calc(-1 * var(--gutter)) 0;padding:10px 0;border-bottom:1px solid var(--rule);display:flex;align-items:center}
+.tabs-wrap::after{content:"";position:absolute;right:0;top:0;bottom:1px;width:36px;background:linear-gradient(90deg,rgba(255,255,255,0),var(--latte) 80%);pointer-events:none;transition:opacity .25s var(--ease)}
+.tabs-wrap.at-end::after{opacity:0}
+.tabs{position:relative;flex:1;min-width:0;display:flex;gap:2px;padding:0 var(--gutter) 0 4px;overflow-x:auto;scrollbar-width:none;scroll-padding:0 var(--gutter)}
+.tabs::-webkit-scrollbar{display:none}
+.tab-ind{display:none}
+.tab[hidden]{display:none}
+.tab{position:relative;flex:none;min-height:44px;border:0;border-radius:999px;background:transparent;cursor:pointer;font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;padding:0 15px;transition:color .3s var(--ease),background-color .3s var(--ease)}
+.tab sup{font-size:15px;font-weight:500;color:var(--grigio);transform:translateY(-3px);transition:color .3s var(--ease)}
+.tab[aria-selected="true"]{background:var(--nero);color:var(--latte)}
+.tab[aria-selected="true"] sup{color:rgba(255,255,255,.78)}
+@media (hover:hover){.tab:hover:not([aria-selected="true"]){background:rgba(28,28,27,.05)}}
+
+.result-note{font-size:16px;font-weight:500;color:var(--grigio);margin:20px 0 0}
+.result-note:empty{margin:0}
+.cat{padding-top:36px;scroll-margin-top:calc(var(--top) + 84px)}
+.cat[hidden]{display:none}
+.cat-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:12px;border-bottom:1px solid var(--nero)}
+.cat-head h3{font-family:"Yellowtail","Brush Script MT",cursive;color:var(--sugo);font-size:42px;line-height:1.1;font-weight:400;letter-spacing:0;margin:0;padding-bottom:.06em}
+.cat-head p{margin:0;font-size:15px;color:var(--grigio)}
+.cat-note{margin:14px 0 4px;color:var(--grigio);font-size:15px;line-height:1.5;max-width:60ch}
+.cat-note a{color:var(--nero);font-weight:500;text-underline-offset:3px;text-decoration-color:rgba(28,28,27,.35);display:inline-block;padding:11px 0;margin:-11px 0}
+.list{list-style:none;margin:0;padding:0}
+/* riga del menu: nome a sinistra, prezzo allineato a destra, ingredienti in grigio, allergeni piccoli */
+.item,.fm{padding:18px 0 17px;border-bottom:1px solid var(--rule)}
+.item[hidden]{display:none}
+.l1{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.item h4,.fm h3{margin:0;font-family:"Lobster","Brush Script MT",cursive;font-size:23px;line-height:1.25;font-weight:400;letter-spacing:.005em;min-width:0;overflow-wrap:anywhere}
+.price{flex:none;font-weight:700;font-size:18px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.item .ing,.fm p{margin:5px 0 0;color:var(--grigio);font-size:16px;line-height:1.45;max-width:44ch}
+.item .alg{font-size:15px;color:var(--grigio);white-space:nowrap;font-variant-numeric:tabular-nums}
+.js .item.enter{animation:itemin .5s var(--ease) both;animation-delay:calc(var(--i,0) * 22ms)}
+@keyframes itemin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.extras{margin-top:72px;display:grid;gap:48px}
+.extras h3,details.extra summary{font-family:"Yellowtail","Brush Script MT",cursive;font-size:36px;line-height:1.15;font-weight:400;letter-spacing:0;margin:0;color:var(--sugo)}
+#varianti h3{color:var(--latte)}
+.extra{padding-top:14px;border-top:1px solid var(--nero)}
+/* Varianti: scheda rossa come il blocco del menu, testi e prezzi bianchi (4,7:1), filetti chiari */
+#varianti{background:var(--pomodoro);color:var(--latte);border-top:0;border-radius:var(--sheet);padding:26px 22px 14px}
+#varianti .vars li{border-bottom-color:rgba(255,255,255,.3)}
+.vars{list-style:none;margin:10px 0 0;padding:0}
+.vars li{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:16px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.vars li:last-child{border-bottom:0}
+.vars .p{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+details.extra summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+details.extra summary::-webkit-details-marker{display:none}
+details.extra summary::after{content:"+";font-size:26px;font-weight:400;line-height:1}
+details.extra[open] summary::after{content:"\2212"}
+.alg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0 14px;padding:0;list-style:none;font-size:16px}
+.alg-grid b{display:inline-block;min-width:2.2ch;font-weight:600;font-variant-numeric:tabular-nums}
+.small{font-size:15px;color:var(--grigio);margin:0;max-width:60ch}
+
+/* ---------- informazioni pratiche (dopo il menu) ---------- */
+.facts{padding-top:72px;padding-bottom:150px}
+.facts h2{margin:0 0 18px;font-size:clamp(36px,10vw,48px);line-height:1.05;padding-bottom:.06em}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--nero)}
+.facts li{border-bottom:1px solid var(--rule)}
+.facts .row{display:grid;grid-template-columns:100px 1fr;gap:12px;align-items:baseline;padding:16px 0}
+.facts span a{color:inherit;font-weight:500;text-underline-offset:3px;display:inline-block;padding:12px 0;margin:-12px 0}
+.facts b{font-size:16px;font-weight:600}
+.facts span{font-size:16px;line-height:1.45;color:var(--grigio)}
+
+/* ---------- fuori menu: l'unico foglio colorato prima della chiusura ---------- */
+.board-sec{background:var(--nero);color:var(--latte);z-index:1}
+.board-sec .lead{color:#CFCFCF}
+.board{list-style:none;margin:36px 0 0;padding:0;border-top:1px solid var(--latte)}
+.board .fm{border-bottom-color:rgba(255,255,255,.16)}
+.board .fm p{color:#CFCFCF}
+.board-sec :focus-visible{outline-color:var(--latte)}
+/* Fuori menu ora sta subito dopo la testata, prima del rosso del menu: foglio latte che sale sul video */
+.fuori{background:var(--latte);color:var(--nero);z-index:1}
+.fuori .lead{color:var(--grigio)}
+.fuori .board{border-top-color:var(--nero)}
+.fuori .board .fm{border-bottom-color:var(--rule)}
+.fuori .board .fm p{color:var(--grigio)}
+.fuori :focus-visible{outline-color:var(--nero)}
+/* Informazioni su nero, dopo il menu: testi latte, secondari #C9C5BF (9,9:1) */
+.info-sec{background:var(--nero);color:var(--latte);z-index:1}
+.info-sec .facts{padding-top:96px;padding-bottom:120px}
+.info-sec .facts ul{border-top-color:var(--latte)}
+.info-sec .facts li{border-bottom-color:rgba(255,255,255,.16)}
+.info-sec .facts span{color:#CFCFCF}
+.info-sec .facts span a{color:var(--latte)}
+.info-sec :focus-visible{outline-color:var(--latte)}
+
+/* ---------- come ordinare ---------- */
+.order{background:var(--latte);z-index:2}
+.order-grid{display:grid;gap:44px;margin-top:40px}
+.photo{margin:0;border-radius:20px;overflow:hidden;background:#F2F2F2;aspect-ratio:1/1}
+.photo img{width:100%;height:100%;object-fit:cover}
+.ways{list-style:none;margin:0;padding:0;border-top:1px solid var(--nero)}
+.way{padding:26px 0 28px;border-bottom:1px solid var(--rule)}
+.way:last-child{border-bottom:0}
+.way h3,.place h3{margin:0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.way p{margin:6px 0 18px;max-width:42ch;color:var(--grigio)}
+.way .num{font-weight:600;font-size:19px;color:var(--nero);font-variant-numeric:tabular-nums}
+.way .note{display:block;font-size:15px;color:var(--grigio);margin-top:14px}
+.js .rv:not(.photo){opacity:0;transform:translateY(16px)}
+.js .rv.in:not(.photo){opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .photo.rv{opacity:0}
+.js .photo.rv.in{opacity:1;transition:opacity 1s var(--ease)}
+
+/* ---------- orari ---------- */
+.hours-grid{display:grid;gap:48px;margin-top:36px}
+.hours{width:100%;border-collapse:collapse;font-size:17px;border-top:1px solid var(--nero)}
+.hours th,.hours td{text-align:left;padding:13px 0;font-weight:400;border-bottom:1px solid var(--rule)}
+.hours td{text-align:right;font-variant-numeric:tabular-nums;color:var(--grigio)}
+.hours tr.closed td{font-weight:600;color:var(--sugo)}
+.hours tr.today th,.hours tr.today td{font-weight:700;color:var(--nero)}
+.hours tr.today th::after{content:" · oggi";font-weight:500;color:var(--sugo)}
+.place{padding-top:14px;border-top:1px solid var(--nero)}
+.place p{margin:6px 0 20px;font-size:17px;color:var(--grigio)}
+address{font-style:normal}
+
+/* ---------- chiusura ---------- */
+.end{background:var(--nero);color:var(--latte);padding:96px 0 28px;z-index:4}
+/* scacchi del forno PiGusto: una sola fascia sottile in cima alla chiusura */
+.end::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;border-radius:var(--sheet) var(--sheet) 0 0;background:repeating-conic-gradient(var(--latte) 0 25%,var(--nero) 0 50%) 0 0/14px 14px;-webkit-mask:linear-gradient(90deg,transparent 0,#000 var(--sheet),#000 calc(100% - var(--sheet)),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 var(--sheet),#000 calc(100% - var(--sheet)),transparent 100%);opacity:.9}
+/* orari sul nero: testi latte, secondari #C9C5BF (9,9:1), chiuso e "oggi" in rosa pomodoro chiaro */
+.end .h2{color:var(--latte)}
+.end .hours{border-top-color:var(--latte)}
+.end .hours th{color:var(--latte)}
+.end .hours th,.end .hours td{border-bottom-color:rgba(255,255,255,.16)}
+.end .hours td{color:#CFCFCF}
+.end .hours tr.closed td{color:#FF8A80}
+.end .hours tr.today th,.end .hours tr.today td{color:var(--latte)}
+.end .hours tr.today th::after{color:#FF8A80}
+.end .place{border-top-color:var(--latte)}
+.end .place p{color:#CFCFCF}
+.end :focus-visible{outline-color:var(--latte)}
+.foot{margin-top:64px;padding-top:26px;border-top:1px solid rgba(255,255,255,.18);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;font-size:15px;color:#DADADA}
+.foot img{width:112px}
+.foot a{display:inline-flex;align-items:center;min-height:44px}
+.foot .ig{justify-content:center;width:48px;height:48px;border-radius:50%;color:var(--latte);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);transition:background-color .25s var(--ease)}
+.foot .ig .ic{width:24px;height:24px}
+@media (hover:hover){.foot .ig:hover{background:rgba(255,255,255,.1)}}
+/* telefono: Instagram sulla riga del logo, a destra; l'indirizzo va sotto */
+@media (max-width:959px){.foot .ig{order:2;margin-left:auto}.foot address{order:3;flex-basis:100%}}
+
+/* ---------- barra fissa (telefono) ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;height:calc(var(--dock) + env(safe-area-inset-bottom));padding:8px var(--gutter) calc(8px + env(safe-area-inset-bottom));background:rgba(248,248,248,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--rule)}
+.dock .btn{--h:56px;min-width:0;gap:9px;padding:0 10px 0 8px;font-size:17px;overflow:hidden}
+.dock .btn .bub{width:38px;height:38px}
+.dock .lbl{display:flex;flex-direction:column;gap:3px;min-width:0;line-height:1.05}
+.dock .lbl small{font-size:15px;font-weight:400;white-space:nowrap}
+/* barra in basso rossa: Chiama bianco con testo rosso scuro, WhatsApp nero; filetto chiaro in alto per staccarla dal rosso del menu */
+.dock{background:var(--pomodoro);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 -6px 18px rgba(60,10,8,.18)}
+.dock .btn-red{background:var(--latte);color:var(--pomodoro)}
+.dock .btn-red .bub{background:var(--pomodoro);color:var(--latte)}
+@media (hover:hover){.dock .btn-red:hover{background:#FFE3E0}}
+
+/* movimenti legati allo scroll (solo dove il browser li supporta, mai con movimento ridotto) */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .sheet{animation:sheetin linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+    .media img,.media video{animation:drift linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+  }
+}
+@keyframes sheetin{from{border-radius:calc(var(--sheet) * 2.4) calc(var(--sheet) * 2.4) 0 0}to{border-radius:var(--sheet) var(--sheet) 0 0}}
+/* testata: scorrendo, la pizza ruota un poco come sulla pala e si avvicina */
+@keyframes drift{to{transform:scale(1.16) rotate(-3deg) translateY(3%)}}
+
+@media (max-width:959px){ .menu-side{display:contents} }
+@media (min-width:700px){
+  .alg-grid{grid-template-columns:repeat(3,1fr)}
+  .hours-grid{grid-template-columns:1.1fr .9fr;align-items:start;gap:72px}
+  .board{display:grid;grid-template-columns:1fr 1fr;column-gap:56px}
+}
+@media (min-width:960px){
+  .end{padding-top:144px}
+  :root{--gutter:40px;--dock:0px;--sheet:44px;--top:76px}
+  body{padding-bottom:0}
+  .dock{display:none}
+  /* testata divisa: foglio rosso a sinistra, video a destra */
+  .hero{height:100svh;max-height:1000px;min-height:640px}
+  .media img,.media video{object-position:50% 42%}
+  /* al computer il titolo e a sinistra: il velo scuro scende anche da sinistra */
+  .media::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(24,9,5,.88) 0%,rgba(24,9,5,.8) 42%,rgba(24,9,5,.46) 62%,rgba(24,9,5,0) 82%);pointer-events:none}
+  #menu{padding-top:144px}
+  .hero-testo{padding:0 40px calc(var(--sheet) + 64px)}
+  .bar{padding:0 40px}
+  .bar .logo{width:100px}
+  .hero h1{font-size:clamp(96px,9.6vw,156px);line-height:1.02}
+
+  .hero .sub{font-size:19px;margin-top:18px;max-width:38ch}
+  .hero .ctas{display:flex;margin-top:32px;gap:12px}
+  .sec{padding-top:144px;padding-bottom:144px}
+  .h2{font-size:80px}
+  #menu{padding-bottom:64px}
+  .menu-grid{display:grid;grid-template-columns:380px 1fr;gap:80px;align-items:start}
+  #menu::before{display:none}
+  /* al computer il blocco rosso e la colonna del menu: una scheda che sale sul video e poi resta attaccata */
+  .menu-side{position:sticky;top:calc(var(--top) + 24px);margin-top:-96px;background:var(--pomodoro);border-radius:var(--sheet);padding:44px 32px 36px}
+  .menu-side .h2{font-size:64px}
+  .menu-side .tabs-wrap{position:static;margin:28px 0 0;padding:0;border:0;background:none}
+  .menu-side .tabs{display:grid;grid-template-columns:1fr;gap:2px;overflow:visible;padding:0}
+  .menu-side .tab{justify-content:space-between;padding:0 14px;font-size:16px}
+  .menu-side{z-index:2}
+  .menu-side .f-pan{width:284px}
+  .menu-side .tab sup{transform:none;font-size:15px}
+  .menu-side .tabs-wrap::after{display:none}
+  .cat{padding-top:0;scroll-margin-top:calc(var(--top) + 32px)}
+  .cat-head h3{font-size:48px}
+  .info-sec .facts{padding-top:144px;padding-bottom:160px}
+  .info-sec .facts li{border-top-color:var(--latte)}
+  .facts h2{margin-bottom:24px}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:0 40px;border-top:0}
+  .facts li{border-bottom:0;border-top:1px solid var(--nero)}
+  .facts .row{grid-template-columns:1fr;align-items:start;gap:6px;padding:18px 0 6px}
+  .extras{grid-template-columns:1fr 1fr;align-items:start;gap:56px}
+  .order-grid{grid-template-columns:.85fr 1.15fr;gap:96px;align-items:start}
+}
+@media (min-width:1180px){
+  .list{columns:2;column-gap:56px}
+  .item{break-inside:avoid}
+}
+
+/* ---------- apertura animata ----------
+   Il logo vero (vettorializzato) diviso in parti: le lettere di Pigusto salgono, la fetta si posa, cola il formaggio, arriva "pizzeria".
+   Poi il foglio latte sale e scopre la testata. L'uscita e' in CSS: anche senza JS l'apertura finisce da sola. */
+.intro-ov{display:none}
+html.intro .intro-ov{display:grid;place-items:center;position:fixed;inset:0;z-index:100;overflow:hidden;background:var(--vivo);cursor:pointer;animation:ovout .6s cubic-bezier(.76,0,.24,1) 1.65s forwards}
+html.intro-out .intro-ov{animation:ovout .45s cubic-bezier(.76,0,.24,1) forwards}
+/* come la copertina del menu: il logo bianco dentro un cerchio rosso piu' scuro con ombra morbida, una foglia di basilico in alto a sinistra */
+.intro-ov .badge{position:relative;display:grid;place-items:center;width:min(84vw,500px);aspect-ratio:1;border-radius:50%;background:var(--pomodoro);box-shadow:0 34px 60px -24px rgba(80,0,4,.6),0 6px 16px rgba(80,0,4,.22);animation:badgein .7s var(--spring) both,logoout .6s cubic-bezier(.76,0,.24,1) 1.65s forwards}
+.intro-ov .bas{position:absolute;left:4%;top:-9%;width:30%;transform:rotate(-24deg);filter:drop-shadow(0 10px 12px rgba(60,0,0,.3));animation:basin .6s var(--spring) .35s both}
+.intro-ov svg{width:80%;height:auto;overflow:visible}
+@keyframes badgein{from{transform:scale(.82);opacity:0}to{transform:none;opacity:1}}
+@keyframes basin{from{opacity:0;transform:translate(-20px,-16px) rotate(-60deg) scale(.6)}to{opacity:1;transform:rotate(-24deg)}}
+.intro-ov path{transform-box:fill-box;fill:var(--latte)}
+.intro-ov .il{opacity:0;transform:translateY(46px);animation:lin .55s var(--ease) forwards;animation-delay:calc(.08s + var(--k) * 70ms)}
+.intro-ov .ir{opacity:0;transform-origin:30% 100%;transform:translateY(-120px) rotate(-18deg);animation:rin .7s var(--spring) .5s forwards}
+.intro-ov .ip{transform-origin:center;transform:scale(0);animation:pin .38s var(--spring) forwards;animation-delay:calc(.9s + var(--k) * 80ms)}
+.intro-ov .id{transform-origin:50% 0;transform:scaleY(0);animation:din .5s var(--ease) 1.05s forwards}
+.intro-ov .ic2{opacity:0;transform:translateX(26px);animation:cin .6s var(--ease) .95s forwards}
+@keyframes lin{to{opacity:1;transform:none}}
+@keyframes rin{0%{opacity:0}30%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes pin{to{transform:none}}
+@keyframes din{to{transform:none}}
+@keyframes cin{to{opacity:1;transform:none}}
+@keyframes ovout{to{transform:translateY(-100%);border-radius:0 0 50% 50% / 0 0 12% 12%;visibility:hidden}}
+@keyframes logoout{to{transform:translateY(-40px) scale(.92);opacity:0}}
+/* la testata entra mentre il foglio sale */
+html.intro.js .hero h1 .ln>span{animation-delay:1.95s}
+html.intro.js .hero h1 .ln:nth-child(2)>span{animation-delay:2.05s}
+html.intro.js .hero .sub{animation-delay:2.2s}
+html.intro.js .hero .ctas{animation-delay:2.3s}
+@media (prefers-reduced-motion:reduce){
+  .intro-ov{display:none!important}
+  .intro-ov .badge,.intro-ov .bas{animation:none}
+  html{scroll-behavior:auto}
+  .media video{display:none}
+  .call{transition:none}
+  .js .hero h1 .ln>span,.js .hero .sub,.js .hero .ctas{animation:none;transform:none;opacity:1}
+  .js .rv,.js .rv.in,.js .photo.rv{opacity:1!important;transform:none!important;transition:none!important}
+  .js .item.enter{animation:none}
+  .tab,.btn,.btn .bub,.btn .tail{transition:none}
+}
+
+/* ---------- movimento (v10): tutto solo transform/opacity/clip-path, niente spostamenti di layout ---------- */
+@media (prefers-reduced-motion:no-preference){
+  /* titoli di sezione: escono da una fessura, dal basso */
+  .js .tt{clip-path:inset(-20% -10% 100% -10%);transform:translateY(.45em)}
+  .js .tt.in{clip-path:inset(-20% -10% -30% -10%);transform:none;transition:clip-path 1s var(--ease),transform 1s var(--ease)}
+  /* testi d'accompagnamento: arrivano subito dopo, scaglionati */
+  .js .mv{opacity:0;transform:translateY(18px)}
+  .js .mv.in{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,120ms)}
+  /* tab e filtri: lo stato scelto "scatta" */
+  .tab[aria-selected="true"],.f-chip{animation:scatto .42s var(--spring)}
+  @keyframes scatto{from{transform:scale(.9)}to{transform:none}}
+  /* cambio scheda: anche il titolo della sezione entra */
+  .js .cat.enter-h .cat-head{animation:itemin .5s var(--ease) both}
+  /* icona del telefono: squilla al passaggio e alla pressione; nella barra in basso ogni tanto */
+  @keyframes squillo{0%,100%{rotate:0deg}12%{rotate:-16deg}24%{rotate:13deg}36%{rotate:-10deg}48%{rotate:6deg}60%{rotate:0deg}}
+  @keyframes squillo-lento{0%,8.6%,100%{rotate:0deg}1.4%{rotate:-16deg}2.8%{rotate:13deg}4.2%{rotate:-10deg}5.6%{rotate:6deg}7%{rotate:0deg}}
+  [data-ic="phone"] .bub .ic,.call .ic{transform-origin:50% 50%}
+  [data-ic="phone"]:active .bub .ic,.call:active .ic{animation:squillo .7s var(--ease)}
+  .dock [data-ic="phone"] .bub .ic{animation:squillo-lento 9s var(--ease) 4s infinite}
+  .btn .bub{transition:transform .5s var(--spring),background-color .3s var(--ease)}
+  .btn:active .bub{transform:scale(.88)}
+  @media (hover:hover){
+    [data-ic="phone"]:hover .bub .ic,.call:hover .ic{animation:squillo .8s var(--ease)}
+    .btn:not([data-ic]):hover .bub .ic{animation:spunta .5s var(--spring)}
+  }
+  @keyframes spunta{0%{transform:scale(1)}40%{transform:scale(.82)}100%{transform:scale(1)}}
+  @supports (animation-timeline:view()){
+    /* righe del menu e della lavagna: entrano mentre scorrono nello schermo */
+    .item>*,.fm>*{animation:riga linear both;animation-timeline:view();animation-range:entry 5% entry 85%}
+    .item>.ing,.fm>p{animation-range:entry 15% entry 95%}
+    /* filetti che si disegnano da sinistra */
+    .cat-head{border-bottom-color:transparent;position:relative}
+    .cat-head::after,.board::before,.ways::before{content:"";position:absolute;left:0;right:0;height:1px;background:var(--nero);transform-origin:0 50%;animation:filetto linear both;animation-timeline:view();animation-range:entry 10% cover 35%}
+    .cat-head::after{bottom:-1px}
+    .board,.ways{position:relative;border-top-color:transparent}
+    .board::before,.ways::before{top:-1px}
+    .board::before{background:var(--latte)}
+    .fuori .board::before{background:var(--nero)}
+  }
+}
+@keyframes riga{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes filetto{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+
+/* ---------- ingredienti veri (foto scontornate) ----------
+   Strato fisso grande quanto lo schermo, ritagliato dallo script tra la barra in alto (o le tab attaccate) e la barra
+   in basso. Le posizioni le calcola lo script in fondo alla pagina, fuori da testi, comandi, immagini e loghi. */
+.ingr-strato{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:4}
+.pz{position:absolute;left:0;top:0;display:block;will-change:transform}
+.pz[hidden]{display:none}
+.pz img{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));filter:drop-shadow(0 14px 16px rgba(40,22,10,.26)) drop-shadow(0 3px 4px rgba(40,22,10,.16))}
+.pz.fl img{scale:-1 1}
+.pz.sf img{filter:blur(var(--b,3px))}
+/* strato dietro l'elenco delle pizze: sotto testi, prezzi, filetti e bottoni (la colonna del menu sale sopra) */
+.menu-grid{position:relative;z-index:1}
+.ingr-fondo{z-index:0}
+.ingr-fondo .pz{opacity:1}
+.ingr-fondo .pz img{filter:drop-shadow(0 8px 10px rgba(40,22,10,.18)) drop-shadow(0 2px 3px rgba(40,22,10,.12))}
+@media (prefers-reduced-motion:no-preference){
+  /* galleggiano piano, ognuno col suo tempo; il parallasse allo scorrimento lo fa lo script */
+  /* su e giu di 4-10 px con +/-2-4 gradi, durate e fasi diverse per ognuno */
+  .pz img{animation:pz-galleggia var(--t,6s) cubic-bezier(.45,0,.55,1) var(--dl,0s) infinite alternate}
+  @keyframes pz-galleggia{from{transform:translate3d(0,var(--a,4px),0) rotate(calc(var(--r,0deg) - var(--g,3deg)))}to{transform:translate3d(0,calc(-1 * var(--a,4px)),0) rotate(calc(var(--r,0deg) + var(--g,3deg)))}}
+}
+</style>
+</head>
+<body>
+<div class="intro-ov" id="intro" aria-hidden="true"><div class="badge"><img class="bas" src="img/ingredienti/basilico.webp" alt="" width="329" height="420"><svg viewBox="12 17 646 426" width="646" height="426" focusable="false"><path class="ir" fill-rule="evenodd" d="M242.94 186.73C240.39 186.36 239.50 185.65 239.50 184.02C239.50 182.78 242.00 175.09 243.12 172.90C243.47 172.22 243.75 171.52 243.75 171.34C243.75 171.16 244.33 169.63 245.03 167.94C245.74 166.26 246.68 163.81 247.13 162.50C247.57 161.19 248.22 159.51 248.55 158.75C248.89 157.99 249.43 156.58 249.74 155.62C250.06 154.66 250.55 153.43 250.82 152.88C251.10 152.32 251.64 150.97 252.02 149.88C252.40 148.78 253.12 146.92 253.63 145.75C255.48 141.50 255.74 140.87 255.74 140.56C255.75 140.14 258.39 133.46 259.11 132.01C259.43 131.39 259.82 130.27 259.97 129.53C260.13 128.80 260.58 127.45 260.97 126.53C261.37 125.62 261.83 124.44 262.00 123.91C262.17 123.38 262.81 121.75 263.43 120.29C264.05 118.82 264.93 116.68 265.39 115.54C265.86 114.39 266.53 112.92 266.90 112.29C267.26 111.65 267.77 110.51 268.03 109.75C268.30 108.99 268.90 107.80 269.36 107.10C269.83 106.40 270.63 104.99 271.14 103.97C274.24 97.79 278.37 92.19 282.69 88.33C288.07 83.50 287.92 83.90 285.78 80.02C284.97 78.55 284.02 76.45 283.67 75.36C283.32 74.27 282.62 72.25 282.12 70.88C278.90 62.01 278.37 45.84 281.09 39.69C286.22 28.08 305.61 20.92 338.88 18.36C345.87 17.82 369.81 17.59 378.24 17.98C393.73 18.70 410.68 20.55 423.00 22.87C424.17 23.08 425.72 23.37 426.45 23.50C448.84 27.41 471.44 37.71 472.18 44.34C472.32 45.52 471.56 45.01 479.22 49.09C481.20 50.15 483.11 51.21 483.47 51.46C483.83 51.71 484.91 52.34 485.88 52.87C493.77 57.19 505.89 65.69 513.11 71.97C520.93 78.77 528.66 86.27 533.25 91.51C534.28 92.69 536.19 94.84 537.50 96.28C540.57 99.68 544.88 104.93 546.42 107.14C549.27 111.25 551.76 114.48 553.72 116.60C556.83 119.97 560.25 125.33 560.25 126.83C560.25 127.08 560.54 128.15 560.90 129.21C562.77 134.78 563.01 144.94 561.40 150.51C561.07 151.67 560.49 153.97 560.12 155.62C559.18 159.85 557.64 164.50 556.32 167.06C554.64 170.35 553.84 170.12 551.28 165.62C549.70 162.84 549.72 161.59 551.46 156.75C555.83 144.54 555.13 131.26 549.71 123.95C542.93 114.79 525.56 116.01 517.46 126.21C511.79 133.34 510.14 148.47 513.98 158.19C517.58 167.34 514.11 171.37 508.29 164.79C507.15 163.52 506.53 163.00 506.10 163.00C505.20 163.00 498.11 165.86 496.12 167.02C495.16 167.58 492.80 168.89 490.88 169.92C488.95 170.95 486.53 172.33 485.50 173.00C484.47 173.67 482.27 174.94 480.62 175.83C477.13 177.71 474.48 179.30 473.25 180.26C472.46 180.88 467.18 183.89 464.61 185.20C463.16 185.93 461.15 186.09 457.00 185.78C450.38 185.28 449.30 184.36 453.11 182.45C454.58 181.71 459.57 178.95 462.62 177.19C472.09 171.72 472.40 171.50 476.13 167.83C483.68 160.41 485.05 154.33 480.79 147.16C477.78 142.09 471.79 138.28 459.62 133.72C458.52 133.31 457.18 132.76 456.62 132.50C454.71 131.60 447.36 128.29 444.75 127.16C441.01 125.54 435.41 122.70 433.47 121.45C428.35 118.14 427.42 117.38 422.23 112.27C409.23 99.46 391.88 92.91 366.50 91.26C356.34 90.60 350.58 90.26 347.38 90.13C342.64 89.94 329.19 88.59 326.25 88.00C315.26 85.82 305.88 85.36 302.25 86.82C301.36 87.18 300.06 87.61 299.38 87.78C292.86 89.35 285.72 95.53 280.43 104.17C279.10 106.34 275.51 113.59 275.00 115.12C274.82 115.66 274.15 117.24 273.50 118.62C272.86 120.00 272.13 121.75 271.88 122.50C271.63 123.26 270.93 124.94 270.32 126.25C269.70 127.56 268.88 129.53 268.49 130.62C267.75 132.72 267.09 134.39 265.51 138.12C264.99 139.36 264.31 141.28 264.00 142.38C263.69 143.47 263.22 144.81 262.96 145.33C262.48 146.27 261.78 148.11 259.63 154.12C259.03 155.78 258.26 157.63 257.91 158.25C257.56 158.87 256.94 160.39 256.53 161.63C256.12 162.86 255.22 165.14 254.54 166.70C253.85 168.25 252.93 170.55 252.49 171.82C252.05 173.09 251.54 174.42 251.35 174.79C251.16 175.16 250.32 177.41 249.48 179.79C246.74 187.55 246.97 187.32 242.94 186.73ZM496.04 157.99C502.21 155.34 502.57 155.05 502.01 153.18C501.48 151.40 499.10 146.90 497.74 145.12C497.04 144.18 496.09 142.87 495.64 142.20C493.56 139.11 486.53 131.26 483.24 128.36C481.70 126.99 479.69 125.22 478.78 124.42C475.87 121.86 466.77 115.22 462.31 112.40C461.20 111.70 459.48 110.59 458.50 109.93C455.52 107.94 449.97 104.83 445.94 102.89C430.64 95.55 426.39 93.60 422.62 92.21C421.52 91.81 419.56 91.08 418.25 90.59C415.73 89.64 415.29 89.49 411.38 88.26C410.00 87.82 407.81 87.07 406.50 86.59C405.19 86.11 402.89 85.40 401.38 85.01C399.86 84.63 398.30 84.18 397.90 84.02C396.45 83.44 388.27 81.16 384.62 80.32C382.56 79.84 379.98 79.23 378.88 78.97C374.90 78.01 373.55 77.74 369.25 77.02C366.84 76.61 364.14 76.11 363.25 75.91C351.79 73.27 327.18 72.66 317.00 74.74C315.69 75.01 313.62 75.41 312.39 75.63C307.37 76.53 307.70 77.35 313.19 77.61C315.93 77.74 317.87 78.00 320.75 78.62C325.33 79.61 330.11 80.39 333.75 80.74C335.19 80.88 337.33 81.10 338.50 81.24C339.67 81.37 342.88 81.60 345.62 81.75C348.38 81.90 351.98 82.17 353.62 82.37C355.27 82.56 359.77 82.90 363.62 83.12C376.27 83.86 387.19 85.33 392.38 87.01C394.02 87.54 396.39 88.21 397.62 88.50C407.18 90.70 417.38 96.90 429.43 107.83C436.44 114.18 441.26 117.22 450.22 120.91C452.09 121.69 455.03 122.90 456.75 123.62C458.47 124.33 460.55 125.17 461.38 125.48C481.72 133.09 491.25 142.52 491.25 155.05C491.25 160.15 491.15 160.09 496.04 157.99ZM504.17 136.62C504.34 136.07 504.82 134.28 505.25 132.64C507.24 124.95 513.75 116.82 520.76 113.25C524.09 111.56 529.65 109.96 532.74 109.82C537.53 109.59 537.74 109.23 535.06 105.80C526.79 95.20 512.36 81.17 500.22 71.96C491.18 65.09 477.44 56.77 468.75 52.88C467.58 52.36 466.51 51.84 466.36 51.73C465.90 51.37 462.07 49.53 459.94 48.64C457.08 47.46 452.57 45.33 451.51 44.67C450.62 44.12 450.62 44.12 452.38 44.00L454.12 43.88L450.63 42.43C445.87 40.45 436.93 37.67 431.25 36.41C423.10 34.58 415.11 33.15 407.50 32.14C385.26 29.19 360.56 28.36 340.08 29.88C332.08 30.48 321.15 31.85 317.38 32.74C316.82 32.87 315.02 33.27 313.38 33.63C299.58 36.66 291.99 41.00 291.25 46.28C290.98 48.14 290.02 49.81 288.74 50.66C287.55 51.45 287.53 51.73 288.14 57.77C288.86 64.99 290.72 71.57 292.35 72.63C293.03 73.08 293.28 73.01 297.15 71.29C301.23 69.49 306.70 67.90 311.12 67.25C312.23 67.09 314.08 66.74 315.25 66.47C318.21 65.78 329.23 65.01 336.00 65.00C341.91 65.00 353.36 65.84 356.62 66.51C357.86 66.77 360.23 67.15 361.88 67.36C363.52 67.57 365.27 67.85 365.75 68.00C366.23 68.14 368.59 68.54 371.00 68.89C375.28 69.52 377.86 70.07 380.88 71.00C381.70 71.26 384.40 71.94 386.88 72.51C391.95 73.69 392.75 73.90 399.38 75.83C401.99 76.59 405.09 77.49 406.27 77.84C407.44 78.18 409.41 78.84 410.64 79.31C411.87 79.78 413.61 80.37 414.50 80.61C415.39 80.86 418.32 81.94 421.00 83.01C423.68 84.09 426.21 85.05 426.62 85.14C427.04 85.24 428.33 85.77 429.50 86.30C430.67 86.84 432.86 87.80 434.37 88.42C443.18 92.06 461.31 101.72 467.62 106.12C468.45 106.70 470.59 108.16 472.38 109.37C475.63 111.58 476.58 112.31 479.90 115.12C480.88 115.95 482.56 117.36 483.65 118.25C489.92 123.42 498.70 132.36 501.43 136.38C502.58 138.08 503.71 138.18 504.17 136.62ZM304.38 165.11C297.73 164.13 292.15 161.57 287.46 157.33C278.26 149.02 276.93 138.20 283.75 127.12C287.01 121.83 297.31 112.36 302.88 109.55C303.70 109.13 305.26 108.28 306.35 107.66C307.43 107.03 308.67 106.45 309.10 106.36C309.53 106.27 310.62 105.87 311.53 105.48C319.30 102.11 334.66 103.55 341.00 108.25C349.03 114.21 351.75 122.36 349.12 132.62C347.92 137.32 347.36 138.97 346.54 140.28C346.16 140.88 345.51 142.05 345.10 142.88C343.96 145.16 340.95 149.07 338.02 152.09C327.94 162.44 316.44 166.90 304.38 165.11ZM314.09 156.85C323.60 155.34 331.75 149.05 338.41 138.08C341.29 133.34 342.50 125.32 341.03 120.75C337.96 111.24 321.63 108.81 308.36 115.89C290.38 125.49 282.93 141.66 292.21 150.96C297.22 155.97 305.53 158.21 314.09 156.85ZM431.29 175.73C430.70 175.62 429.63 175.25 428.92 174.92C427.63 174.33 427.12 173.92 422.19 169.59C415.55 163.76 409.43 161.17 400.40 160.38C390.42 159.50 386.36 156.53 385.24 149.27C383.74 139.65 393.13 133.43 405.25 136.01C406.56 136.29 408.58 136.69 409.75 136.90C413.20 137.51 415.74 138.24 418.50 139.40C419.26 139.72 420.94 140.39 422.25 140.89C424.65 141.81 425.85 142.42 428.12 143.87C428.81 144.31 429.90 145.00 430.54 145.40C435.15 148.26 441.34 153.81 443.43 156.96C445.78 160.47 445.88 165.38 443.72 169.94C441.80 173.98 436.03 176.66 431.29 175.73ZM435.23 166.80C438.64 164.25 436.49 159.60 429.32 154.02C421.69 148.08 402.62 142.12 396.71 143.84C393.23 144.85 392.11 148.40 394.54 150.68C395.60 151.66 396.95 152.03 400.35 152.27C411.26 153.04 417.60 155.68 426.53 163.15C431.70 167.48 433.38 168.18 435.23 166.80ZM300.06 187.12C298.53 186.46 297.52 183.48 298.50 182.50C299.08 181.92 301.88 181.78 302.83 182.29C305.22 183.57 307.91 186.94 306.85 187.35C306.05 187.66 300.89 187.49 300.06 187.12Z"/><path class="il" style="--k:0" fill-rule="evenodd" d="M20.62 302.74C18.62 302.47 18.61 302.35 20.22 298.65C22.35 293.77 22.69 290.91 22.26 281.62C22.10 278.32 21.87 271.86 21.74 267.25C21.62 262.64 21.40 257.02 21.27 254.75C21.13 252.48 20.90 245.22 20.75 238.62C20.61 232.03 20.37 223.42 20.24 219.50C19.71 204.42 19.51 196.77 19.37 186.88C19.16 171.77 18.50 167.09 15.87 162.11C13.50 157.62 12.55 157.90 30.60 157.75C87.32 157.28 89.98 157.54 103.25 164.84C104.77 165.68 105.74 166.39 109.78 169.67C114.46 173.48 119.14 182.33 121.26 191.38C123.22 199.72 121.99 213.78 118.66 221.15C111.42 237.20 101.17 245.45 86.25 247.24C84.94 247.39 83.03 247.64 82.00 247.79C79.57 248.14 73.54 248.14 71.62 247.79C70.80 247.63 69.06 247.39 67.75 247.25C58.72 246.26 52.87 243.59 39.03 234.17C31.24 228.86 27.70 232.12 31.86 240.78C33.50 244.19 37.00 247.81 43.62 252.96C46.15 254.91 47.78 256.26 50.68 258.78C51.95 259.88 53.98 261.60 55.18 262.60C58.10 265.01 62.80 269.82 64.03 271.65C72.09 283.58 70.37 299.71 60.75 302.53C59.61 302.86 22.99 303.06 20.62 302.74ZM84.25 216.50C86.93 216.36 89.97 216.09 91.00 215.89C92.03 215.70 93.55 215.47 94.38 215.38C95.20 215.29 96.55 215.06 97.38 214.88C98.20 214.70 99.78 214.35 100.88 214.11C109.94 212.16 113.92 208.04 112.77 201.80C112.02 197.71 108.41 194.59 102.50 192.91C101.74 192.69 100.31 192.29 99.32 192.00C98.33 191.72 96.46 191.33 95.18 191.14C93.89 190.95 92.17 190.67 91.36 190.52C82.12 188.89 54.14 188.96 44.12 190.65C30.16 193.00 24.29 201.61 31.34 209.39C34.20 212.55 39.63 214.35 51.00 215.90C56.73 216.68 74.47 217.00 84.25 216.50Z"/><path class="il" style="--k:1" fill-rule="evenodd" d="M131.38 302.75C128.68 302.56 128.44 302.10 129.72 299.56C132.83 293.36 132.80 293.95 131.99 260.38C131.85 254.46 131.64 244.34 131.51 237.88C131.30 227.07 131.24 225.99 130.77 224.50C130.10 222.40 128.32 220.33 126.21 219.21C124.37 218.23 123.64 217.32 124.35 216.90C124.61 216.75 125.39 216.24 126.10 215.76C126.80 215.29 128.27 214.52 129.37 214.06C130.46 213.60 132.99 212.40 134.99 211.39C143.85 206.92 154.76 201.92 156.65 201.48C157.32 201.32 159.00 200.85 160.38 200.42C166.81 198.43 169.74 199.81 170.27 205.09C170.65 208.93 171.31 242.54 171.62 274.18C171.81 293.13 171.93 294.24 174.27 298.72C175.58 301.21 175.75 301.98 175.09 302.53C174.67 302.88 135.86 303.07 131.38 302.75ZM152.38 193.90C144.16 192.31 135.20 188.35 132.04 184.90C128.53 181.07 129.18 173.29 133.18 171.08C136.10 169.46 138.12 170.51 142.89 176.11C148.65 182.87 155.93 187.10 165.10 189.00C168.91 189.78 168.08 192.24 163.56 193.56C161.37 194.21 154.98 194.40 152.38 193.90Z"/><path class="il" style="--k:2" fill-rule="evenodd" d="M231.75 347.23C230.03 347.14 227.44 346.88 226.00 346.65C224.56 346.42 222.02 346.01 220.36 345.74C218.25 345.40 215.93 344.77 212.61 343.63C210.01 342.74 207.73 342.01 207.54 342.00C206.96 342.00 203.98 340.73 200.70 339.11C185.57 331.60 177.93 320.23 182.54 312.06C183.33 310.68 185.47 308.77 189.11 306.22C190.22 305.44 191.86 304.28 192.75 303.64C195.58 301.61 202.45 298.09 204.95 297.39C206.19 297.04 207.52 296.63 207.91 296.48C212.22 294.78 216.69 295.55 219.31 298.46C220.83 300.14 221.07 303.20 220.04 307.88C217.81 318.12 218.55 326.27 222.13 330.82C228.55 338.96 243.70 337.58 247.84 328.48C252.53 318.17 247.47 303.32 237.38 297.76C236.55 297.31 234.97 296.42 233.88 295.80C230.23 293.73 224.16 290.74 221.50 289.70C220.06 289.14 218.09 288.35 217.12 287.94C216.16 287.54 213.97 286.65 212.25 285.96C210.53 285.28 208.88 284.56 208.59 284.37C208.30 284.18 206.38 283.26 204.34 282.31C176.80 269.63 170.33 233.19 192.15 213.62C197.09 209.19 202.13 205.93 205.88 204.75C206.43 204.58 207.62 204.12 208.53 203.72C211.40 202.49 217.28 201.06 220.79 200.76C222.53 200.61 224.61 200.37 225.41 200.24C228.56 199.73 242.68 200.45 245.25 201.26C245.73 201.42 247.72 201.60 249.66 201.68C259.76 202.07 266.21 198.99 271.24 191.38C275.59 184.80 279.52 184.21 284.66 189.38C287.42 192.15 288.47 194.45 289.39 199.72C289.83 202.23 289.83 202.23 288.91 204.10C286.49 209.00 282.39 210.03 273.00 208.12C265.71 206.64 264.97 206.54 264.30 206.96C263.71 207.34 264.25 207.86 267.28 209.88C283.05 220.37 289.29 238.49 283.97 258.34C282.11 265.25 275.68 274.27 269.88 278.08C268.91 278.72 267.77 279.52 267.34 279.88C265.67 281.25 256.36 285.24 253.98 285.61C243.89 287.18 240.86 289.08 243.56 292.16C244.82 293.59 247.30 294.53 251.75 295.26C252.78 295.42 253.88 295.66 254.19 295.78C254.51 295.90 255.52 296.11 256.44 296.25C260.79 296.92 267.33 298.77 269.75 300.02C270.51 300.41 271.74 301.01 272.50 301.36C274.52 302.27 277.70 304.94 279.89 307.55C284.23 312.72 285.52 317.79 284.22 324.50C282.86 331.46 274.16 339.89 265.38 342.75C264.41 343.06 263.23 343.52 262.75 343.76C262.27 344.00 260.58 344.53 259.00 344.95C252.09 346.77 240.84 347.72 231.75 347.23ZM236.67 284.59C239.14 283.34 242.30 278.62 243.34 274.62C245.45 266.54 246.85 258.71 247.24 252.88C247.56 248.07 247.22 237.78 246.62 234.38C246.41 233.14 246.06 231.11 245.85 229.88C244.45 221.60 241.37 213.00 238.77 210.17C236.51 207.69 232.27 206.86 229.25 208.29C224.46 210.57 221.43 216.99 218.78 230.50C216.29 243.16 217.90 263.96 222.17 274.37C226.14 284.06 230.98 287.47 236.67 284.59Z"/><path class="il" style="--k:3" fill-rule="evenodd" d="M316.62 304.84C307.57 303.41 301.51 298.71 297.85 290.27C295.28 284.33 295.15 282.54 295.20 253.50C295.27 214.32 295.11 211.40 292.63 205.79C291.53 203.29 291.58 202.68 292.94 202.22C294.27 201.77 335.10 201.76 335.94 202.21C336.71 202.63 336.67 203.57 335.78 205.81C333.33 212.02 333.30 212.47 333.20 243.62C333.12 273.15 333.04 272.07 335.34 275.42C337.84 279.06 344.29 279.19 347.67 275.67C352.21 270.95 352.39 269.72 352.74 240.25C353.08 212.46 352.94 209.59 351.02 205.17C350.36 203.63 350.34 202.60 350.99 202.26C351.73 201.86 392.28 201.83 393.69 202.22C395.08 202.61 395.07 202.99 393.60 206.67C391.58 211.72 391.50 212.55 391.36 228.75C391.18 248.90 390.80 271.41 390.48 280.00C390.08 290.64 390.42 293.43 392.76 298.94C393.94 301.69 393.98 302.17 393.08 302.52C391.80 303.00 359.38 302.69 357.85 302.18C353.77 300.81 352.53 297.83 352.51 289.30C352.49 285.23 350.59 284.40 348.31 287.46C347.93 287.96 347.13 288.99 346.52 289.75C345.91 290.51 345.10 291.62 344.72 292.22C343.03 294.87 337.43 300.02 334.79 301.35C329.28 304.11 321.50 305.61 316.62 304.84ZM373.22 187.75C370.69 187.32 370.46 186.67 372.00 184.28C375.42 178.99 374.76 176.53 369.46 174.73C364.58 173.08 360.44 175.54 354.28 183.75C351.47 187.49 351.21 187.62 346.96 187.62C342.20 187.62 341.94 187.26 344.23 183.84C356.22 165.88 365.59 161.95 377.51 169.88C382.56 173.24 384.55 179.18 382.20 183.87C380.26 187.74 378.27 188.60 373.22 187.75Z"/><path class="il" style="--k:4" fill-rule="evenodd" d="M435.62 304.24C434.52 304.13 433.06 303.93 432.38 303.78C431.69 303.63 429.95 303.39 428.52 303.25C427.09 303.11 425.51 302.89 425.02 302.76C424.53 302.63 422.77 302.29 421.12 302.02C413.18 300.67 404.88 297.72 402.21 295.30C398.55 292.00 399.24 286.25 404.69 274.50C409.01 265.17 413.95 263.29 421.62 268.06C422.31 268.49 424.17 269.68 425.75 270.71C431.72 274.59 432.67 275.20 434.38 276.20C435.34 276.76 437.02 277.63 438.12 278.13C439.23 278.63 441.02 279.48 442.12 280.01C444.34 281.08 450.93 282.80 454.49 283.24C468.21 284.93 480.27 279.58 480.35 271.79C480.41 265.90 476.90 265.13 461.50 267.66C455.87 268.59 447.54 268.70 444.12 267.90C443.30 267.71 441.56 267.41 440.27 267.25C438.97 267.08 437.04 266.69 435.98 266.37C434.92 266.05 433.40 265.72 432.59 265.63C430.72 265.42 426.35 264.17 424.25 263.25C423.36 262.85 422.04 262.30 421.32 262.02C410.99 257.99 403.48 250.42 400.46 240.99C399.25 237.20 399.18 226.71 400.33 222.62C402.52 214.89 408.04 209.02 417.04 204.85C423.63 201.81 425.34 201.40 437.88 199.94C448.33 198.73 464.42 200.38 472.50 203.49C473.53 203.89 475.50 204.64 476.88 205.16C483.20 207.56 488.45 211.65 489.40 214.93C490.40 218.36 488.34 226.42 485.47 230.29C479.59 238.22 473.35 238.82 463.93 232.35C461.09 230.40 451.36 222.72 448.99 220.56C441.42 213.67 433.11 209.25 427.71 209.25C420.44 209.25 415.59 212.77 415.67 218.00C415.75 223.89 422.03 227.86 434.48 229.88C435.77 230.09 438.14 230.60 439.73 231.00C441.32 231.41 443.24 231.90 444.00 232.09C444.76 232.28 446.78 232.75 448.50 233.12C451.35 233.73 458.30 235.81 463.00 237.45C465.32 238.25 471.35 241.29 473.40 242.68C481.64 248.28 484.88 251.97 486.95 258.12C488.14 261.67 488.67 270.82 487.98 276.26C487.27 282.00 482.67 289.90 477.90 293.60C477.20 294.14 476.23 294.94 475.75 295.38C472.15 298.65 464.07 301.95 456.25 303.35C455.08 303.56 453.34 303.90 452.38 304.11C450.47 304.52 439.54 304.61 435.62 304.24Z"/><path class="il" style="--k:5" fill-rule="evenodd" d="M525.45 304.24C516.00 303.14 506.50 295.28 503.87 286.38C503.50 285.14 502.92 283.28 502.58 282.25C501.31 278.42 501.27 261.42 502.46 228.08C503.13 209.31 503.19 209.50 496.95 209.50C492.32 209.50 491.92 209.23 491.92 206.10C491.92 203.48 492.37 202.84 494.89 201.86C497.48 200.85 500.16 199.60 500.97 199.02C501.33 198.77 502.75 197.92 504.12 197.13C506.97 195.49 510.51 192.92 513.25 190.51C514.28 189.60 515.46 188.60 515.88 188.28C516.62 187.71 523.01 181.84 527.96 177.17C533.65 171.80 537.02 170.55 539.10 173.01C540.19 174.31 540.25 175.00 539.97 183.35C539.83 187.63 539.69 193.30 539.67 195.96C539.61 202.15 539.26 201.75 544.72 201.76C550.99 201.77 551.75 202.15 551.75 205.35C551.75 209.22 551.48 209.40 545.14 209.64C539.79 209.85 539.63 209.91 539.41 211.79C539.24 213.25 538.52 236.34 538.24 249.50C538.12 255.34 537.90 264.74 537.75 270.38C537.45 282.07 537.57 283.57 539.15 288.33C540.33 291.87 541.05 292.79 543.66 294.10C547.41 295.98 547.63 296.78 545.15 299.46C541.91 302.97 533.04 305.12 525.45 304.24Z"/><path class="il" style="--k:6" fill-rule="evenodd" d="M593.88 303.50C587.77 302.28 582.38 300.48 579.25 298.62C578.49 298.18 577.39 297.57 576.80 297.27C567.84 292.77 557.41 278.84 555.63 269.00C555.39 267.69 554.95 265.78 554.66 264.75C553.69 261.35 553.88 252.30 555.06 246.00C556.53 238.10 557.59 235.01 561.16 228.12C564.01 222.64 570.18 215.04 574.17 212.09C575.16 211.35 576.04 210.64 576.12 210.51C576.33 210.17 580.20 207.43 582.11 206.26C583.55 205.38 589.22 203.00 591.88 202.16C596.35 200.76 606.27 199.49 609.99 199.85C617.63 200.60 622.99 201.79 627.10 203.68C628.74 204.44 630.51 205.20 631.03 205.39C634.01 206.44 639.91 211.10 643.95 215.59C646.91 218.88 652.25 227.42 652.25 228.85C652.25 228.94 652.75 230.28 653.36 231.82C656.81 240.59 657.01 257.01 653.75 265.16C653.36 266.14 652.80 267.77 652.50 268.78C651.89 270.83 648.36 277.82 647.15 279.38C646.72 279.93 646.04 280.88 645.64 281.49C642.66 286.11 633.46 294.87 629.46 296.90C628.76 297.25 627.39 298.04 626.41 298.65C624.31 299.96 620.43 301.52 617.19 302.37C615.92 302.70 614.37 303.15 613.75 303.37C609.62 304.85 600.91 304.91 593.88 303.50ZM611.43 296.12C612.44 295.82 613.01 295.41 614.28 294.05C615.90 292.33 616.01 292.13 618.39 286.35C619.30 284.13 620.08 280.70 620.50 277.00C620.65 275.69 620.96 273.22 621.20 271.50C621.78 267.25 621.77 258.55 621.17 253.00C620.33 245.11 620.23 244.35 619.49 240.47C618.85 237.11 617.33 231.59 615.54 226.12C615.02 224.53 613.15 220.24 611.46 216.75C608.02 209.64 604.27 207.05 599.31 208.38C595.43 209.42 591.65 215.53 590.35 222.88C590.25 223.43 589.91 224.64 589.58 225.57C587.12 232.62 587.37 252.66 590.05 264.10C590.60 266.45 591.20 269.09 591.39 269.97C592.22 273.82 593.33 277.13 595.69 282.88C596.03 283.70 596.46 284.88 596.65 285.51C596.95 286.52 598.06 288.48 599.95 291.32C602.80 295.62 607.09 297.41 611.43 296.12Z"/><path class="id" fill-rule="evenodd" d="M277.28 440.24C274.45 439.50 272.99 438.71 270.97 436.87C265.60 431.94 263.60 426.61 263.32 416.47C263.08 408.07 263.70 403.08 266.36 391.88C268.74 381.87 268.84 375.68 266.71 369.75C266.29 368.58 265.58 366.56 265.13 365.25C264.69 363.94 264.02 362.18 263.66 361.32C262.51 358.61 262.85 357.85 265.85 356.32C269.18 354.62 270.27 355.50 273.34 362.38C276.72 369.92 277.64 381.12 275.62 390.25C275.30 391.69 274.97 393.38 274.87 394.00C274.65 395.44 273.60 399.89 272.99 402.00C271.75 406.27 271.62 418.50 272.77 423.68C273.72 428.00 277.18 432.04 279.96 432.07C288.17 432.18 293.37 416.79 290.25 401.62C286.54 383.59 286.09 367.67 289.06 359.88C291.72 352.90 293.55 350.10 299.53 343.87C304.14 339.06 304.51 338.54 305.81 335.08C306.99 331.94 307.36 326.87 306.76 322.11C306.33 318.70 307.23 317.47 310.43 317.09C314.61 316.59 315.69 319.25 315.42 329.38C315.19 338.23 313.71 341.22 304.99 350.51C297.12 358.89 295.52 363.16 295.51 375.86C295.50 382.82 296.06 387.93 297.50 393.91C300.44 406.18 300.33 419.71 297.23 425.79C296.94 426.36 296.53 427.40 296.33 428.10C293.92 436.31 284.69 442.18 277.28 440.24ZM349.37 342.77C344.62 342.01 341.02 338.79 339.85 334.25C338.87 330.41 339.12 315.54 340.20 313.63C341.17 311.92 346.36 310.05 347.23 311.10C347.44 311.35 347.50 314.05 347.46 321.04C347.39 333.09 347.69 334.27 350.94 334.96C356.63 336.17 359.64 331.06 358.93 321.35C358.57 316.42 358.81 315.93 361.73 315.58C365.49 315.14 366.69 317.14 366.91 324.25C367.30 336.53 359.82 344.43 349.37 342.77Z"/><path class="ic2" fill-rule="evenodd" d="M434.32 359.49C433.10 359.11 433.14 359.60 433.13 342.88C433.13 328.08 433.10 327.04 432.65 325.71C432.39 324.94 432.25 324.12 432.33 323.90C432.77 322.76 440.70 319.93 442.30 320.33C442.67 320.43 443.17 320.87 443.47 321.37C444.10 322.45 444.89 322.52 445.96 321.62C450.41 317.87 458.10 320.21 460.75 326.12C463.54 332.34 462.46 340.86 458.33 345.27C454.83 349.02 450.51 349.72 446.66 347.19C443.68 345.22 443.64 345.29 443.81 352.82C443.94 358.78 443.94 358.78 443.34 359.17C442.62 359.64 435.62 359.89 434.32 359.49ZM449.23 342.64C451.53 341.44 452.10 339.56 451.95 333.53C451.81 328.06 451.03 326.04 448.58 324.78C447.31 324.13 445.25 324.85 444.21 326.31C443.23 327.68 443.31 338.49 444.32 340.54C445.41 342.77 447.37 343.60 449.23 342.64ZM466.03 347.94C465.43 347.62 465.43 347.62 465.38 337.38C465.33 328.54 465.27 326.94 464.90 325.81C464.37 324.16 464.61 323.65 466.21 322.97C466.85 322.70 468.50 321.91 469.88 321.23C471.25 320.55 472.90 319.92 473.54 319.84C475.60 319.57 475.53 319.13 475.59 332.80C475.63 341.95 475.72 344.92 475.99 345.95C476.55 348.05 476.42 348.11 471.05 348.19C467.84 348.24 466.46 348.17 466.03 347.94ZM469.18 317.48C462.49 315.89 463.51 305.99 470.36 306.00C473.92 306.01 475.88 308.01 475.87 311.62C475.85 315.38 472.54 318.28 469.18 317.48ZM480.12 347.91C476.72 346.37 477.81 341.25 482.46 336.95C483.83 335.68 490.22 331.03 492.32 329.77C493.47 329.08 493.91 328.37 493.49 327.86C493.08 327.37 486.87 327.38 484.12 327.88C479.30 328.75 478.75 328.39 478.75 324.35C478.75 321.84 478.77 321.73 479.48 320.94L480.21 320.12L490.12 320.20C501.27 320.28 501.82 320.35 501.95 321.69C502.09 323.14 500.88 324.87 497.10 328.62C493.36 332.34 490.36 336.40 490.08 338.12C489.64 340.82 494.51 341.59 498.81 339.51C500.95 338.48 501.54 338.72 502.01 340.83C502.80 344.35 502.08 346.50 499.75 347.60C498.31 348.27 481.52 348.54 480.12 347.91ZM510.25 348.03C504.39 347.82 504.25 347.72 504.25 343.88C504.25 340.29 505.68 338.38 511.25 334.56C519.99 328.56 520.55 327.71 515.89 327.54C513.56 327.45 511.93 327.64 508.66 328.35C505.27 329.08 504.25 328.09 504.25 324.04C504.25 319.87 504.17 319.90 517.26 320.04C527.45 320.16 527.76 320.21 527.95 321.82C528.17 323.66 527.65 324.43 523.06 329.05C516.79 335.34 514.68 339.16 516.88 340.24C518.24 340.91 522.08 340.72 523.90 339.90C526.97 338.52 527.71 339.20 527.74 343.40C527.75 346.09 527.45 347.14 526.50 347.62C525.67 348.06 517.02 348.27 510.25 348.03ZM542.00 348.52C530.86 346.47 526.46 333.83 533.66 324.58C540.39 315.93 554.75 319.06 555.20 329.27C555.41 334.11 553.04 335.47 544.90 335.15C539.57 334.95 538.76 335.35 540.51 337.35C543.23 340.45 548.52 341.99 552.50 340.85C555.00 340.14 554.96 340.14 555.28 340.85C556.99 344.58 548.20 349.66 542.00 348.52ZM545.68 332.30C548.01 331.08 547.79 327.86 545.23 325.67C543.55 324.23 539.61 323.67 537.46 324.57C534.41 325.85 534.98 331.75 538.25 332.72C539.85 333.20 544.47 332.93 545.68 332.30ZM558.76 347.56C558.18 347.09 558.18 347.09 558.48 343.86C558.77 340.69 558.69 328.36 558.35 323.46C558.15 320.51 558.29 320.41 562.98 320.31C566.98 320.21 567.35 320.34 568.25 322.13C569.10 323.83 569.69 323.89 571.07 322.42C573.10 320.25 575.90 319.25 578.24 319.85C581.66 320.73 582.15 322.11 580.37 325.86C578.85 329.08 577.44 329.87 575.81 328.41C572.78 325.70 569.31 326.79 568.71 330.65C568.43 332.43 568.56 345.41 568.87 346.38C568.96 346.66 568.86 347.09 568.66 347.38C568.10 348.13 559.66 348.29 558.76 347.56ZM586.12 348.04C584.32 347.71 584.43 348.54 584.53 336.91C584.62 327.13 584.59 326.32 584.17 325.55C583.93 325.10 583.79 324.53 583.86 324.30C584.18 323.29 590.07 320.38 592.87 319.86C595.02 319.46 595.31 321.13 595.16 333.11C595.10 337.66 595.14 342.56 595.24 344.00C595.44 346.77 595.31 347.58 594.61 347.84C593.97 348.09 587.27 348.24 586.12 348.04ZM587.48 316.92C583.56 314.88 583.31 308.51 587.06 306.64C590.72 304.82 595.25 307.27 595.25 311.07C595.25 315.66 591.07 318.81 587.48 316.92ZM602.92 348.25C599.71 347.28 597.35 343.40 597.84 339.86C598.52 334.92 605.27 329.10 610.93 328.57C613.19 328.36 613.75 327.87 613.75 326.10C613.75 320.80 609.53 320.81 605.11 326.11C601.82 330.06 600.02 330.22 599.59 326.59C599.18 323.13 601.67 320.78 606.33 320.24C607.45 320.11 608.98 319.90 609.73 319.78C612.76 319.29 618.13 320.64 620.45 322.49C623.58 324.97 624.23 327.48 624.38 337.62C624.44 341.75 624.52 345.69 624.56 346.37C624.64 347.95 624.06 348.21 620.43 348.24C617.64 348.25 616.81 347.99 615.09 346.58C613.59 345.35 612.85 345.37 610.62 346.69C607.98 348.26 604.98 348.86 602.92 348.25ZM612.53 342.68C614.05 341.67 614.25 340.90 614.25 336.22C614.25 330.98 613.77 330.09 611.40 330.99C608.84 331.96 607.62 334.27 607.62 338.17C607.62 342.74 609.65 344.60 612.53 342.68Z"/></svg></div></div>
+<!-- Icone: Phosphor Icons (regular), licenza MIT, https://phosphoricons.com -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 256 256"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 256 256"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></symbol>
+    <symbol id="i-pizza" viewBox="0 0 256 256"><path d="M239.54,63a15.91,15.91,0,0,0-7.25-9.9,201.49,201.49,0,0,0-208.58,0,16,16,0,0,0-5.37,22l96,157.27a16,16,0,0,0,27.36,0l96-157.27A15.82,15.82,0,0,0,239.54,63ZM63.59,118.5a24,24,0,1,1,24.47,40.09Zm87.92,66.95A24,24,0,0,1,176,145.37Zm32.93-53.93a40,40,0,0,0-41.38,67.77L128,224,96.5,172.43a40,40,0,1,0-41.35-67.76L48.8,94.26a152,152,0,0,1,158.39,0Zm31.1-50.93a168.12,168.12,0,0,0-175.08,0L32,66.77a185.6,185.6,0,0,1,192,0Z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 256 256"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"/></symbol>
+    <symbol id="i-out" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 256 256"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM196,72a12,12,0,1,1-12-12A12,12,0,0,1,196,72Z"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 256 256"><path d="M200,136a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H192A8,8,0,0,1,200,136Zm32-56H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-80,96H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Z"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar" id="bar">
+  <a class="logo" href="#" aria-label="Pizzeria PiGusto, torna all'inizio"><img class="white" src="img/logo-pigusto-crema.svg" alt="" width="646" height="426"><img class="dark" src="img/logo-pigusto-rosso.svg" alt="" width="646" height="426"></a>
+  <div class="bar-r">
+    <a class="call" href="tel:+393756309217"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h1">
+    <div class="media" aria-hidden="true">
+      <picture>
+        <source media="(min-width:960px)" srcset="video/pizza-d.webp">
+        <img src="video/pizza-v.webp" alt="" width="720" height="1000" fetchpriority="high">
+      </picture>
+      <video id="vid" muted loop playsinline autoplay preload="auto" tabindex="-1">
+        <source src="video/pizza-d.mp4" type="video/mp4" media="(min-width:960px)">
+        <source src="video/pizza-v.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-testo"><span class="sent" id="sent" aria-hidden="true"></span>
+      <h1 class="d" id="h1"><span class="ln"><span>Pizzeria</span></span><span class="ln"><span>ad Arcade</span></span></h1>
+      <div class="ctas">
+        <a class="btn btn-main wide" data-ic="phone" href="tel:+393756309217"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Chiama 375 630 9217</a>
+        <a class="btn btn-line wide" href="https://wa.me/393756309217?text=Ciao%20PiGusto%2C%20vorrei%20ordinare.%0ANome%3A%20%0AOrario%20di%20ritiro%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span>WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="lavagna" class="board-sec fuori sheet" aria-labelledby="h-lav">
+    <div class="wrap sec">
+      <h2 class="h2 d" id="h-lav">Stagionali</h2>
+      <p class="lead">Le pizze d'autunno con la zucca. Per gli allergeni chiedi al telefono.</p>
+      <ul class="board">
+        <li class="fm"><div class="l1"><h3>Z1</h3><span class="price">10,00 €</span></div><p>fior di latte, crema di zucca, porcini, grana</p></li>
+        <li class="fm"><div class="l1"><h3>Z2</h3><span class="price">9,50 €</span></div><p>fior di latte, crema di zucca, speck, provola affumicata</p></li>
+        <li class="fm"><div class="l1"><h3>Z3</h3><span class="price">9,50 €</span></div><p>fior di latte, zucca, pancetta</p></li>
+        <li class="fm"><div class="l1"><h3>Z4</h3><span class="price">9,50 €</span></div><p>fior di latte, zucca, gorgonzola DOP, noci</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="menu" class="wrap sec" aria-labelledby="h-menu">
+    <div class="menu-grid">
+      <div class="menu-side">
+        <div class="menu-top">
+        <h2 class="h2 d" id="h-menu">Il menu</h2>
+        <div class="filtro" id="filtro">
+          <button class="f-btn" type="button" id="f-btn" aria-expanded="false" aria-controls="f-pan"><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Filtri<span class="dot" aria-hidden="true"></span></button>
+          <div class="f-pan" id="f-pan" role="group" aria-label="Filtri" hidden>
+            <button class="f-opt" type="button" data-f="verd" aria-pressed="false">Vegetariana<span class="n"></span></button>
+            <button class="f-opt" type="button" data-f="pic" aria-pressed="false">Piccanti<span class="n"></span></button>
+          </div>
+        </div>
+        </div>
+        <div class="f-attivo" id="f-attivo" hidden><button class="f-chip" type="button" id="f-off"><span id="f-lab"></span><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+        <div class="tabs-wrap">
+          <div class="tabs" role="tablist" aria-label="Sezioni del menu" id="tabs"><span class="tab-ind" id="tab-ind" aria-hidden="true"></span></div>
+        </div>
+      </div>
+      <div class="menu-main">
+        <p class="result-note" id="note" aria-live="polite"></p>
+        <div id="cats"></div>
+        <div class="extras">
+          <div class="extra" id="varianti">
+            <h3>Extra</h3>
+            <ul class="vars">
+              <li>Impasto integrale, con farro<span class="p">+1,00 €</span></li>
+              <li>Doppio impasto<span class="p">+1,00 €</span></li>
+              <li>Burrata<span class="p">+2,50 €</span></li>
+              <li>Acciughe<span class="p">+2,50 €</span></li>
+              <li>Abbondante mozzarella<span class="p">+1,00 €</span></li>
+              <li>Altre aggiunte<span class="p">da 1,00 a 2,00 €</span></li>
+            </ul>
+          </div>
+          <details class="extra" id="allergeni">
+            <summary>Allergeni</summary>
+            <ul class="alg-grid">
+              <li><b>1</b> cereali con glutine</li><li><b>2</b> crostacei</li><li><b>3</b> uova</li>
+              <li><b>4</b> pesce</li><li><b>5</b> arachidi</li><li><b>6</b> soia</li>
+              <li><b>7</b> latte</li><li><b>8</b> frutta a guscio</li><li><b>9</b> sedano</li>
+              <li><b>10</b> senape</li><li><b>11</b> sesamo</li><li><b>12</b> solfiti</li>
+              <li><b>13</b> lupini</li><li><b>14</b> molluschi</li>
+            </ul>
+            <p class="small">I numeri tra parentesi sono gli allergeni. L'asterisco * indica un prodotto surgelato.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="info" class="info-sec sheet" aria-labelledby="h-info">
+    <div class="wrap facts">
+    <h2 class="d" id="h-info">Informazioni</h2>
+    <ul>
+      <li><div class="row"><b>Orari</b><span>Martedì-domenica 18:00-22:00. Lunedì chiuso.</span></div></li>
+      <li><div class="row"><b>Asporto</b><span>Via Indipendenza 35, Arcade. Parcheggio gratuito.</span></div></li>
+      <li><div class="row"><b>Telefono</b><span><a href="tel:+393756309217">375 630 9217</a>, anche su WhatsApp.</span></div></li>
+      <li><div class="row"><b>Pagamento</b><span>Carte di credito e di debito.</span></div></li>
+    </ul>
+    </div>
+  </section>
+
+  <section id="ordina" class="order sheet" aria-labelledby="h-ord">
+    <div class="wrap sec">
+      <h2 class="h2 d" id="h-ord">Come ordinare</h2>
+      <div class="order-grid">
+        <figure class="photo rv"><img src="img/forno.webp" alt="Il pizzaiolo di PiGusto sforna una margherita davanti al forno" width="834" height="834" loading="lazy" decoding="async"></figure>
+        <ul class="ways">
+          <li class="way rv">
+            <h3>Telefono</h3>
+            <p><span class="num">375 630 9217</span><br>Ritiro in Via Indipendenza 35.</p>
+            <a class="btn btn-red" data-ic="phone" href="tel:+393756309217"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Chiama</a>
+          </li>
+          <li class="way rv" id="whatsapp">
+            <h3>WhatsApp</h3>
+            <p><span class="num">375 630 9217</span><br>Scrivi nome, orario di ritiro e pizze.</p>
+            <a class="btn btn-ink" href="https://wa.me/393756309217?text=Ciao%20PiGusto%2C%20vorrei%20ordinare.%0ANome%3A%20%0AOrario%20di%20ritiro%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span>WhatsApp</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="orari" class="end sheet" aria-labelledby="h-orari">
+    <div class="wrap">
+      <h2 class="h2 d" id="h-orari">Orari</h2>
+      <div class="hours-grid">
+        <table class="hours" id="hours">
+          <caption class="sr">Orari di apertura settimanali</caption>
+          <tbody>
+            <tr data-d="1" class="closed"><th scope="row">Lunedì</th><td>chiuso</td></tr>
+            <tr data-d="2"><th scope="row">Martedì</th><td>18:00-22:00</td></tr>
+            <tr data-d="3"><th scope="row">Mercoledì</th><td>18:00-22:00</td></tr>
+            <tr data-d="4"><th scope="row">Giovedì</th><td>18:00-22:00</td></tr>
+            <tr data-d="5"><th scope="row">Venerdì</th><td>18:00-22:00</td></tr>
+            <tr data-d="6"><th scope="row">Sabato</th><td>18:00-22:00</td></tr>
+            <tr data-d="0"><th scope="row">Domenica</th><td>18:00-22:00</td></tr>
+          </tbody>
+        </table>
+        <div class="place rv" id="ritiro">
+          <h3>Ritiro</h3>
+          <address><p>Via Indipendenza 35<br>31030 Arcade (TV)<br>Parcheggio gratuito.</p></address>
+          <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&amp;query=Pizzeria%20PiGusto%20Via%20Indipendenza%2035%20Arcade" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg></span>Apri in Maps<svg class="ic tail" aria-hidden="true"><use href="#i-out"/></svg></a>
+        </div>
+      </div>
+      <footer class="foot">
+        <img src="img/logo-pigusto-crema.svg" alt="Pigusto pizzeria" width="646" height="426" loading="lazy">
+        <address>Pizzeria PiGusto · Via Indipendenza 35, 31030 Arcade (TV)<br><a href="tel:+393756309217">Tel 375 630 9217</a></address>
+        <a class="ig" href="https://www.instagram.com/pizzeriapigusto/" target="_blank" rel="noopener" aria-label="Instagram di PiGusto"><svg class="ic" aria-hidden="true"><use href="#i-ig"/></svg></a>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<nav class="dock" aria-label="Ordina subito">
+  <a class="btn btn-red" data-ic="phone" href="tel:+393756309217"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="lbl">Chiama<small>375 630 9217</small></span></a>
+  <a class="btn btn-ink" href="https://wa.me/393756309217?text=Ciao%20PiGusto%2C%20vorrei%20ordinare.%0ANome%3A%20%0AOrario%20di%20ritiro%3A%20%0APizze%3A%20" target="_blank" rel="noopener"><span class="bub"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></span><span class="lbl">WhatsApp<small>stesso numero</small></span></a>
+
+</nav>
+
+<script>
+document.documentElement.classList.add('js');
+const REDUCE = matchMedia('(prefers-reduced-motion:reduce)');
+const BAR = () => document.getElementById('bar').offsetHeight;
+/* la barra in alto diventa chiara PRIMA che il titolo o i bottoni dell'hero arrivino sotto di lei (anticipo 36 px per la dissolvenza) */
+(function(){
+  const bar = document.getElementById('bar'), blk = document.querySelector('.hero-testo');
+  let t=false;
+  function aggiorna(){ t=false; bar.classList.toggle('light', blk.getBoundingClientRect().top < bar.offsetHeight + 36); }
+  function rich(){ if(!t){ t=true; requestAnimationFrame(aggiorna); } }
+  addEventListener('scroll', rich, {passive:true}); addEventListener('resize', rich); aggiorna();
+})();
+
+/* apertura: tocco, clic o tasto la chiudono subito; poi il livello si toglie dal DOM */
+(function(){
+  const ov = document.getElementById('intro'), H = document.documentElement;
+  if(!ov) return;
+  if(!H.classList.contains('intro')){ ov.remove(); return; }
+  let done = false;
+  const end = ()=>{ if(done) return; done = true; H.classList.remove('intro-out'); ov.remove(); ['pointerdown','keydown'].forEach(t=>removeEventListener(t, skip, true)); };
+  const t0 = performance.now();
+  /* saltata: la testata recupera il tempo, cosi' non resta ferma ad aspettare */
+  const skip = ()=>{ if(done) return; H.classList.add('intro-out');
+    const adv = Math.max(0, 1650 - (performance.now() - t0));
+    document.querySelectorAll('.hero, .hero *').forEach(el=>el.getAnimations && el.getAnimations().forEach(a=>{ if(a.animationName!=='drift') a.currentTime = (a.currentTime||0) + adv; }));
+    setTimeout(end, 470); };
+  ov.addEventListener('animationend', e=>{ if(e.target===ov && e.animationName==='ovout') end(); });
+  ['pointerdown','keydown'].forEach(t=>addEventListener(t, skip, true));
+  setTimeout(end, 2600);
+})();
+
+/* Video della testata: parte muto in loop; con movimento ridotto resta il fotogramma fermo */
+(function(){
+  const v = document.getElementById('vid');
+  if(REDUCE.matches){ v.removeAttribute('autoplay'); [...v.querySelectorAll('source')].forEach(s=>s.remove()); v.load(); return; }
+  const on = ()=>v.classList.add('on');
+  v.addEventListener('playing', on, {once:true});
+  const p = v.play(); if(p && p.catch) p.catch(()=>{});
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && v.paused) v.play().catch(()=>{}); });
+})();
+
+/* Menu PiGusto: dal post IG DHhRIfKtH83 del 23/3/2025 (carosello, immagini 2-5, in 01-materiali/post-DHhRIfKtH83).
+   Uguale alle foto della scheda Google (google-menu-1..4.jpg) tranne Siciliana (Google 5, post 9,50) e Carciofina (il post ha anche i carciofi):
+   qui vale il post. Differenze in 00-brief/menu-post-DHhRIfKtH83.md.
+   Voce: [nome, prezzo, ingredienti, allergeni (numerazione UE 1-14 del loro menu), 'x' = esclusa dai filtri]. */
+const MENU = [
+ {id:'classiche', t:'Classiche', items:[
+  ['Margherita','6,00','pomodoro, fior di latte, olio EVO',[1,7]],
+  ['Marinara','5,00','pomodoro, aglio, pomodorini, origano',[1,7]],
+  ['Romana','8,50','pomodoro, fior di latte, acciughe del mar Cantabrico',[1,4,7]],
+  ['Prosciutto e funghi','8,50','pomodoro, fior di latte, prosciutto cotto, champignon freschi',[1,7]],
+  ['Capricciosa','9,00','pomodoro, fior di latte, prosciutto cotto, champignon freschi, carciofini',[1,7]],
+  ['Wurstel e patate fritte','7,50','pomodoro, fior di latte, wurstel di suino, patate fritte*',[1,7]],
+  ['Verdure','8,00','pomodoro, fior di latte, melanzane, zucchine, peperoni, verdura stagionale',[1,7]],
+  ['Diavola','7,50','pomodoro, fior di latte, salamino piccante',[1,7]],
+  ['Quattro formaggi','9,00','pomodoro, fior di latte, gorgonzola DOP, asiago DOP, grana, brie',[1,3,7]],
+  ['Tonno cipolla','8,00','pomodoro, fior di latte, tonno, cipolla rossa',[1,4,7]],
+  ['Parmigiana','8,50','pomodoro, fior di latte, melanzane, grana',[1,3,7]]]},
+ {id:'nostre', t:'Le nostre pizze', items:[
+  ['Peperina','10,00',"pomodoro, fior di latte, 'nduja, olive, pomodori secchi, pecorino",[1,7]],
+  ['Favolosa','10,00','pomodoro, fior di latte, salsiccia, gorgonzola DOP, cipolla rossa',[1,7]],
+  ['Montanara','10,00','pomodoro, fior di latte, porcini*, salsiccia, ricotta affumicata',[1,7]],
+  ['Tranquilla','9,50','pomodoro, fior di latte, prosciutto cotto, zucchine, brie',[1,7]],
+  ['Siciliana','9,50','pomodoro, fior di latte, olive, capperi di Salina, acciughe del mar Cantabrico',[1,4,7]],
+  ['Carciofina','8,50','pomodoro, fior di latte, carciofi, crudo di Parma, scaglie di grana',[1,3,7]],
+  ['Gustosa','9,00','pomodoro, fior di latte, salamino piccante, gorgonzola DOP',[1,7]],
+  ['Ghiotta','9,50','pomodoro, fior di latte, salsiccia, patate al forno, scamorza affumicata',[1,7]],
+  ['Bufala e pomodorini','9,00','pomodoro, bufala di Paestum, pomodoro confit, basilico',[1,7]],
+  ['Sfiziosa','11,00','fior di latte, crudo di Parma, burrata di Paestum, pomodoro confit, basilico',[1,7]],
+  ['Tirolese','9,50','fior di latte, gorgonzola DOP, speck, noci, miele',[1,7,8]],
+  ['Combo','10,00','pomodoro, fior di latte, gorgonzola DOP, verdure, speck, cipolla rossa',[1,7]],
+  ['Peppa','8,50','pomodoro, fior di latte, porchetta trevigiana, patate al forno',[1,7]],
+  ['Delizia','11,00','fior di latte, acciughe del mar Cantabrico, burrata di Paestum, pomodori secchi',[1,4,7]],
+  ['Rustica','10,00','pomodoro, fior di latte, prosciutto cotto, champignon freschi, salsiccia, uovo',[1,3,7]],
+  ['Porchetta e porcini','9,00','pomodoro, fior di latte, porcini*, porchetta trevigiana',[1,7]],
+  ['Dolomitica','9,50','fior di latte, patate, uova, speck in cottura',[1,3,7]],
+  ['Alpina','10,00','pomodoro, fior di latte, patate al forno, asiago DOP, cipolla rossa, pancetta',[1,7]],
+  ['Sfilacci rucola grana','10,50','pomodoro, fior di latte, sfilacci di cavallo, rucola, grana',[1,3,7]],
+  ['Broccolina','12,00','fior di latte, pomodoro giallo del monte Somma, burrata di Paestum, broccoli e acciughe del mar Cantabrico',[1,4,7]],
+  ['Piuma','9,00','pomodoro, fior di latte, pancetta, peperoni, cipolla rossa',[1,7]],
+  ['Gladiatore','9,50','fior di latte, carciofi, pecorino, pancetta',[1,7]],
+  ['Tonno e cipolla 2.0','10,50','pomodoro, fior di latte, tonno, cipolla rossa, cappero di Salina, olive, pomodoro confit',[1,4,7]]]},
+ {id:'tacuin', t:'Tacuin', note:'Pane pizza piegato a metà e farcito all\'interno.', items:[
+  ['T1','7,00','crudo di Parma, zucchine, scamorza affumicata',[1,7]],
+  ['T2','7,00','speck, brie, champignon freschi',[1,7]],
+  ['T3','7,00','verdure, ricotta affumicata, olive',[1,7]],
+  ['T4','7,00','porchetta e peperoni',[1,7]],
+  ['TS','7,00','Tacuin con proposta di stagione',null,'x']]},
+ {id:'metro', t:'Al metro', note:'Pizza più alta e soffice. I prezzi dei 1/4 di metro si aggiungono al prezzo di listino.', items:[
+  ['1/2 metro, margherita','15,00','',null,'x'],
+  ['1/4 di metro, classiche','+2,00','',null,'x'],
+  ['1/4 di metro, le nostre pizze e stagionali','+3,00','',null,'x']]},
+ {id:'bibite', t:'Bibite', items:[
+  ['Acqua 1/2 l','1,00','',null,'x'],
+  ['Bibite in lattina','2,00','',null,'x'],
+  ['Birra artigianale','4,50','birrificio artigianale',null,'x'],
+  ['Birra 0,33 l','2,50','',null,'x'],
+  ['Birra 0,66 l','3,50','',null,'x']]}
+];
+
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+/* vegetariana = pizze senza carne né pesce (anche allergeni 2 crostacei, 4 pesce, 14 molluschi); VERD non più usato */
+const VERD = /melanzan|zucchin|peperon(?!cin)|spinac|carciof|fung|champignon|porcin|rucola|pomodorin|confit|ciliegin|cipoll|asparag|patat|broccol|verdur/;
+/* senza carne e pesce: deducibile dagli ingredienti scritti; esclude anche gli allergeni 2 crostacei, 4 pesce, 14 molluschi */
+const MEAT = /prosciutto|crudo|speck|salsicc|salamino|wurstel|pancetta|porchetta|nduja|cavallo|acciughe|tonno|salmone/;
+function algText(a){
+  return a ? `(${a.join(',')})` : '';
+}
+const esc = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cats = document.getElementById('cats'), tabs = document.getElementById('tabs'), ind = document.getElementById('tab-ind');
+const num = p => parseFloat(p.split('/')[0].replace(',','.'));
+
+MENU.forEach((c,ci)=>{
+  const n = c.items.length;
+  const tab = document.createElement('button');
+  tab.className='tab'; tab.type='button'; tab.setAttribute('role','tab'); tab.id='t-'+c.id;
+  tab.setAttribute('aria-controls','c-'+c.id); tab.setAttribute('aria-selected', ci===0?'true':'false');
+  tab.innerHTML = `${c.t}<sup>${n}</sup>`;
+  tab.setAttribute('aria-label', `${c.t}, ${n}`); tab.dataset.t = c.t;
+  tabs.appendChild(tab);
+  const sec = document.createElement('div');
+  sec.className='cat'; sec.id='c-'+c.id; sec.setAttribute('role','tabpanel'); sec.setAttribute('aria-labelledby','t-'+c.id);
+  if(ci) sec.hidden = true;
+  sec.innerHTML = `<div class="cat-head"><h3>${c.t}</h3></div>${c.note?`<p class="cat-note">${c.note}</p>`:''}<ul class="list"></ul>`;
+  const ul = sec.querySelector('.list');
+  c.items.forEach(it=>{
+    const [name,price,ing,alg,x] = it;
+    const li = document.createElement('li');
+    li.className='item'; li.dataset.cat=c.id;
+    li.dataset.kind = x ? 'altro' : 'pizza';
+    const t = norm(name+' '+ing);
+    if(li.dataset.kind==='pizza' && /piccant|nduja/.test(t)) li.dataset.pic='1';
+    li.dataset.alg = alg ? alg.join(',') : '';
+    if(li.dataset.kind==='pizza' && !MEAT.test(t) && !(alg||[]).some(v=>[2,4,14].includes(v))) { li.dataset.veg='1'; li.dataset.verd='1'; }
+    const at = algText(alg);
+    li.innerHTML = `<div class="l1"><h4>${esc(name)}</h4><span class="price">${price} €</span></div>`+
+      `<p class="ing"><span class="txt">${esc(ing)}</span>${at?` <span class="alg" aria-label="allergeni ${alg.join(', ')}">${at}</span>`:''}</p>`;
+    if(!ing && !at) li.querySelector('.ing').remove();
+    ul.appendChild(li);
+  });
+  cats.appendChild(sec);
+});
+
+document.addEventListener('click',e=>{ const l=e.target.closest('a.leg'); if(l){ const d=document.getElementById('allergeni'); if(d) d.open=true; } });
+const note = document.getElementById('note');
+const tabList = () => [...tabs.querySelectorAll('.tab')];
+let active = 'classiche', filtro = null;
+/* filtri del menu, uno alla volta: Vegetariana (senza carne né pesce, allergeni 2/4/14 esclusi) e Piccanti */
+const FILTRI = {verd:{t:'Vegetariana',p:'vegetariane'}, veg:{t:'Senza carne e pesce',p:'senza carne e pesce'}, pic:{t:'Piccanti',p:'piccanti'}};
+
+/* indicatore tab (non usato: la tab attiva è una pillola nera) */
+function moveInd(){
+  const t = document.getElementById('t-'+active);
+  if(!t || !t.offsetParent) return;
+  ind.style.width = t.offsetWidth+'px';
+  ind.style.transform = `translateX(${t.offsetLeft}px)`;
+}
+/* le righe entrano in cascata quando cambi sezione */
+function enter(sec){
+  if(REDUCE.matches) return;
+  sec.classList.remove('enter-h'); void sec.offsetWidth; sec.classList.add('enter-h');
+  [...sec.querySelectorAll('.item:not([hidden])')].forEach((li,i)=>{ li.classList.remove('enter'); void li.offsetWidth; li.style.setProperty('--i', Math.min(i,14)); li.classList.add('enter'); });
+}
+function showTab(id, scroll, animate){
+  const changed = id !== active;
+  active = id;
+  tabList().forEach(t=>t.setAttribute('aria-selected', t.id==='t-'+id ? 'true':'false'));
+  const at=document.getElementById('t-'+id);
+  if(tabs.scrollWidth>tabs.clientWidth) tabs.scrollTo({left:Math.max(0,at.offsetLeft-tabs.clientWidth/2+at.offsetWidth/2),behavior:REDUCE.matches?'auto':'smooth'});
+  document.querySelectorAll('.cat').forEach(s=>{ s.hidden = s.id !== 'c-'+id; });
+  moveInd();
+  if(animate && changed) enter(document.getElementById('c-'+id));
+  if(scroll){
+    const head = document.getElementById('c-'+id);
+    const top = head.getBoundingClientRect().top;
+    const offset = BAR() + (matchMedia('(min-width:960px)').matches ? 24 : (document.querySelector('.tabs-wrap').getBoundingClientRect().height + 8));
+    if(top < offset || top > window.innerHeight*.6) window.scrollBy({top: top - offset, behavior: REDUCE.matches?'auto':'smooth'});
+  }
+}
+const fBox = document.getElementById('filtro'), fBtn = document.getElementById('f-btn'), fLab = document.getElementById('f-lab'),
+      fRiga = document.getElementById('f-attivo'), fOff = document.getElementById('f-off'), fPan = document.getElementById('f-pan'), fOpts = [...fPan.querySelectorAll('.f-opt')];
+/* accanto a ogni opzione, quante pizze */
+fOpts.forEach(o=>{ o.querySelector('.n').textContent = document.querySelectorAll(`.item[data-${o.dataset.f}="1"]`).length; });
+/* le tab mostrano solo le pizze filtrate; le sezioni vuote spariscono */
+function render(){
+  let tot = 0, first = null;
+  document.querySelectorAll('.cat').forEach(s=>{
+    let n = 0;
+    s.querySelectorAll('.item').forEach(li=>{ const ok = !filtro || li.dataset[filtro]==='1'; li.hidden = !ok; if(ok) n++; });
+    const t = document.getElementById('t-'+s.id.slice(2));
+    t.hidden = n===0; t.querySelector('sup').textContent = n; t.setAttribute('aria-label', `${t.dataset.t}, ${n}`);
+    if(n && !first) first = s.id.slice(2); tot += n;
+  });
+  const on = !!filtro;
+  fBtn.classList.toggle('on', on);
+  if(on) fBtn.setAttribute('aria-label', `Filtri, attivo: ${FILTRI[filtro].t}`); else fBtn.removeAttribute('aria-label');
+  fLab.textContent = on ? FILTRI[filtro].t : '';
+  fOff.setAttribute('aria-label', on ? `Togli il filtro ${FILTRI[filtro].t}` : 'Togli il filtro');
+  fRiga.hidden = !on;
+  fOpts.forEach(o=>o.setAttribute('aria-pressed', String(o.dataset.f===filtro)));
+  note.textContent = on ? `${tot} pizze ${FILTRI[filtro].p}` : '';
+  showTab(document.getElementById('t-'+active).hidden ? first : active, false, false);
+  document.dispatchEvent(new Event('filtro'));
+}
+function apri(){
+  fPan.hidden = false; fBtn.setAttribute('aria-expanded','true');
+  (fOpts.find(o=>o.getAttribute('aria-pressed')==='true') || fOpts[0]).focus({preventScroll:true});
+}
+function chiudi(torna){
+  if(fPan.hidden) return;
+  fPan.hidden = true; fBtn.setAttribute('aria-expanded','false');
+  if(torna) fBtn.focus({preventScroll:true});
+}
+function scegli(f){
+  filtro = f; render();
+  if(f){ const m=document.querySelector('.menu-main'); const top=m.getBoundingClientRect().top; if(top>window.innerHeight*.7) window.scrollBy({top:top-(BAR()+document.querySelector('.tabs-wrap').getBoundingClientRect().height+12),behavior:REDUCE.matches?'auto':'smooth'}); }
+}
+fBtn.addEventListener('click', ()=>{ fPan.hidden ? apri() : chiudi(true); });
+fOpts.forEach(o=>o.addEventListener('click', ()=>{ chiudi(true); scegli(filtro===o.dataset.f ? null : o.dataset.f); }));
+fOff.addEventListener('click', ()=>{ chiudi(false); scegli(null); fBtn.focus({preventScroll:true}); });
+fPan.addEventListener('keydown', e=>{
+  const i = fOpts.indexOf(document.activeElement);
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); fOpts[(i+(e.key==='ArrowDown'?1:-1)+fOpts.length)%fOpts.length].focus(); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !fPan.hidden){ e.preventDefault(); chiudi(true); } });
+document.addEventListener('pointerdown', e=>{ if(!fPan.hidden && !fBox.contains(e.target)) chiudi(false); });
+fBox.addEventListener('focusout', e=>{ if(e.relatedTarget && !fBox.contains(e.relatedTarget)) chiudi(false); });
+tabs.addEventListener('click', e=>{
+  const t = e.target.closest('.tab'); if(!t) return;
+  showTab(t.id.slice(2), true, true);
+});
+tabs.addEventListener('keydown', e=>{
+  const list=tabList().filter(t=>!t.hidden), i=list.indexOf(document.activeElement);
+  if(i<0) return;
+  let j = e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;
+  if(j===null) return; e.preventDefault();
+  j=(j+list.length)%list.length; list[j].focus(); list[j].click();
+});
+(function(){
+  const wrap = document.querySelector('.tabs-wrap');
+  const f = ()=> wrap.classList.toggle('at-end', tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 4);
+  tabs.addEventListener('scroll', f, {passive:true}); addEventListener('resize', f); f();
+})();
+moveInd();
+addEventListener('resize', moveInd);
+if(document.fonts) document.fonts.ready.then(moveInd);
+
+/* Orari: evidenzia la riga di oggi (ora di Roma). ?ora=2026-11-24T19:05 per provarlo */
+(function(){
+  const param = new URLSearchParams(location.search).get('ora');
+  const now = (param && !isNaN(new Date(param))) ? new Date(param) : new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Rome'}));
+  const row = document.querySelector(`#hours tr[data-d="${now.getDay()}"]`); if(row) row.classList.add('today');
+})();
+
+/* Entrate allo scroll con IntersectionObserver, niente listener di scroll */
+(function(){
+  const els = document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window) || REDUCE.matches){ els.forEach(e=>e.classList.add('in')); return; }
+  const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.2});
+  els.forEach(e=>{ if(e.classList.contains('way')) e.style.transitionDelay = ([...e.parentNode.children].indexOf(e)*110)+'ms'; io.observe(e); });
+})();
+
+</script>
+<script>
+/* altezza del blocco rosso del menu sul telefono: dal bordo alto del menu al fondo delle tab */
+(function(){
+  const m=document.getElementById('menu'),c0=document.querySelector('.menu-top'),c1=document.getElementById('f-attivo'),t=document.querySelector('.tabs-wrap');
+  if(!m||!c0||!t) return;
+  const misura=()=>{ const c=c1&&!c1.hidden?c1:c0; m.style.setProperty('--testa',(c.offsetTop+c.offsetHeight+parseFloat(getComputedStyle(t).marginTop)+t.offsetHeight)+'px'); };
+  misura(); window.addEventListener('resize',misura); document.addEventListener('filtro',misura); window.addEventListener('load',misura);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(misura);
+})();
+</script>
+<script>
+/* Movimento allo scroll (v10): titoli che escono da una fessura, testi che seguono scaglionati,
+   conteggio delle pizze che sale nell'intestazione di ogni sezione del menu. Con movimento ridotto: fermo. */
+(function(){
+  if(REDUCE.matches || !('IntersectionObserver' in window)) return;
+  var tt=[].slice.call(document.querySelectorAll('main .h2, .facts h2'));
+  var mv=[];
+  function segna(sel,base,passo){[].forEach.call(document.querySelectorAll(sel),function(el,i){el.classList.add('mv');el.style.setProperty('--d',(base+i*passo)+'ms');mv.push(el)})}
+  segna('main .sec > .lead, #menu .lead',160,0);
+  segna('.facts li',120,90);
+  segna('.end .foot',120,0);
+  tt.forEach(function(el){el.classList.add('tt')});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){(e.target._tt||e.target).classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:0});
+  mv.forEach(function(el){io.observe(el)});
+  /* il titolo ritagliato per Chrome "non si vede": si osserva un segnaposto invisibile alla sua stessa altezza */
+  tt.forEach(function(el){var s=document.createElement('span');s.setAttribute('aria-hidden','true');s.style.cssText='position:absolute;width:1px;height:1px;pointer-events:none;opacity:0';
+    el.parentNode.insertBefore(s,el);s._tt=el;io.observe(s)});
+  /* "37 pizze, da 4,50 a 7,50 EUR": il numero conta da zero la prima volta che si vede.
+     Il testo finale resta identico; se un filtro riscrive la riga a meta, il conteggio si ferma. */
+  var io2=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io2.unobserve(e.target);
+    var el=e.target,orig=el.textContent,m=orig.match(/^(\d+)(.*)$/);if(!m)return;
+    var n=+m[1],resto=m[2],t0=0,scritto=orig;if(n<4)return;
+    function passo(t){if(el.textContent!==scritto)return;t0=t0||t;var f=Math.min(1,(t-t0)/700),k=1-Math.pow(1-f,3);
+      scritto=Math.round(n*k)+resto;el.textContent=scritto;if(f<1)requestAnimationFrame(passo)}
+    requestAnimationFrame(passo)})},{threshold:.6});
+  [].forEach.call(document.querySelectorAll('.cat-head p'),function(p){io2.observe(p)});
+})();
+</script>
+<script>
+/* Ingredienti veri (foto scontornate) che galleggiano.
+   Mai sopra la testata col video: la composizione sta subito sotto, nel passaggio verso il menu e attorno al blocco rosso.
+   Due strati fissi:
+   - davanti (sopra la pagina): composizione sotto la testata e singoli dopo il menu, lati alterni, in parte fuori dal bordo;
+     ritagliato tra la barra in alto (o le tab attaccate), il fondo della testata e la barra in basso.
+   - dietro (sotto i testi, dentro il menu): lungo l'elenco delle pizze, nei margini e tra le categorie,
+     a meta fuori dal bordo dello schermo su telefono, nei margini e nei corridoi tra le colonne al computer.
+   Niente posti fissi: dopo il caricamento la pagina misura ogni riga di testo, i comandi, le immagini e i loghi,
+   e mette ogni ingrediente solo dove non tocca niente, contando il margine del galleggiamento e del parallasse.
+   Si ridispongono quando la pagina cambia altezza (scheda, filtro, allergeni) o larghezza.
+   Con movimento ridotto: niente galleggiamento ne parallasse, scorrono con la pagina. */
+(function(){
+  var IMG={pomodorini:[460,360],basilico:[329,420],salame:[440,299],mezzo:[360,342],mozzarella:[440,350]};
+  var FILE={pomodorini:'pomodorini',basilico:'basilico',salame:'salame',mezzo:'pomodorino-mezzo',mozzarella:'mozzarella'};
+  var GIRO=['basilico','pomodorini','salame','mozzarella','mezzo','basilico','salame','pomodorini','mezzo','mozzarella'];
+  var GIRO2=['salame','basilico','mezzo','mozzarella','pomodorini','basilico','salame','mezzo','pomodorini','mozzarella'];
+  var fermo=REDUCE.matches;
+  var hero=document.querySelector('.hero'),bar=document.getElementById('bar'),dock=document.querySelector('.dock'),
+      tabs=document.querySelector('.tabs-wrap'),menu=document.getElementById('menu'),lista=document.querySelector('.menu-main');
+  function strato(cls,dove){var s=document.createElement('div');s.className=cls;s.setAttribute('aria-hidden','true');dove.insertBefore(s,dove.firstChild);return s}
+  var davanti=strato('ingr-strato',document.body),dietro=strato('ingr-strato ingr-fondo',menu);
+  var SEL='main #varianti,main a,main button,main input,main label,main summary,main .tab,main .btn,main figure,main img:not(.media img),main svg.ic,main h1';
+  var mobile=false,P=[],poolA=[],poolB=[],W=0,VH=0,barH=0,dockH=0,largo=false;
+  function seme(n){return function(){n=(n*1664525+1013904223)%4294967296;return n/4294967296}}
+  var G=[],N=[],PR=[];
+  function ostacoli(sy){
+    G=[];N=[];PR=[];var O=[],els=document.querySelectorAll(SEL),i,r,hb=hero.getBoundingClientRect().bottom+sy;
+    /* testi non ancora entrati (titoli dalla fessura, testi scaglionati, righe del menu): sono ancora spostati in basso,
+       quindi l'ostacolo vale anche per il posto finale, un po' piu su */
+    function su(el,r){var a=el.closest('.tt:not(.in),.mv:not(.in),.rv:not(.in),.item.enter');if(a)return 34;
+      /* righe del menu e della lavagna: entrano dal basso (16 px) quando arrivano nello schermo */
+      return el.closest('.item,.fm')?18:0}
+    for(i=0;i<els.length;i++){r=els[i].getBoundingClientRect();if(r.width>0&&r.height>0)O.push([r.left,r.top+sy-su(els[i],r),r.right,r.bottom+sy])}
+    /* il pannello dei filtri, anche chiuso: si misura aperto e invisibile, cosi gli ingredienti non lo toccano quando si apre */
+    var fp=document.getElementById('f-pan');if(fp){var ch0=fp.hidden;fp.style.visibility='hidden';fp.hidden=false;r=fp.getBoundingClientRect();fp.hidden=ch0;fp.style.visibility='';O.push([r.left-8,r.top+sy-8,r.right+8,r.bottom+sy+8])}
+    var tw=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT),n,rg=document.createRange();
+    while((n=tw.nextNode())){if(!n.textContent.trim())continue;var pe=n.parentElement;if(!pe||pe.closest('.sr,[hidden]'))continue;
+      var dst=pe.closest('.ing,.cat-note,.small')&&!pe.closest('a')?G:pe.closest('.item h4')?N:pe.closest('.item .price')?PR:O;
+      rg.selectNodeContents(n);var rs=rg.getClientRects();for(i=0;i<rs.length;i++){r=rs[i];if(r.width>0)dst.push([r.left,r.top+sy-su(pe,r),r.right,r.bottom+sy])}}
+    /* al computer la colonna del menu (titolo, filtri, tab) resta attaccata: vale per tutta l'altezza del menu */
+    if(largo&&menu){var ms=document.querySelector('.menu-side');if(ms){var rm=menu.getBoundingClientRect(),ra=ms.getBoundingClientRect();O.push([ra.left-10,rm.top+sy,ra.right+10,rm.bottom+sy])}}
+    /* filetti (bordi sopra e sotto di righe, categorie, tabelle): anche questi non si toccano */
+    var bs=document.querySelectorAll('main li,main .cat-head,main .board,main .ways,main .extra,main .facts ul,main .hours,main .hours tr,main .place,main .foot,main table');
+    for(i=0;i<bs.length;i++){var cs=getComputedStyle(bs[i]);r=bs[i].getBoundingClientRect();if(!r.width)continue;var up=bs[i].closest('.item,.fm')?18:0;
+      if(parseFloat(cs.borderBottomWidth)>0)O.push([r.left,r.bottom+sy-1-up,r.right,r.bottom+sy]);
+      if(parseFloat(cs.borderTopWidth)>0)O.push([r.left,r.top+sy-up,r.right,r.top+sy+1])}
+    for(i=0;i<O.length;i++)if(O[i][1]<hb&&O[i][3]>hb)O[i][3]=hb;
+    return O}
+  function sovrapposto(L,a){var t=0;for(var i=0;i<L.length;i++){var o=L[i],w=Math.min(a[2],o[2])-Math.max(a[0],o[0]),h=Math.min(a[3],o[3])-Math.max(a[1],o[1]);if(w>0&&h>0)t+=w*h}return t}
+  /* strato di fondo: solo dove non tocca nessun testo (nemmeno da dietro). Al computer anche negli spazi liberi
+     dell'elenco; su telefono piccoli e quasi del tutto fuori dal bordo, nelle fasce vuote tra una pizza e l'altra.
+     Se non c'e posto si salta. xs = posizioni da provare: [x, bordo?] */
+  function cercaFondo(O,tipo,w,xs,y0,raggio,rot,v,limiti){
+    var im=IMG[tipo],h=w*im[1]/im[0],rad=(Math.abs(rot)+6)*Math.PI/180,c=Math.cos(rad),s=Math.sin(rad);
+    var bw=w*c+h*s,bh=w*s+h*c,M=v+7;
+    for(var d=0;d<=raggio;d+=8){for(var sg=0;sg<2;sg++){if(!d&&sg)continue;var yy=y0+(sg?-d:d),cy=yy+h/2;
+      if(cy-bh*.45-v-2<limiti[0]||cy+bh*.45+v+2>limiti[1])continue;
+      for(var k=0;k<xs.length;k++){
+        var x=xs[k][0],cx=x+w/2,a=[Math.max(0,cx-bw*.45)-6,cy-bh*.45-M,Math.min(W,cx+bw*.45)+6,cy+bh*.45+M];
+        /* mai a contatto con testi, nemmeno dietro: nomi, prezzi, ingredienti, allergeni, titoli, comandi */
+        if(libero(O,a)&&libero(G,a)&&libero(N,a)&&libero(PR,a))return {x:x,y:yy,w:w,h:h,tipo:tipo,rot:rot,v:v}}}}
+    return null}
+  function libero(O,a){for(var i=0;i<O.length;i++){var o=O[i];if(a[0]<o[2]&&a[2]>o[0]&&a[1]<o[3]&&a[3]>o[1])return false}return true}
+  /* prova una posizione e le vicine; vis = quota visibile (il resto esce dal bordo); limiti = fascia verticale ammessa
+     per la parte piena dell'ingombro ruotato, compreso il parallasse (gli angoli vuoti delle foto possono uscire: il ritaglio li taglia) */
+  function cerca(O,tipo,w,cx0,y0,lato,vis,raggio,rot,v,limiti){
+    var im=IMG[tipo],h=w*im[1]/im[0],rad=(Math.abs(rot)+6)*Math.PI/180,c=Math.cos(rad),s=Math.sin(rad);
+    var bw=w*c+h*s,bh=w*s+h*c,M=v+12;
+    for(var d=0;d<=raggio;d+=8){for(var sg=0;sg<2;sg++){if(!d&&sg)continue;var yy=y0+(sg?-d:d),cy=yy+h/2;
+      if(cy-bh*.45-v-2<limiti[0]||cy+bh*.45+v+2>limiti[1])continue;
+      for(var k=0;k<vis.length;k++){
+        var x=cx0!=null?cx0-w/2:(lato>0?W-w*vis[k]:-w*(1-vis[k]));
+        if(cx0!=null&&k)break;
+        var cx=x+w/2;
+        var a=[Math.max(0,cx-bw*.45)-6,cy-bh*.45-M,Math.min(W,cx+bw*.45)+6,cy+bh*.45+M];
+        if(libero(O,a)&&libero(G,a)&&libero(N,a)&&libero(PR,a))return {x:x,y:yy,w:w,h:h,tipo:tipo,rot:rot,v:v}}}}
+    return null}
+  function disponi(){
+    var de=document.documentElement,sy=scrollY;W=de.clientWidth;VH=innerHeight;largo=matchMedia('(min-width:960px)').matches;
+    barH=bar?bar.offsetHeight:0;dockH=dock&&getComputedStyle(dock).display!=='none'?dock.offsetHeight:0;
+    var H=de.scrollHeight,O=ostacoli(sy),R=seme(11),mob=mobile=W<768,out=[],v=mob?22:34;
+    var hB=hero.getBoundingClientRect().bottom+sy,lim=[hB,H-40];
+    var rm=menu.getBoundingClientRect(),mT=rm.top+sy,mB=rm.bottom+sy;
+    var rl=lista.getBoundingClientRect(),lT=rl.top+sy,lB=rl.bottom+sy;
+    function metti(p,sf,z,fondo){if(p){p.sf=sf;p.z=z;p.fondo=!!fondo;out.push(p);O.push([p.x+p.w*.1,p.y+p.h*.1,p.x+p.w*.9,p.y+p.h*.9])}}
+    /* 1. composizione subito sotto la testata: passaggio verso il menu e attorno al blocco rosso */
+    var hm=document.getElementById('h-menu').getBoundingClientRect(),hmT=hm.top+sy;
+    var ch=document.getElementById('filtro').getBoundingClientRect(),chT=ch.top+sy;
+    /* prima la misura grande; se non c'e spazio libero, un po' piu piccolo */
+    function prova(t,w){var args=[].slice.call(arguments,2);for(var k=0;k<4;k++){var p=cerca.apply(null,[O,t,w*[1,.86,.74,.62][k]].concat(args));if(p)return p}return null}
+    if(largo){
+      var lim1=[hB,lT+260],vc=8;
+      metti(prova('mozzarella',170,W-62,hB+6,1,[1],60,-6,vc,lim1),false,.25);
+      metti(prova('salame',190,W-60,hB+160,1,[1],80,-12,vc,lim1),false,.2);
+    }else{
+      var lim2=[hB,lT],vc=6;
+      metti(prova('pomodorini',130,null,hB+14,1,[.55,.48,.42,.36],120,-10,vc,lim2),false,.3);
+      metti(prova('basilico',84,null,hB+30,-1,[.5,.42,.36],120,26,vc,lim2),false,.4);
+      metti(prova('mezzo',100,null,chT+40,-1,[.5,.42,.36],100,16,vc,lim2),false,.25);
+    }
+    /* 2. dietro l'elenco delle pizze: distribuzione regolare, lati alterni, varieta di ingredienti */
+    var vb=mob?2:14,limL=[lT+8,lB-8],passoL=mob?VH*.24:VH*.7,y=lT+40,lato=1,i=0;
+    var cols=[];if(largo){var ms=document.querySelector('.menu-side');
+      var r1=ms.getBoundingClientRect(),r2=lista.getBoundingClientRect();cols.push((r1.right+r2.left)/2);
+      var ls=lista.querySelector('.list:not([hidden])');if(ls&&getComputedStyle(ls).columnCount==='2'){var rr=ls.getBoundingClientRect();cols.push((rr.left+rr.right)/2)}}
+    var x0=rl.left,x1=rl.right;
+    while(y<lB-80&&i<80){
+      var tipo=GIRO2[i%GIRO2.length],rot=(R()-.5)*(mob?24:60),w=mob?60+R()*20:150+R()*60,f;
+      var p=null,sc=mob?[1.7,1.4,1.15,1,.85]:[1.15,1,.85,.7];
+      /* prova prima piu grande e piu dentro lo schermo, poi via via piu piccolo */
+      for(var z=0;z<sc.length&&!p;z++){var wz=w*sc[z],xz=[];
+        /* sempre tagliati ai lati: solo posizioni che escono dal bordo dello schermo */
+        if(false)for(f=0;f<=1.001;f+=.05){var fx2=lato>0?1-f:f,cx2=x0+wz*.4+(x1-x0-wz*.8)*fx2;xz.push([cx2-wz/2,0])}
+        (mob?[lato]:[lato,-lato]).forEach(function(l){(mob?[.48,.42,.36,.3]:[.5,.42,.36,.3]).forEach(function(vv){xz.push([l>0?W-wz*vv:-wz*(1-vv),1])})});
+        p=cercaFondo(O,tipo,wz,xz,y,passoL*.45,rot,vb,limL)}
+      if(false&&!p&&cols.length)for(f=0;f<cols.length&&!p;f++){var wc2=Math.min(w*.62,110);p=cercaFondo(O,tipo,wc2,[[cols[f]-wc2/2,0]],y,passoL*.4,rot*.5,vb,limL)}
+      if(p){metti(p,false,.35,true);lato=-lato;y=p.y+p.h+passoL*(.55+R()*.35)}else y+=passoL*.35;
+      i++}
+    /* 3. singoli davanti, dopo il menu, lati alterni. Su telefono la mozzarella apre la serie (accanto al titolo ora c'e Filtri) */
+    var passo=VH*(mob?.72:1.1);y=mB+VH*.15;lato=-1;i=0;
+    var mz=largo?null:prova('mozzarella',140,null,mB+VH*.1,1,[.5,.42,.36,.3],VH*.3,-8,v,lim);if(mz){metti(mz,false,.25);y=mz.y+mz.h+passo*.6}
+    while(y<H-100&&i<60){
+      var tipo2=GIRO[i%GIRO.length],sf=(i%4===3),w2=(mob?110+R()*40:160+R()*70)*(sf?.85:1),rot2=(R()-.5)*50;
+      var q=cerca(O,tipo2,w2,largo?(lato>0?W-w2*.3:w2*.3):null,y,lato,mob?[.5,.44,.38,.32]:[.6,.5,.4],VH*.3,rot2,v,lim);
+      if(!q&&mob)q=cerca(O,tipo2,w2*.75,null,y,lato,[.5,.4,.34],VH*.3,rot2,v,lim);
+      if(q){metti(q,sf,sf?1.2:.5+R()*.4);lato=-lato;y=q.y+q.h+passo*(.6+R()*.45)}else y+=passo*.3;
+      i++}
+    P=out;var na=0,nb=0;
+    for(var j=0;j<P.length;j++){var o=P[j],pool=o.fondo?poolB:poolA,k=o.fondo?nb++:na++,el=pool[k];
+      if(!el){el=document.createElement('span');el.className='pz';el.innerHTML='<img alt="" decoding="async">';(o.fondo?dietro:davanti).appendChild(el);pool.push(el)}
+      var img=el.firstChild,src='img/ingredienti/'+FILE[o.tipo]+'.webp';
+      if(img.getAttribute('src')!==src){img.src=src;img.width=IMG[o.tipo][0];img.height=IMG[o.tipo][1]}
+      el.classList.toggle('sf',o.sf);el.classList.toggle('fl',j%3===1);el.hidden=false;
+      el.style.width=o.w.toFixed(1)+'px';
+      el.style.cssText+=';--r:'+o.rot.toFixed(1)+'deg;--t:'+(4+(j*1.37)%4).toFixed(2)+'s;--dl:-'+((j*2.3)%8).toFixed(1)+'s;--a:'+(2+(j*1.9)%3).toFixed(1)+'px;--g:'+(2+(j*.7)%2).toFixed(1)+'deg;--b:'+(o.w<110?2:3.4)+'px';
+      o.el=el;o.fuori=false;el.style.visibility=''}
+    for(;na<poolA.length;na++)poolA[na].hidden=true;
+    for(;nb<poolB.length;nb++)poolB[nb].hidden=true;
+    aggiorna()}
+  /* a ogni scorrimento: posizione nello schermo + parallasse limitato a +/- v, e ritaglio */
+  var chiesto=false;
+  function aggiorna(){chiesto=false;var sy=scrollY,top=barH,hb=hero.getBoundingClientRect().bottom;
+    if(tabs&&!largo){var rt=tabs.getBoundingClientRect();if(rt.top<=barH+1&&rt.bottom>barH)top=rt.bottom}
+    davanti.style.clipPath='inset('+Math.max(top,hb,0).toFixed(1)+'px 0 '+dockH+'px 0)';
+    var rl=lista.getBoundingClientRect();
+    dietro.style.clipPath='inset('+Math.max(top,rl.top).toFixed(1)+'px 0 '+Math.max(dockH,VH-rl.bottom).toFixed(1)+'px 0)';
+    for(var j=0;j<P.length;j++){var q=P[j],yv=q.y-sy;
+      if(yv>VH+60||yv+q.h<-60){if(!q.fuori){q.el.style.visibility='hidden';q.fuori=true}continue}
+      if(q.fuori){q.el.style.visibility='';q.fuori=false}
+      var par=fermo?0:Math.max(-q.v,Math.min(q.v,(yv+q.h/2-VH/2)*.06*q.z));
+      q.el.style.transform='translate3d('+q.x.toFixed(1)+'px,'+(yv-par).toFixed(1)+'px,0)'}}
+  window.addEventListener('scroll',function(){if(!chiesto){chiesto=true;requestAnimationFrame(aggiorna)}},{passive:true});
+  var t;function poi(){clearTimeout(t);t=setTimeout(disponi,160)}
+  if(document.readyState==='complete')disponi();else window.addEventListener('load',disponi);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(poi);
+  /* i caratteri arrivano dopo (e cambiano la larghezza delle righe): si rimisura quando finiscono di caricare e dopo l'apertura */
+  if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',poi);
+  window.addEventListener('load',function(){setTimeout(poi,2600)});
+  window.addEventListener('resize',poi);
+  if('ResizeObserver' in window){var ultima=0;new ResizeObserver(function(){var h=document.querySelector('main').offsetHeight;if(h!==ultima){ultima=h;poi()}}).observe(document.querySelector('main'))}
+})();
+</script>
+</body>
+</html>

@@ -9,5 +9,6 @@
 */
 window.DEMO_ELENCO = [
   { slug: 'inferno-b34d', nome: 'Inferno, Pizza & Takeaway', tipo: 'Pizzeria', luogo: 'Spresiano', stato: 'pronta' },
-  { slug: 'pizzaclub-8a87', nome: 'Pizza Club', tipo: 'Pizzeria', luogo: 'Villorba', stato: 'pronta' }
+  { slug: 'pizzaclub-8a87', nome: 'Pizza Club', tipo: 'Pizzeria', luogo: 'Villorba', stato: 'pronta' },
+  { slug: 'pigusto-2699', nome: 'PiGusto', tipo: 'Pizzeria', luogo: 'Arcade', stato: 'pronta' }
 ];
