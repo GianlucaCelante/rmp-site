@@ -635,3 +635,10 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .tabella td { color: #1f2326; }
 .brand { min-height: 44px; align-items: center; }
 .tel-big { padding-block: 6px; }
+
+/* demo: a telefono stretto il link dell informativa va a capo invece di uscire dalla colonna */
+.campo { grid-template-columns: minmax(0, 1fr); }
+.link-piccolo { white-space: normal; text-align: left; }
+.link-piccolo::after { display: none; }
+.link-piccolo { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.link-piccolo:hover, .link-piccolo:focus-visible { text-decoration-color: transparent; }
