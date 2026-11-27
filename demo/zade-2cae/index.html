@@ -190,49 +190,76 @@
       </div>
     </div>
 
-    <div class="modelli" id="basculanti" aria-labelledby="t-mod">
-      <div class="modelli-head">
-        <div class="modelli-intro" data-reveal>
-          <h3 id="t-mod">Porte basculanti: otto modelli su misura</h3>
-          <p>Coibentate e non, manuali o motorizzate. Struttura in acciaio zincato verniciata a polveri RAL, paracadute anticaduta e guarnizione laterale anticesoiamento su tutti i modelli.</p>
+    <div class="visore" id="basculanti" aria-labelledby="t-vis">
+    <div class="visore-grid">
+      <div class="visore-palco-wrap">
+        <div class="palco palco--visore" id="palcoVisore" data-tema="media">
+          <img class="palco-foto" id="fotoModello" src="assets/img/mod-doghe-lisce.webp" width="760" height="950" loading="lazy" decoding="async"
+               alt="Basculante modello Doghe lisce marrone a doghe orizzontali con porta pedonale">
+          <div class="palco-comandi">
+            <div class="seg seg--stato" role="group" aria-label="Porta"><button type="button" class="seg-b" data-stato="chiusa" aria-pressed="true">Chiusa</button><button type="button" class="seg-b" data-stato="aperta" aria-pressed="false">Aperta</button></div>
+            <span class="palco-hint" aria-hidden="true">Trascinate per girarle intorno</span>
+          </div>
         </div>
-        <div class="modelli-ctrl" data-reveal>
-          <span class="conta mono" id="contaModelli" aria-live="polite">1 / 8</span>
-          <button class="freccia" type="button" id="modPrev" aria-label="Modello precedente" aria-controls="filaModelli"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 8H3M7 4 3 8l4 4"/></svg></button>
-          <button class="freccia" type="button" id="modNext" aria-label="Modello successivo" aria-controls="filaModelli"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
-        </div>
-      </div>
-      <div class="fila" id="filaModelli" data-lenis-prevent tabindex="0" role="region" aria-label="Otto modelli di porta basculante, scorrete in orizzontale">
-        <article class="card" aria-roledescription="scheda" aria-label="1 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-energy.webp" width="760" height="950" loading="eager" decoding="async" alt="Basculante modello Energy grigio antracite con porta pedonale, in un muro di mattoni"></div>
-            <div class="tx"><h4>Energy</h4><div class="spec mono"><span>Spessore <b>60 mm</b></span><span>Coibentato</span></div><p>Rivestimento in gres, interno in okumè bianco o noce. Non chiede manutenzione esterna.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="2 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-style.webp" width="760" height="950" loading="eager" decoding="async" alt="Basculante modello Style con pannello rosso laccato a bugne sagomate"></div>
-            <div class="tx"><h4>Style</h4><div class="spec mono"><span>Spessore <b>50 mm</b></span><span>Coibentato</span></div><p>Lastra in alluminio verniciata e laccata, trattata contro la corrosione. Pannello abbinabile al portoncino d'ingresso.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="3 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-doghe-lisce.webp" width="760" height="950" loading="eager" decoding="async" alt="Basculante modello Doghe lisce marrone a doghe orizzontali con porta pedonale"></div>
-            <div class="tx"><h4>Doghe lisce</h4><div class="spec mono"><span>Doghe <b>150 o 250</b></span><span>Coibentato</span></div><p>Doga verticale, orizzontale o a spina. In tutti i colori RAL.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="4 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-pannello-standard.webp" width="760" height="950" loading="lazy" decoding="async" alt="Basculante modello Pannello standard verde con porta pedonale e maniglia in ottone"></div>
-            <div class="tx"><h4>Pannello standard</h4><div class="spec mono"><span>Spessore <b>40 mm</b></span><span>Coibentato</span></div><p>Pannello metallico verniciato a polveri RAL. Il classico che chiude e isola.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="5 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-simil-legno.webp" width="760" height="950" loading="lazy" decoding="async" alt="Basculante modello metallico simil legno con porta pedonale aperta"></div>
-            <div class="tx"><h4>Metallico simil legno</h4><div class="spec mono"><span>Spessore <b>40 mm</b></span><span>Coibentato</span></div><p>L'aspetto del legno senza le sue cure. Liscio, dogato, rigato o a cassettoni.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="6 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-legno.webp" width="760" height="950" loading="lazy" decoding="async" alt="Due garage con basculanti modello Legno e finestrature"></div>
-            <div class="tx"><h4>Legno</h4><div class="spec mono"><span>Spessore <b>70 mm</b></span><span>Coibentato</span></div><p>Esterno in multistrato marino okumè da 15 mm, doga verticale od orizzontale.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="7 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-acciaio-grecato.webp" width="760" height="950" loading="lazy" decoding="async" alt="Basculante modello Acciaio grecato marrone a greca verticale"></div>
-            <div class="tx"><h4>Acciaio grecato</h4><div class="spec mono"><span>Lamiera <b>grecata zincata</b></span><span>Non coibentato</span></div><p>Telaio saldato e tubolari orizzontali che tengono in asse il manto a ogni apertura.</p></div></article>
-        <article class="card" aria-roledescription="scheda" aria-label="8 di 8"><div class="ph" data-tema="media"><img src="assets/img/mod-struttura-libera.webp" width="760" height="950" loading="lazy" decoding="async" alt="Telaio di basculante nudo, Struttura libera, montato in un'apertura"></div>
-            <div class="tx"><h4>Struttura libera</h4><div class="spec mono"><span>Rivestimento <b>a scelta</b></span><span>Su richiesta</span></div><p>Il telaio pronto per legno, alluminio o pvc, come chiede il cliente.</p></div></article>
       </div>
 
-      <div class="sicurezza" id="sicurezza" aria-labelledby="t-sic">
-        <h3 id="t-sic">Sicurezza e certificazioni</h3>
-        <dl class="sic-lista">
-          <div><dt>Paracadute anticaduta</dt><dd>Il sistema che impedisce alla porta di cadere. C&#39;&egrave; su tutti i nostri modelli.</dd></div>
-          <div><dt>Guarnizione anticesoiamento</dt><dd>Una guarnizione speciale sui lati: se una mano finisce nella chiusura, non si ferisce.</dd></div>
-          <div><dt>Marchio CE</dt><dd>Su tutti i nostri prodotti. Vuol dire che il prodotto &egrave; stato valutato prima della vendita e rispetta i requisiti europei di sicurezza, salute e ambiente.</dd></div>
-          <div><dt>Vento in classe 2</dt><dd>Il risultato delle prove di resistenza al carico del vento, calcolato sul modello base in acciaio grecato.</dd></div>
-          <div><dt>Certificazione al cliente</dt><dd>Con la porta rilasciamo la certificazione a marchio CE. Un esempio &egrave; il rapporto di prova n. 365/08 di Treviso Tecnologia.</dd></div>
-          <div><dt>Posa in opera</dt><dd>La porta la montiamo noi.</dd></div>
-        </dl>
-        <div class="cta-row"><a class="btn btn--ink" href="#preventivo" data-bisogno="basculante" data-magnetic>Chiedete un preventivo<span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M2 8h11M9 4l4 4-4 4"/></svg><svg viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a><a class="link-sec" href="tel:+390422779636">Chiamateci: 0422 779636<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a></div>
+      <div class="visore-pannello">
+        <h3 id="t-vis">Porte basculanti: scegliete la vostra</h3>
+        <p class="visore-lead">Otto modelli, tutti costruiti su misura. Struttura in acciaio zincato verniciata a polveri RAL, paracadute anticaduta e guarnizione anticesoiamento su tutti.</p>
+
+        <div class="vis-stato" id="visStato"></div>
+        <div class="vis-tab" role="tablist" aria-label="Cosa scegliere">
+          <button type="button" role="tab" id="tabModello" aria-selected="true" aria-controls="sceltaModello">Modello</button>
+          <button type="button" role="tab" id="tabColore" aria-selected="false" aria-controls="sceltaColore" tabindex="-1">Colore</button>
+        </div>
+        <fieldset class="scegli" id="sceltaModello" role="tabpanel" aria-labelledby="tabModello">
+          <legend>Modello</legend>
+          <div class="modelli-lista">
+            <label class="mod"><input type="radio" name="modello" value="doghe" checked><img class="mod-img" src="assets/img/mod-doghe-lisce.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Doghe lisce</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="energy"><img class="mod-img" src="assets/img/mod-energy.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Energy</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="style"><img class="mod-img" src="assets/img/mod-style.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Style</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="standard"><img class="mod-img" src="assets/img/mod-pannello-standard.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Pannello standard</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="simil"><img class="mod-img" src="assets/img/mod-simil-legno.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Simil legno</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="legno"><img class="mod-img" src="assets/img/mod-legno.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Legno</span><span class="mod-s">Coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="grecato"><img class="mod-img" src="assets/img/mod-acciaio-grecato.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Acciaio grecato</span><span class="mod-s">Non coibentato</span></label>
+            <label class="mod"><input type="radio" name="modello" value="libera"><img class="mod-img" src="assets/img/mod-struttura-libera.webp" width="760" height="950" loading="lazy" decoding="async" alt=""><span class="mod-n">Struttura libera</span><span class="mod-s">Su richiesta</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="scegli" id="sceltaColore" role="tabpanel" aria-labelledby="tabColore">
+          <legend>Colore <span class="opz" id="notaColore">un esempio: tutti i colori RAL</span></legend>
+          <div class="colori" id="colori"></div>
+          <p class="colore-nome" id="coloreNome"></p>
+        </fieldset>
+
+        <label class="spunta spunta--pedonale" for="pedonale"><input id="pedonale" type="checkbox" checked><span>Porta pedonale</span></label>
+
+        <div class="scheda" aria-live="polite">
+          <div class="scheda-spec mono" id="schedaSpec"><span>Doghe <b>150 o 250</b></span><span>Coibentato</span></div>
+          <p id="schedaTesto">Doga verticale, orizzontale o a spina. In tutti i colori RAL.</p>
+        </div>
+
+        <div class="visore-cta">
+          <p class="scelta-riassunto" id="riassunto">Doghe lisce, RAL 7016 grigio antracite, con porta pedonale</p>
+          <div class="cta-row">
+            <a class="btn btn--ink" href="#preventivo" id="ctaModello" data-bisogno="basculante" data-magnetic>Chiedete un preventivo<span class="ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M2 8h11M9 4l4 4-4 4"/></svg><svg viewBox="0 0 16 16" fill="none" stroke-width="1.5"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a>
+            <a class="link-sec" href="tel:+390422779636">Chiamateci: 0422 779636<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div class="sicurezza" id="sicurezza" aria-labelledby="t-sic">
+      <h3 id="t-sic">Su tutti i modelli</h3>
+      <dl class="sic-lista">
+        <div><dt>Paracadute anticaduta</dt><dd>Il sistema che impedisce alla porta di cadere.</dd></div>
+        <div><dt>Guarnizione anticesoiamento</dt><dd>Sui lati: se una mano finisce nella chiusura, non si ferisce.</dd></div>
+        <div><dt>Marchio CE</dt><dd>Con la porta rilasciamo la certificazione. Un esempio &egrave; il rapporto di prova n. 365/08 di Treviso Tecnologia.</dd></div>
+        <div><dt>Vento in classe 2</dt><dd>Prova di resistenza al carico del vento, sul modello base in acciaio grecato.</dd></div>
+        <div><dt>Manuali o motorizzate</dt><dd>Coibentate e non, debordanti e non debordanti.</dd></div>
+        <div><dt>Posa in opera</dt><dd>Le costruiamo in officina e le montiamo noi.</dd></div>
+      </dl>
+    </div>
     </div>
 
     <div class="cancelli" id="cancelli" aria-labelledby="t-can">
@@ -282,6 +309,18 @@
         <form class="modulo" id="preventivo" novalidate aria-labelledby="t-mod-form">
           <h3 class="sr-only" id="t-mod-form">Richiesta di preventivo</h3>
           <div class="campi" id="campi">
+            <div class="modello-scelto" id="modelloScelto" role="group" aria-labelledby="ms-titolo" hidden>
+              <img class="ms-img" id="msImg" src="" width="760" height="950" alt="">
+              <div class="ms-tx">
+                <span class="mono" id="ms-titolo">La vostra basculante</span>
+                <span class="ms-scelta" id="modelloScelto-testo"></span>
+                <span class="ms-az">
+                  <a class="link-sec link-piccolo" href="#basculanti" id="modelloModifica">Modificate<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+                  <button class="link-sec link-piccolo" type="button" id="modelloTogli">Togli<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+                </span>
+              </div>
+              <input type="hidden" name="modello" id="f-modello" value="">
+            </div>
             <fieldset class="scelta" id="f-bisogno" aria-describedby="e-bisogno">
               <legend>Di cosa avete bisogno? <span class="req" aria-hidden="true">*</span></legend>
               <div class="scelte">
@@ -363,25 +402,22 @@
 
 <footer class="foot" data-tema="scuro">
   <div class="foot-inner">
-    <div class="foot-grid">
+    <div class="foot-marchio" aria-hidden="true" translate="no"><span>ZADE</span></div>
+    <div class="foot-righe">
       <div class="foot-col">
-        <a class="foot-head ulink" href="#furgoni">Allestimento furgoni</a>
+        <a class="ulink" href="#furgoni">Allestimento furgoni</a>
         <a class="ulink" href="mailto:info@zadeallestimenti.it">info@zadeallestimenti.it</a>
       </div>
       <div class="foot-col">
-        <a class="foot-head ulink" href="#lavorazioni">Lavorazioni metalliche</a>
         <a class="ulink" href="#basculanti">Porte basculanti</a>
         <a class="ulink" href="#cancelli">Cancelli e ringhiere</a>
         <a class="ulink" href="mailto:info@zadelavorazioni.it">info@zadelavorazioni.it</a>
       </div>
       <div class="foot-col">
-        <span class="foot-head">Officina</span>
-        <a class="ulink" href="https://www.google.com/maps/search/?api=1&amp;query=Via%20Alessandro%20Platone%2013%2FA%2C%2031040%20Nervesa%20della%20Battaglia%20TV" target="_blank" rel="noopener">Via Alessandro Platone 13/A<br>31040 Nervesa della Battaglia (TV)</a>
+        <a class="ulink" href="https://www.google.com/maps/search/?api=1&amp;query=Via%20Alessandro%20Platone%2013%2FA%2C%2031040%20Nervesa%20della%20Battaglia%20TV" target="_blank" rel="noopener">Via Alessandro Platone 13/A, Nervesa della Battaglia (TV)</a>
         <a class="ulink" href="tel:+390422779636">0422 779636</a>
       </div>
     </div>
-    <!-- Marchio a doghe: sei fasce che si chiudono dall'alto come una basculante -->
-    <div class="foot-word" aria-hidden="true" translate="no"><span class="band" style="--i:0"><span>ZADE</span></span><span class="band" style="--i:1"><span>ZADE</span></span><span class="band" style="--i:2"><span>ZADE</span></span><span class="band" style="--i:3"><span>ZADE</span></span><span class="band" style="--i:4"><span>ZADE</span></span><span class="band" style="--i:5"><span>ZADE</span></span></div>
     <div class="foot-row">
       <span>ZADE SRL, P.IVA 05050320265</span>
       <span class="foot-legal"><a class="ulink" href="privacy-policy.html">Privacy</a><a class="ulink" href="cookie-policy.html">Cookie</a></span>

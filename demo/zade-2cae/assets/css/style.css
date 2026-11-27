@@ -420,7 +420,7 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .modulo { border-top: 1px solid var(--line-light); padding-top: 24px; }
 .campi { display: grid; gap: 22px; }
 .riga { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
-.campo { display: grid; gap: 8px; min-width: 0; }
+.campo { display: grid; gap: 8px; min-width: 0; align-content: start; }
 .modulo label, .scelta legend { font-weight: 500; font-size: 1rem; color: var(--ink); }
 .req { color: var(--spark-ink); }
 .opz { font-weight: 400; color: var(--mute); font-size: .92rem; margin-left: 4px; }
@@ -489,8 +489,16 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 
 /* ---------- Stato iniziale per le animazioni (solo con JS e moto consentito) ---------- */
 .js-motion [data-reveal] { opacity: 0; transform: translateY(28px); }
-.js-motion .hero h1 .ln > span, .js-motion .lav-open h2 .ln > span { transform: translateY(108%); }
-.js-motion .hero-kicker, .js-motion .door { opacity: 0; }
+/* v5: l'apertura del titolo e' un'animazione CSS che parte al primo disegno (non aspetta GSAP): stesso movimento della v3c */
+.js-motion .lav-open h2 .ln > span { transform: translateY(108%); }
+@keyframes zLn { from { transform: translateY(108%); } to { transform: none; } }
+@keyframes zSu { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.js-motion .hero h1 .ln > span { animation: zLn .7s cubic-bezier(.16, 1, .3, 1) both; }
+.js-motion .hero h1 .ln:nth-child(2) > span { animation-delay: .08s; }
+.js-motion .hero-kicker { animation: zSu .5s cubic-bezier(.16, 1, .3, 1) .05s both; }
+.js-motion .door { animation: zSu .6s cubic-bezier(.16, 1, .3, 1) .35s both; }
+.js-motion .door:nth-child(2) { animation-delay: .41s; }
+.js-motion .door:nth-child(3) { animation-delay: .47s; }
 
 /* ---------- Telefono ---------- */
 @media (max-width: 860px) {
@@ -636,9 +644,151 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .brand { min-height: 44px; align-items: center; }
 .tel-big { padding-block: 6px; }
 
-/* demo: a telefono stretto il link dell informativa va a capo invece di uscire dalla colonna */
-.campo { grid-template-columns: minmax(0, 1fr); }
-.link-piccolo { white-space: normal; text-align: left; }
-.link-piccolo::after { display: none; }
-.link-piccolo { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
-.link-piccolo:hover, .link-piccolo:focus-visible { text-decoration-color: transparent; }
+/* ================= v5: la v3c con il visore 3D della v4 e il footer della v4 ================= */
+:root {
+  --wall: #e6e8e9; --paper: #f7f8f8;
+  --gl: max(var(--gutter), env(safe-area-inset-left, 0px));
+  --gr: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+/* palco: dove vive il canvas 3D del visore */
+.palco { position: relative; overflow: hidden; background: var(--wall); isolation: isolate; }
+.palco canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; z-index: 2; touch-action: pan-y; }
+.palco-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.palco.is-3d .palco-foto { visibility: hidden; }
+
+/* visore delle basculanti, nello stile della v3c */
+.visore { margin-top: clamp(90px, 14vh, 160px); }
+.visore-grid { max-width: 1440px; margin: 0 auto; padding: 0 var(--gr) 0 var(--gl); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(18px, 2.4vw, 40px); align-items: start; }
+.visore-palco-wrap { grid-column: 1 / span 7; position: sticky; top: calc(var(--nav-h) + 16px); }
+.palco--visore { height: calc(100svh - var(--nav-h) - 40px); min-height: 460px; max-height: 860px; }
+.palco-comandi { position: absolute; z-index: 3; left: 14px; right: 14px; bottom: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; pointer-events: none; }
+.seg { pointer-events: auto; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--ink); background: var(--paper); }
+.seg-b { min-height: 44px; padding: 0 16px; font-weight: 500; font-size: .95rem; color: var(--ink); transition: background-color .3s var(--ease), color .3s var(--ease); }
+.seg-b[aria-pressed="true"] { background: var(--ink); color: var(--light); }
+.seg-b:not([aria-pressed="true"]):hover { background: var(--steel); }
+.seg-b:focus-visible { outline: 2px solid var(--spark-ink); outline-offset: -4px; }
+.palco-hint { font-size: .88rem; color: var(--ink); background: rgba(247, 248, 248, .82); padding: 6px 10px; }
+.palco:not(.is-3d) .seg--stato, .palco:not(.is-3d) .palco-hint { display: none; }
+.vis-stato { display: none; }
+.visore-pannello { grid-column: 8 / -1; display: grid; gap: 26px; padding-top: 6px; }
+.visore h3 { font-size: clamp(2rem, 3.6vw, 3.4rem); font-weight: 400; line-height: 1.02; }
+.visore-lead { color: var(--mute); max-width: 52ch; }
+.scegli { border: 0; margin: 0; padding: 0; display: grid; gap: 12px; min-width: 0; }
+.scegli legend { padding: 0; margin-bottom: 12px; font-weight: 500; font-size: 1rem; }
+.modelli-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mod { position: relative; display: grid; gap: 2px; align-content: center; min-height: 60px; padding: 10px 14px; cursor: pointer; border: 1px solid #8a9095; background: var(--paper); transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease); }
+.mod input, .colore input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.mod-n { font-weight: 500; line-height: 1.2; }
+.mod-s { font-family: var(--f-mono); font-size: .74rem; font-weight: 500; letter-spacing: .03em; text-transform: uppercase; color: var(--mute); }
+.mod:hover { border-color: var(--ink); }
+.mod:has(input:checked) { background: var(--ink); color: var(--light); border-color: var(--ink); }
+.mod:has(input:checked) .mod-s { color: var(--mute-dark); }
+.mod:has(input:focus-visible), .colore:has(input:focus-visible) { outline: 2px solid var(--spark-ink); outline-offset: 3px; }
+.colori { display: flex; flex-wrap: wrap; gap: 8px; }
+.colore { position: relative; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 14px 6px 6px; border: 1px solid #8a9095; background: var(--paper); cursor: pointer; font-size: .92rem; font-weight: 500; transition: border-color .3s var(--ease), box-shadow .3s var(--ease); }
+.colore i { width: 34px; height: 34px; flex: none; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18); }
+.colore:hover { border-color: var(--ink); }
+.colore:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.colore:has(input:checked)::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: -1px; height: 3px; background: var(--ink); }
+.spunta--pedonale { font-weight: 500; padding: 0; }
+.spunta input:disabled, .spunta input:disabled + span { opacity: .45; cursor: default; }
+.scheda { display: grid; gap: 10px; border-top: 1px solid var(--line-light); padding-top: 18px; }
+.scheda-spec { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--mute); }
+.scheda-spec b { color: var(--ink); font-weight: 500; }
+.scheda p { max-width: 52ch; }
+.visore-cta { display: grid; gap: 14px; }
+.scelta-riassunto { font-family: var(--f-display); font-size: clamp(1.15rem, 1.4vw, 1.35rem); line-height: 1.25; }
+.visore .sicurezza { padding-inline: var(--gl) var(--gr); }
+
+/* modulo: la basculante scelta nel visore */
+.modello-scelto { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 14px; align-items: center; padding: 10px; background: var(--light); border: 1px solid var(--ink); margin-bottom: 6px; }
+.ms-img { width: 76px; height: 95px; object-fit: cover; background: #d3d6d8; }
+.ms-tx { display: grid; gap: 4px; min-width: 0; }
+.modello-scelto .mono { color: var(--mute); }
+.ms-scelta { font-family: var(--f-display); font-size: clamp(1.08rem, 1.4vw, 1.3rem); line-height: 1.2; }
+.ms-az { display: flex; flex-wrap: wrap; gap: 0 20px; }
+
+/* footer della v4: il marchio a doghe */
+.foot { padding: clamp(50px, 8vh, 80px) var(--gr) calc(34px + env(safe-area-inset-bottom, 0px)) var(--gl); font-size: .95rem; }
+.foot-inner { gap: clamp(36px, 6vh, 60px); }
+.foot-marchio { --gap: .5; font-family: var(--f-display); font-weight: 500; font-size: clamp(5.5rem, 24vw, 22rem); letter-spacing: -.02em; line-height: .78; overflow: hidden; padding-top: .04em; }
+.foot-marchio span {
+  display: block; color: transparent; --step: .13em;
+  background: repeating-linear-gradient(180deg, #d7dadc 0, #d7dadc calc(var(--step) * (1 - var(--gap))), transparent calc(var(--step) * (1 - var(--gap))), transparent var(--step));
+  -webkit-background-clip: text; background-clip: text;
+}
+.foot-righe { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 32px; border-top: 1px solid var(--line-dark); padding-top: 22px; }
+.foot-col { gap: 2px; font-size: inherit; }
+.foot-col a { display: inline-flex; align-items: center; min-height: 44px; justify-self: start; color: #d7dadc; }
+.foot-row { border-top: 0; padding-top: 0; gap: 12px 24px; font-size: .88rem; }
+.foot-row a { color: inherit; }
+.foot-legal { display: flex; gap: 22px; }
+.foot-legal a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* visore: elementi solo telefono (su computer restano nascosti) */
+.mod-img, .vis-tab, .colore-nome { display: none; }
+
+/* ---------- Visore su telefono: la porta resta sempre in vista mentre si sceglie ----------
+   In alto la porta (fissa), sotto due schede Modello / Colore, in fondo una barra con
+   riepilogo e preventivo. Modelli in una fila che scorre di lato, colori come tessere grandi. */
+@media (max-width: 860px) {
+  .foot-righe { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .visore { margin-top: 64px; }
+  .visore-grid { grid-template-columns: minmax(0, 1fr); row-gap: 0; padding: 0; }
+  .visore-palco-wrap { grid-column: 1; top: var(--nav-h); z-index: 3; }
+  .palco--visore { height: 50svh; min-height: 300px; max-height: 500px; }
+  .palco-hint { display: none !important; }
+  .palco-comandi { display: none; } /* sul telefono nulla copre la porta */
+  .vis-stato { order: 2; display: flex; gap: 8px; }
+  .vis-stato .seg { flex: none; }
+  .vis-stato .spunta--pedonale { flex: 1 1 0; min-width: 0; align-items: center; justify-content: center; min-height: 46px; padding: 0 10px; gap: 8px; border: 1px solid var(--ink); background: var(--paper); font-size: .93rem; white-space: nowrap; }
+  .vis-stato .spunta--pedonale input { width: 22px; height: 22px; }
+  .vis-stato .seg-b { min-height: 44px; padding: 0 11px; font-size: .93rem; }
+
+  .visore-pannello { grid-column: 1; padding: 16px 0 0; gap: 14px; }
+  .visore-pannello > * { padding-inline: var(--gl) var(--gr); }
+  .visore h3 { order: 1; font-size: clamp(1.45rem, 6.4vw, 1.9rem); }
+  .vis-tab { order: 3; display: grid; grid-template-columns: 1fr 1fr; margin-inline: var(--gl) var(--gr); padding: 0; border: 1px solid var(--ink); }
+  .vis-tab button { min-height: 46px; font-weight: 500; font-size: 1rem; color: var(--ink); background: var(--paper); transition: background-color .3s var(--ease), color .3s var(--ease); }
+  .vis-tab button[aria-selected="true"] { background: var(--ink); color: var(--light); }
+  .vis-tab button:focus-visible { outline: 2px solid var(--spark-ink); outline-offset: -4px; }
+  #sceltaModello, #sceltaColore { order: 4; }
+  .visore-pannello[data-tab="modello"] #sceltaColore, .visore-pannello[data-tab="colore"] #sceltaModello { display: none; }
+  .scegli legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .scheda { order: 6; }
+  .visore-lead { order: 7; }
+
+  /* modelli: fila orizzontale con miniatura, si scorre col dito, la pagina non scorre di lato */
+  .modelli-lista {
+    display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gl) * -1) calc(var(--gr) * -1); padding: 2px var(--gr) 6px var(--gl); scroll-padding-inline: var(--gl);
+    scrollbar-width: none;
+  }
+  .modelli-lista::-webkit-scrollbar { display: none; }
+  .mod { flex: none; width: 108px; min-height: 0; padding: 6px 6px 8px; gap: 4px; align-content: start; scroll-snap-align: start; }
+  .mod-img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 40%; background: #d3d6d8; }
+  .mod-n { font-size: .9rem; line-height: 1.15; }
+  .mod-s { font-size: .68rem; }
+
+  /* colori: tessere grandi, il nome del colore scelto sotto */
+  .colori { gap: 10px; }
+  .colore { width: 52px; height: 52px; min-height: 0; padding: 3px; gap: 0; justify-content: center; }
+  .colore i { width: 100%; height: 100%; }
+  .colore span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .colore:has(input:checked) { box-shadow: inset 0 0 0 2px var(--ink); }
+  .colore:has(input:checked)::after { left: 3px; right: 3px; bottom: -6px; }
+  .colore-nome { display: block; margin-top: 4px; font-weight: 500; }
+
+  /* preventivo subito sotto le scelte, niente barra fissa: lo spazio va alla porta */
+  .visore-cta { order: 5; gap: 8px; padding-top: 2px; }
+  .scelta-riassunto { font-size: .98rem; }
+  .visore-cta .cta-row { gap: 4px 18px; }
+  .visore-cta .btn { min-height: 48px; }
+  .visore-cta .link-sec { font-size: .92rem; }
+}
+@media (max-width: 380px) { .mod { width: 104px; } }
+
+
+/* a 360 px il link all'informativa andava a capo fuori schermo */
+.link-piccolo { white-space: normal; }

@@ -1,4 +1,5 @@
-/* ZADE v3: motion system (GSAP 3.12.5 + ScrollTrigger + Lenis 1.1.13, tutti in locale) */
+/* ZADE v5: la v3c (GSAP 3.12.5 + ScrollTrigger + Lenis 1.1.13, in locale) con il 3D della v4:
+   il visore 3D delle basculanti (scena.js + Three.js r170, caricati dopo). */
 (function () {
   "use strict";
 
@@ -6,6 +7,9 @@
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isPhone = window.matchMedia("(max-width: 860px)").matches;
   var fine = window.matchMedia("(pointer: fine)").matches;
+  var scenaURL = new URL("scena.js", document.currentScript.src).href;
+  var api = null; // la scena 3D, quando c'e'
+  window.ZADE = { get api() { return api; } };
 
   /* ---------- Video: file giusto per il dispositivo, caricati solo quando servono ---------- */
   function setVideo(v) {
@@ -102,7 +106,13 @@
       if (tema === "media") {
         // cerca la foto o il video sotto, e se in quel punto e' chiaro usa il testo scuro
         for (var j = i; j < els.length; j++) {
-          if ((els[j].tagName === "IMG" || els[j].tagName === "VIDEO") && t.contains(els[j])) {
+          if (els[j].tagName === "CANVAS" && t.contains(els[j])) {
+            var m = els[j], L3 = -1;
+            if (api) L3 = api.lumAt(x, y);
+            if (L3 > 0.55) return "chiaro";
+            break;
+          }
+          if ((els[j].tagName === "IMG" || els[j].tagName === "VIDEO") && t.contains(els[j]) && getComputedStyle(els[j]).visibility !== "hidden" && +getComputedStyle(els[j]).opacity > 0.5) {
             // media della luminosita' su tutta la larghezza della parte, non su un punto solo
             var span = toneAt.span || [x - 1, x + 1], tot = 0, cnt = 0;
             for (var q = 0; q <= 6; q++) {
@@ -125,14 +135,14 @@
     // 1. tono del fondo lungo tutta la barra (9 punti)
     var votes = { scuro: 0, chiaro: 0, media: 0 };
     toneAt.span = null;
-    for (var k = 0; k < 9; k++) {
-      var x = r.left + 8 + (r.width - 16) * k / 8;
+    for (var k = 0; k < 7; k++) {
+      var x = r.left + 8 + (r.width - 16) * k / 6;
       toneAt.span = [x - 20, x + 20];
       votes[toneAt(x, yMid)]++;
     }
     var fondo = "scuro";
     Object.keys(votes).forEach(function (kk) { if (votes[kk] > votes[fondo]) fondo = kk; });
-    if (fondo === "chiaro" && votes.media >= 4) fondo = "media";
+    if (fondo === "chiaro" && votes.media >= 3) fondo = "media";
     if (nav.getAttribute("data-fondo") !== fondo) nav.setAttribute("data-fondo", fondo);
     // 2. ogni parte: se c'e' un pannello pieno prende il suo tono, sopra foto/video legge il proprio punto
     parts.forEach(function (p) {
@@ -148,16 +158,16 @@
     var y = window.scrollY, w = window.innerWidth;
     // dopo ogni movimento continua a leggere per ~1,5 s: le scene scrubbate finiscono dopo lo scroll
     if (y !== lastY || w !== lastW) force = 90;
-    if (force > 0) { if (force % 2 === 0) sampleNav(); lastY = y; lastW = w; force--; }
+    if (force > 0) { if (force % 3 === 0) sampleNav(); lastY = y; lastW = w; force--; }
     requestAnimationFrame(navLoop);
   }
   requestAnimationFrame(navLoop);
   window.addEventListener("resize", function () { force = 90; });
 
   /* ---------- Modulo preventivo ----------
-     La demo non ha un server: all'invio prepara una mail all'indirizzo giusto (furgoni ->
+     Senza server: all'invio prepara una mail all'indirizzo giusto (furgoni ->
      info@zadeallestimenti.it, il resto -> info@zadelavorazioni.it) e mostra la conferma.
-     Sul sito vero l'invio va fatto lato server (vedi 02-design/LEGGIMI-modulo-e-pagine-legali.md). */
+     Sul sito vero l'invio va fatto lato server (vedi documenti/LEGGIMI-modulo-e-pagine-legali.md). */
   var form = document.getElementById("preventivo");
   var NOMI = { furgone: "Allestimento furgone", basculante: "Porta basculante", cancello: "Cancello, ringhiera, recinzione", altro: "Altro" };
   var MISURE = {
@@ -166,9 +176,12 @@
     cancello: ["Misure del vano", "es. larghezza 400 x altezza 160 cm"],
     altro: ["Misure", "se le avete"]
   };
+  var boxModello = document.getElementById("modelloScelto"), campoModello = document.getElementById("f-modello");
   function aggiornaMisure() {
     var c = form.querySelector('input[name="bisogno"]:checked');
     var m = MISURE[c ? c.value : "basculante"];
+    boxModello.hidden = !((c ? c.value : "") === "basculante" && campoModello.value);
+    if (typeof aggiornaPrecompilato === "function") aggiornaPrecompilato();
     document.getElementById("l-misure").firstChild.nodeValue = m[0] + " ";
     document.getElementById("f-misure").placeholder = m[1];
   }
@@ -241,6 +254,7 @@
     var oggetto = "Richiesta preventivo: " + NOMI[tipo] + " - " + f.nome.value.trim();
     var dati = [
       "Richiesta: " + NOMI[tipo],
+      tipo === "basculante" && campoModello.value ? "Modello: " + campoModello.value : "",
       "Nome: " + f.nome.value.trim(),
       f.azienda.value.trim() ? "Azienda: " + f.azienda.value.trim() : "",
       "Email: " + f.email.value.trim(),
@@ -266,7 +280,8 @@
     else { ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} }
   });
   document.getElementById("nuova").addEventListener("click", function () {
-    form.reset(); toccati = {};
+    form.reset(); toccati = {}; campoModello.value = ""; msgAuto = ""; aggiornaMisure();
+    if (configurata) portaNelModulo();
     Object.keys(errId).forEach(function (k) { document.getElementById(errId[k]).textContent = ""; document.getElementById(campi[k]).removeAttribute("aria-invalid"); });
     document.getElementById("copia").firstChild.nodeValue = "Copiate il testo";
     document.getElementById("conferma").hidden = true;
@@ -274,40 +289,203 @@
     document.getElementById("f-nome").focus();
   });
 
-  /* ---------- Modelli di basculante: fila scorrevole con frecce e contatore ---------- */
-  var fila = document.getElementById("filaModelli");
-  var schede = Array.prototype.slice.call(fila.querySelectorAll(".card"));
-  var conta = document.getElementById("contaModelli");
-  var prevB = document.getElementById("modPrev"), nextB = document.getElementById("modNext");
-  function indiceCorrente() {
-    var fr = fila.getBoundingClientRect(), best = 0, bestD = Infinity;
-    schede.forEach(function (c, i) { var d = Math.abs(c.getBoundingClientRect().left - fr.left - (parseFloat(getComputedStyle(fila).paddingLeft) || 0)); if (d < bestD) { bestD = d; best = i; } });
-    return best;
+  /* ---------- Visore delle basculanti ---------- */
+  var RAL = [
+    { id: "7016", corto: "7016 antracite", nome: "RAL 7016 grigio antracite", c: "#383e42" },
+    { id: "9010", corto: "9010 bianco", nome: "RAL 9010 bianco puro", c: "#f1ede1" },
+    { id: "7035", corto: "7035 grigio luce", nome: "RAL 7035 grigio luce", c: "#cbd0cc" },
+    { id: "8017", corto: "8017 marrone", nome: "RAL 8017 marrone cioccolato", c: "#45322e" },
+    { id: "6005", corto: "6005 verde", nome: "RAL 6005 verde muschio", c: "#114232" },
+    { id: "3000", corto: "3000 rosso", nome: "RAL 3000 rosso fuoco", c: "#a72920" }
+  ];
+  var SIMIL = [
+    { id: "chiaro", corto: "Legno chiaro", nome: "effetto legno chiaro", c: "#b47b45", legno: true },
+    { id: "scuro", corto: "Legno scuro", nome: "effetto legno scuro", c: "#6b4428", legno: true }
+  ];
+  var OKUME = [
+    { id: "okume", corto: "Okumè naturale", nome: "okumè naturale", c: "#a8663f", legno: true },
+    { id: "noce", corto: "Tinta noce", nome: "tinta noce", c: "#5e3c24", legno: true }
+  ];
+  var TELAIO = [
+    { id: "zinc", corto: "Zincato", nome: "acciaio zincato", c: "#a3a8ab", metal: true },
+    { id: "7016", corto: "7016 antracite", nome: "RAL 7016 grigio antracite", c: "#383e42" }
+  ];
+  var MOD = {
+    doghe: { nome: "Doghe lisce", spec: ["Doghe <b>150 o 250</b>", "Coibentato"], testo: "Doga verticale, orizzontale o a spina. In tutti i colori RAL.", foto: "mod-doghe-lisce.webp", alt: "Basculante modello Doghe lisce marrone a doghe orizzontali con porta pedonale", fin: RAL, def: "7016", nota: "un esempio: tutti i colori RAL" },
+    energy: { nome: "Energy", spec: ["Spessore <b>60 mm</b>", "Coibentato"], testo: "Rivestimento in gres, interno in okumè bianco o noce. Non chiede manutenzione esterna.", foto: "mod-energy.webp", alt: "Basculante modello Energy grigio antracite con porta pedonale, in un muro di mattoni", fin: [RAL[0], RAL[2], RAL[1]], def: "7016", nota: "un esempio: il gres si sceglie con noi" },
+    style: { nome: "Style", spec: ["Spessore <b>50 mm</b>", "Coibentato"], testo: "Lastra in alluminio verniciata e laccata, trattata contro la corrosione. Pannello abbinabile al portoncino d'ingresso.", foto: "mod-style.webp", alt: "Basculante modello Style con pannello rosso laccato a bugne sagomate", fin: RAL, def: "3000", nota: "un esempio di laccatura" },
+    standard: { nome: "Pannello standard", spec: ["Spessore <b>40 mm</b>", "Coibentato"], testo: "Pannello metallico verniciato a polveri RAL. Il classico che chiude e isola.", foto: "mod-pannello-standard.webp", alt: "Basculante modello Pannello standard verde con porta pedonale e maniglia in ottone", fin: RAL, def: "6005", nota: "un esempio: tutti i colori RAL" },
+    simil: { nome: "Metallico simil legno", spec: ["Spessore <b>40 mm</b>", "Coibentato"], testo: "L'aspetto del legno senza le sue cure. Liscio, dogato, rigato o a cassettoni.", foto: "mod-simil-legno.webp", alt: "Basculante modello metallico simil legno con porta pedonale aperta", fin: SIMIL, def: "chiaro", nota: "un esempio di finitura" },
+    legno: { nome: "Legno", spec: ["Spessore <b>70 mm</b>", "Coibentato"], testo: "Esterno in multistrato marino okumè da 15 mm, doga verticale od orizzontale.", foto: "mod-legno.webp", alt: "Due garage con basculanti modello Legno e finestrature", fin: OKUME, def: "okume", nota: "un esempio di finitura" },
+    grecato: { nome: "Acciaio grecato", spec: ["Lamiera <b>grecata zincata</b>", "Non coibentato"], testo: "Telaio saldato e tubolari orizzontali che tengono in asse il manto a ogni apertura.", foto: "mod-acciaio-grecato.webp", alt: "Basculante modello Acciaio grecato marrone a greca verticale", fin: RAL, def: "8017", nota: "un esempio: tutti i colori RAL" },
+    libera: { nome: "Struttura libera", spec: ["Rivestimento <b>a scelta</b>", "Su richiesta"], testo: "Il telaio pronto per legno, alluminio o pvc, come chiede il cliente.", foto: "mod-struttura-libera.webp", alt: "Telaio di basculante nudo, Struttura libera, montato in un'apertura", fin: TELAIO, def: "zinc", nota: "il telaio, prima del rivestimento", noPed: true }
+  };
+  var stato = { model: "doghe", fin: RAL[0], ped: true };
+  var coloriBox = document.getElementById("colori");
+  var pedBox = document.getElementById("pedonale");
+  var foto = document.getElementById("fotoModello");
+  var riassunto = document.getElementById("riassunto");
+  function testoScelta() {
+    var m = MOD[stato.model];
+    var t = m.nome + ", " + stato.fin.nome;
+    if (!m.noPed) t += stato.ped ? ", con porta pedonale" : ", senza porta pedonale";
+    return t.charAt(0).toUpperCase() + t.slice(1);
   }
-  function aggiornaConta() {
-    var i = indiceCorrente();
-    var fine = fila.scrollLeft + fila.clientWidth >= fila.scrollWidth - 4;
-    if (fine) i = schede.length - 1;
-    conta.textContent = (i + 1) + " / " + schede.length;
-    prevB.disabled = fila.scrollLeft <= 2;
-    nextB.disabled = fine;
+  function testoBreve() { // per la barra del telefono: una riga sola
+    var m = MOD[stato.model], f = stato.fin;
+    var c = f.id.length === 4 && /^\d+$/.test(f.id) ? "RAL " + f.id : f.corto;
+    return m.nome + ", " + c + (m.noPed ? "" : stato.ped ? ", con pedonale" : ", senza pedonale");
   }
-  function vaiA(i) {
-    i = Math.max(0, Math.min(schede.length - 1, i));
-    var c = schede[i];
-    var pad = parseFloat(getComputedStyle(fila).paddingLeft) || 0;
-    fila.scrollTo({ left: c.offsetLeft - pad, behavior: reduce ? "auto" : "smooth" });
+  function disegnaColori() {
+    var m = MOD[stato.model];
+    coloriBox.textContent = "";
+    m.fin.forEach(function (f) {
+      var l = document.createElement("label"); l.className = "colore";
+      var i = document.createElement("input"); i.type = "radio"; i.name = "colore"; i.value = f.id; i.checked = f.id === stato.fin.id;
+      i.setAttribute("aria-label", f.nome);
+      var sw = document.createElement("i"); sw.style.setProperty("--c", f.c); sw.setAttribute("aria-hidden", "true");
+      var s = document.createElement("span"); s.textContent = f.corto; s.setAttribute("aria-hidden", "true");
+      l.appendChild(i); l.appendChild(sw); l.appendChild(s); coloriBox.appendChild(l);
+    });
+    document.getElementById("notaColore").textContent = m.nota;
   }
-  prevB.addEventListener("click", function () { vaiA(indiceCorrente() - 1); });
-  nextB.addEventListener("click", function () { vaiA(indiceCorrente() + 1); });
-  fila.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight") { e.preventDefault(); vaiA(indiceCorrente() + 1); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); vaiA(indiceCorrente() - 1); }
+  function aggiornaVisore(instant) {
+    var m = MOD[stato.model];
+    document.getElementById("schedaSpec").innerHTML = m.spec.map(function (s) { return "<span>" + s + "</span>"; }).join("");
+    document.getElementById("schedaTesto").textContent = m.testo;
+    pedBox.disabled = !!m.noPed;
+    riassunto.textContent = window.matchMedia("(max-width: 860px)").matches ? testoBreve() : testoScelta();
+    document.getElementById("coloreNome").textContent = stato.fin.nome.charAt(0).toUpperCase() + stato.fin.nome.slice(1);
+    if (foto.getAttribute("src") !== "assets/img/" + m.foto) { foto.src = "assets/img/" + m.foto; foto.alt = m.alt; }
+    if (api) api.visore({ model: stato.model, fin: stato.fin, ped: stato.ped && !m.noPed, instant: instant });
+    if (!instant && typeof portaNelModulo === "function") portaNelModulo();
+  }
+  document.getElementById("sceltaModello").addEventListener("change", function (e) {
+    if (e.target.name !== "modello") return;
+    stato.model = e.target.value;
+    var m = MOD[stato.model];
+    stato.fin = m.fin.filter(function (f) { return f.id === m.def; })[0];
+    disegnaColori(); aggiornaVisore();
   });
-  var contaRaf = 0;
-  fila.addEventListener("scroll", function () { cancelAnimationFrame(contaRaf); contaRaf = requestAnimationFrame(aggiornaConta); }, { passive: true });
-  window.addEventListener("resize", aggiornaConta);
-  aggiornaConta();
+  coloriBox.addEventListener("change", function (e) {
+    var m = MOD[stato.model];
+    stato.fin = m.fin.filter(function (f) { return f.id === e.target.value; })[0] || stato.fin;
+    aggiornaVisore();
+  });
+  pedBox.addEventListener("change", function () { stato.ped = pedBox.checked; aggiornaVisore(); });
+  // interruttore della porta: dice lo stato (Chiusa / Aperta), non un verbo
+  var segStato = document.querySelector(".seg--stato");
+  segStato.addEventListener("click", function (e) {
+    var b = e.target.closest(".seg-b"); if (!b) return;
+    var open = b.dataset.stato === "aperta";
+    segStato.querySelectorAll(".seg-b").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    if (api) api.apri(open);
+    portaNelModulo();
+  });
+  disegnaColori(); aggiornaVisore(true);
+
+  /* ---------- Dal visore al modulo ----------
+     Appena l'utente tocca il visore (modello, colore, pedonale, aperta/chiusa) la sua basculante
+     entra nel modulo, da qualunque strada ci arrivi: riquadro in cima, "Porta basculante" scelta
+     (se non ha gia' scelto altro) e una riga nel Messaggio, solo se il Messaggio e' vuoto. */
+  var configurata = false, msgAuto = "";
+  var campoMsg = document.getElementById("f-msg");
+  function testoPunti() {
+    var m = MOD[stato.model], t = m.nome + " · " + stato.fin.nome.charAt(0).toUpperCase() + stato.fin.nome.slice(1);
+    if (!m.noPed) t += stato.ped ? " · con porta pedonale" : " · senza porta pedonale";
+    return t;
+  }
+  function frasePreventivo() {
+    var m = MOD[stato.model], t = "Vorrei un preventivo per una basculante " + m.nome + ", " + stato.fin.nome;
+    if (!m.noPed) t += stato.ped ? ", con porta pedonale" : ", senza porta pedonale";
+    return t + ".";
+  }
+  function portaNelModulo() {
+    configurata = true;
+    campoModello.value = testoScelta();
+    document.getElementById("modelloScelto-testo").textContent = testoPunti();
+    var img = document.getElementById("msImg"), src = "assets/img/" + MOD[stato.model].foto;
+    if (img.getAttribute("src") !== src) img.src = src;
+    if (!form.querySelector('input[name="bisogno"]:checked')) {
+      form.querySelector('input[name="bisogno"][value="basculante"]').checked = true;
+    }
+    aggiornaMisure();
+  }
+  function aggiornaPrecompilato() {
+    var c = form.querySelector('input[name="bisogno"]:checked');
+    var bas = c && c.value === "basculante" && campoModello.value;
+    // la riga nel Messaggio: si scrive solo se il campo e' vuoto o contiene ancora la nostra riga
+    if (bas && (campoMsg.value === "" || campoMsg.value === msgAuto)) { msgAuto = frasePreventivo(); campoMsg.value = msgAuto; }
+    if (!bas && msgAuto && campoMsg.value === msgAuto) { campoMsg.value = ""; }
+    if (!bas && campoMsg.value === "") msgAuto = "";
+  }
+  document.getElementById("modelloTogli").addEventListener("click", function () {
+    configurata = false; campoModello.value = "";
+    if (msgAuto && campoMsg.value === msgAuto) campoMsg.value = "";
+    msgAuto = ""; aggiornaMisure();
+    form.querySelector('input[name="bisogno"]:checked').focus();
+  });
+  /* ---------- Visore su telefono: schede Modello / Colore, porta pedonale vicino alla porta ---------- */
+  var pannello = document.querySelector(".visore-pannello");
+  var tabs = [document.getElementById("tabModello"), document.getElementById("tabColore")];
+  function scheda(nome, fuoco) {
+    pannello.setAttribute("data-tab", nome);
+    tabs.forEach(function (t) {
+      var on = t.id === (nome === "modello" ? "tabModello" : "tabColore");
+      t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1;
+      if (on && fuoco) t.focus();
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { scheda(i ? "colore" : "modello"); });
+    t.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); scheda(i ? "modello" : "colore", true); }
+    });
+  });
+  scheda("modello");
+  var mqTel = window.matchMedia("(max-width: 860px)");
+  // su telefono niente sopra la porta: interruttore e porta pedonale scendono nel pannello delle scelte
+  var pedLabel = document.querySelector(".spunta--pedonale"), pedCasa = pedLabel.parentNode, pedPrima = pedLabel.nextSibling;
+  var comandi = document.querySelector(".palco-comandi"), visStato = document.getElementById("visStato");
+  function sistemaPedonale() {
+    if (mqTel.matches) {
+      if (segStato.parentNode !== visStato) visStato.appendChild(segStato);
+      if (pedLabel.parentNode !== visStato) visStato.appendChild(pedLabel);
+    } else {
+      if (segStato.parentNode !== comandi) comandi.insertBefore(segStato, comandi.firstChild);
+      if (pedLabel.parentNode !== pedCasa) pedCasa.insertBefore(pedLabel, pedPrima);
+    }
+    riassunto.textContent = mqTel.matches ? testoBreve() : testoScelta();
+  }
+  sistemaPedonale();
+  if (mqTel.addEventListener) mqTel.addEventListener("change", sistemaPedonale);
+  // la miniatura scelta resta in vista nella fila
+  document.getElementById("sceltaModello").addEventListener("change", function (e) {
+    var l = e.target.closest(".mod"), fila = l && l.parentNode;
+    if (!fila || fila.scrollWidth <= fila.clientWidth) return;
+    var x = l.offsetLeft - (fila.clientWidth - l.offsetWidth) / 2;
+    fila.scrollTo({ left: Math.max(0, x), behavior: reduce ? "auto" : "smooth" });
+  });
+
+  /* ---------- Scena 3D: si carica dopo, quando la pagina e' gia' leggibile ---------- */
+  var palcoVis = document.getElementById("palcoVisore");
+  function supportaWebGL() {
+    try { var c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl"))); }
+    catch (e) { return false; }
+  }
+  function caricaScena() {
+    if (!supportaWebGL() || !window.ResizeObserver) return;
+    import(scenaURL).then(function (mod) {
+      try { api = mod.avvia(); } catch (e) { api = null; return; }
+      api.attach(palcoVis);
+      api.visore({ model: stato.model, fin: stato.fin, ped: stato.ped && !MOD[stato.model].noPed, instant: true });
+    }).catch(function () { api = null; });
+  }
+  function quandoPronto(fn) {
+    var go = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 1); })(fn, { timeout: 900 }); };
+    if (document.readyState === "complete") go(); else window.addEventListener("load", go);
+  }
+  quandoPronto(caricaScena);
 
   /* Foto: dopo il caricamento si scaricano anche quelle piu' in basso, cosi' saltando con
      le ancore non compaiono riquadri vuoti */
@@ -336,10 +514,9 @@
       if (!t) return;
       e.preventDefault();
       var navH = nav.getBoundingClientRect().height;
-      lenis.scrollTo(id === "#top" ? 0 : t, {
-        offset: id === "#top" ? 0 : -(navH + 16), duration: 1.4,
-        onComplete: function () { if (id === "#preventivo") window.focusScelta(); }
-      });
+      var yy = id === "#top" ? 0 : t.getBoundingClientRect().top + window.scrollY - navH - 16;
+      lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+      lenis.scrollTo(yy, { duration: 1.4, force: true, onComplete: function () { if (id === "#preventivo") window.focusScelta(); } });
     });
   });
 
@@ -347,14 +524,11 @@
   var slats = gsap.utils.toArray(".slat");
   var intro = gsap.timeline({ delay: 0.05 });
   intro
-    .fromTo(".hero h1 .ln > span", { y: 0, yPercent: 108 }, { y: 0, yPercent: 0, duration: 0.7, ease: "power4.out", stagger: 0.08 }, 0)
-    .fromTo(".hero-kicker", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 0.05)
     .set(".shutter-led", { opacity: 1 }, 0.15)
     .to(".shutter", { yPercent: -100, duration: 1.1, ease: "power3.inOut" }, 0.15)
     .to(slats, { rotateX: -78, duration: 0.8, ease: "power2.in", stagger: { each: 0.035, from: "start" } }, 0.18)
     .to(".shutter-led", { opacity: 0, duration: 0.3, ease: "none" }, 1.0)
     .fromTo(".hero-media", { scale: 1.14 }, { scale: 1, duration: 1.8, ease: "power3.out" }, 0.15)
-    .fromTo(".door", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.06 }, 0.35)
     .set(".shutter", { display: "none" })
     .add(function () { force = 90; });
 
@@ -463,11 +637,8 @@
     scrollTrigger: { trigger: ".anni", start: "top bottom", end: "center center", scrub: 1 }
   });
 
-  /* ---------- Chiusura: il marchio ZADE si chiude a doghe, dall'alto, come una basculante ---------- */
-  gsap.fromTo(".foot-word .band > span", { yPercent: -110 }, {
-    yPercent: 0, ease: "power2.out", stagger: { each: 0.12, from: "end" },
-    scrollTrigger: { trigger: ".foot-word", start: "top bottom", end: "bottom bottom", scrub: 0.9 }
-  });
+  /* ---------- Chiusura: le doghe del marchio ZADE si chiudono come una basculante ---------- */
+  gsap.fromTo(".foot-marchio", { "--gap": 0.6 }, { "--gap": 0.1, ease: "none", scrollTrigger: { trigger: ".foot", start: "top bottom", end: "bottom bottom", scrub: 0.8 } });
 
   /* ---------- Bottoni magnetici (solo mouse) ---------- */
   if (fine) {
