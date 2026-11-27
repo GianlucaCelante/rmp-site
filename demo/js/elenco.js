@@ -13,5 +13,6 @@ window.DEMO_ELENCO = [
   { slug: 'pigusto-2699', nome: 'PiGusto', tipo: 'Pizzeria', luogo: 'Arcade', stato: 'pronta' },
   { slug: 'zade-2cae', nome: 'ZADE', tipo: 'Azienda', luogo: 'Nervesa della Battaglia', stato: 'pronta' },
   { slug: 'rotonda-507e', nome: 'Pizzeria alla Rotonda', tipo: 'Pizzeria', luogo: 'Santandrà di Povegliano', stato: 'pronta' },
-  { slug: 'toelettatura-28a9', nome: 'Amici a Quattro Zampe', tipo: 'Toelettatura', luogo: 'Ponzano Veneto', stato: 'pronta' }
+  { slug: 'toelettatura-28a9', nome: 'Amici a Quattro Zampe', tipo: 'Toelettatura', luogo: 'Ponzano Veneto', stato: 'pronta' },
+  { slug: 'harmonia-01d0', nome: 'Harmônia', tipo: 'Estetista e solarium', luogo: 'Fontane di Villorba', stato: 'pronta' }
 ];
