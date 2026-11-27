@@ -11,5 +11,7 @@ window.DEMO_ELENCO = [
   { slug: 'inferno-b34d', nome: 'Inferno, Pizza & Takeaway', tipo: 'Pizzeria', luogo: 'Spresiano', stato: 'pronta' },
   { slug: 'pizzaclub-8a87', nome: 'Pizza Club', tipo: 'Pizzeria', luogo: 'Villorba', stato: 'pronta' },
   { slug: 'pigusto-2699', nome: 'PiGusto', tipo: 'Pizzeria', luogo: 'Arcade', stato: 'pronta' },
-  { slug: 'zade-2cae', nome: 'ZADE', tipo: 'Azienda', luogo: 'Nervesa della Battaglia', stato: 'pronta' }
+  { slug: 'zade-2cae', nome: 'ZADE', tipo: 'Azienda', luogo: 'Nervesa della Battaglia', stato: 'pronta' },
+  { slug: 'rotonda-507e', nome: 'Pizzeria alla Rotonda', tipo: 'Pizzeria', luogo: 'Santandrà di Povegliano', stato: 'pronta' },
+  { slug: 'toelettatura-28a9', nome: 'Amici a Quattro Zampe', tipo: 'Toelettatura', luogo: 'Ponzano Veneto', stato: 'pronta' }
 ];
