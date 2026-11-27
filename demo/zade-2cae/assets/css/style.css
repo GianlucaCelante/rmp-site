@@ -792,3 +792,9 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 
 /* a 360 px il link all'informativa andava a capo fuori schermo */
 .link-piccolo { white-space: normal; }
+
+/* demo: a 320 px la riga Chiusa/Aperta + pedonale era piu larga della colonna e stringeva la pagina: va a capo */
+@media (max-width: 340px) {
+  .vis-stato { flex-wrap: wrap; }
+  .vis-stato .spunta--pedonale { flex: 1 1 100%; }
+}
